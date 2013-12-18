@@ -1,0 +1,159 @@
+Next Call -
+
+walk through cvaddtocohorttreeview.  Get Matt to give his opinion as to cleaning the code
+
+
+
+How can I create a custom access-level that will let all students of any cohort in a particular course be able to see and professor content
+while not allowing that content to be seen by outsiders.
+
+
+is there a google adsense plugin?  How would I do this?
+is there a streaming video plugin?
+ist there a quiz or flashcard plugin?
+Is there any way for me to manually go in and delete entities using admin tools?
+
+Note to Rich - Need to add a way for professors (and students maybe) to mark a cohort as archived or not active etc...
+
+Dec 5
+
+- A couple things about my code on linux -- crash when creating new content
+
+- my sidebar css isn't working on the linux -- but my other css is working?
+
+-  How can I create my own log messages?
+
+- wiki discussion
+
+-  How can I change the css for the sidebar width? --Think I got it...one quick question.
+
+-  A quick code walkthrough - best practices -- camelCase etc.
+
+Nov 21 agenda
+
+Rough week...didn't get much done...
+
+--can we build a form with checkboxes and input box and then the action that can process it?
+
+--is there a way that we can tap into a page that has just edited and saved an element?
+
+--walk through my idea about adding the tree to the bottom of each page
+
+Nov 14 agenda
+
+How can we hack the edit and create views of plugins to allow us to add relationships to our menu items?
+
+x  problem with adding polls - creates extra objects for choices
+
+problem when adding content, loses the current menu item when complete
+
+x Can we add more plugins that athabasca uses ...like wikis
+
+Nov 7 agenda
+
+Request for less polite critique of code
+
+Actions and tokens one last time...turning courseview on and off
+
+passing stuff to views... the $vars array?
+
+Discuss new requirement to add content to courseview from outside of courseview...during creation and editing
+
+Discuss my idea to do away with cohort selection and just build all cohorts into the treeview
+
+Discuss problems with persisting treeview
+
+need to be able to ascertain whether or not a user belongs to any CV groups
+
+need to fetch all cohorts that a user is a member of
+
+Can I figure out what submit button was hit on a form?  edit menu item example
+
+How can I connect the cveditcourse action to the checkbox that shows the course editing stuff
+
+Where should I use extend view vs require?
+
+Setting up a quasi-production courseview site in the next couple weeks
+
+
+
+Oct 24 Agenda -
+
+How do I get the checkboxes working in settings page?
+
+How do I control the dropdown selection in the contentpane ?
+
+In Start.php, how do I redirect back to the coursview page after going to the content creation page?
+
+How can I get the contentpane form to call the action?
+
+How can I get the Courseview menu item to call the action?
+
+
+
+
+Oct 17 Agenda -
+
+Once again, I had a rough week and didn't get much done on this...However, I think I've got enough done for us
+to move forward on a couple important points.
+
+-  When viewing a module of type student, I'd like to be able to filter by the various plugin types.
+        - For instance, filter by blog, bookmark, file etc.
+-  As I filter by a particular plugin, I'd like a button to appear that will allow me to add content of that type.
+        -  For instance, if I'm filtering by "blog", there should be a "add blog entry" button
+-  I need to intercept the creation of this content and add the appropriate relationships.
+
+If we can cover some of this, I have a reading week next week so I should have time to completely clean up all my 
+code so we can move forward in a more organized, less frenetic prototyping fashion!
+
+
+
+
+Oct 10 Agenda -
+
+-  Walk through my updated design
+
+-  If I pull out a bunch of objects by relationship, how can I efficiently sort them by an attribute like sortorder=1, 2 etc?
+
+- So, If I'm making all these decisions based on passing values through the url, then how do we stop users from spoofing the url?
+
+- I'm not really understanding how to retrieve information back out of the url...
+
+-  Can we walk through a form and action type scenario?
+
+- A couple git questions.
+
+Oct 2 Agenda - Hey Matt...sorry but I'm not as prepared as I should be...caught a touch of the flu over the 
+weekend and I'm just starting to feel better...
+
+Anyway, I thought we could discuss the following:
+
+- Is there any way that you are comfortable with that would let you view my screen remotely?  I know that Chrome has a couple plugins but 
+I want to be sure that you're ok with the security aspects of doing this.  If you are, it would make things much easier as I could show you the code 
+that I'm having trouble with, I could run it, you could see the results and make suggestions.
+
+-  I've been sketching out what I think the app should look like since I was too sick to make it over to the computer...I just transferred
+my thoughts to a ppt which I'll send you and walk you through to see if you have any comments or suggestions.
+
+-  I have a little chunk of code in testinginit (under pages) that I would like to discuss with you...I have a lot of quesions.
+    --what is the best way to add metadata?  is it set? set_meta_data, or simply adding a field?
+
+- I'd like to know how I could add a link to the group edit page after intercepting that page with my elgg_register_event_handler('pagesetup', 'system','interceptpagesetup'); in 
+the start.php file.
+
+Thanks eh!
+Rich.
+
+Sept 26 Agenda:
+
+-  Walk through start and content pane and get feedback about how I'm doing things
+-  Talk about how I should use views more advantageously and don't just use elgg_echo everywhere
+-  Have him walk me through how he would find out more about this group add function stuff
+-  Have him walk me through how he would find out more about elgg_get_entity_by...
+-  Discuss hosting a test elgg site for reporting to athabasca profs
+
+Stuff for Rich to do next week
+
+-  work through Matt's css tutorial plugin and fix up the course menu
+- figure out the whole building the course tree into a group object thing
+- fix up how I'm using views so I use less ad-hoq elgg_echo's through the code.
