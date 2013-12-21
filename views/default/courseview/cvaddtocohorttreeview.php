@@ -16,10 +16,9 @@ $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $userguid = elgg_get_logged_in_user_guid();
 
-//we'll need some of the library methods here
+//load needed libraries
 elgg_load_library('elgg:courseview');
 
-$count = 0;
 $prof_menu_item_already_used = array();
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
@@ -31,7 +30,7 @@ foreach ($cohorts as $cohort)
     
     // building the html of the treeview control and adding the correct css classes so that the css
     //can turn it into a tree that can be manipulated by the user 
-    echo ('<div class ="css-treeview">');
+    echo '<div class ="css-treeview">';
     //we start our tree with indentlevel at 0.  The only menu items that will be at indent level 0 will be the course container folder
     $indentlevel = 0;
     //now, loop through each menu item (by menusort order)
@@ -46,18 +45,18 @@ foreach ($cohorts as $cohort)
          * 
          * A $menu_item of type professor will have a relationship in the following format:  
          *              $menu_item->guid, 'content', $current_content_entity -> guid.
-         *                      This is because any content inside of a $menu_item of type professor will belong to the entire course
+         * This is because any content inside of a $menu_item of type professor will belong to the entire course
          * 
          * A $menu_item of any other type (ie student) will have a relationship in the following format:
          *              $menu_item->guid, 'content'.<cohortguid>, $current_content_entity->guid
-         *                      This is becase content inside of a $menu_item of type student will belong only to the current cohort
+         * This is becase content inside of a $menu_item of type student will belong only to the current cohort
          * 
          * By separting relationships in this fashion, we can access student content in any particular cohort where as the
          * professor content will remain constant in all cohorts (ie, belongs to the entire course)
          */
            
         //figure out the correct $relationship string  (professor content is "content", studen content is "content<GUID> where guid is the cohort guid.
-        $relationship =buildRelationship ($menuitem, $cohortguid);
+        $relationship = cv_build_relationship ($menuitem, $cohortguid);
         
         //decide whether or not the current $menuitem should have the checkbox checked when it is rendered.
         $checkoptions = setCheckStatus ($menuitem, $relationship, $current_content_entity,$cvmenuguid, $cvcohortguid, $cohortguid);
@@ -69,7 +68,6 @@ foreach ($cohorts as $cohort)
 
         //set up attributes to insert into the html tags
         $name = $menuitem->name;
-        $count++;
         $indent = $menuitem->indent;
 
         //build html depending on menu type: student, professor, or folder
@@ -93,11 +91,17 @@ foreach ($cohorts as $cohort)
              */
             $value = $menuitem->guid . "|" . $cohortguid;
         
-            echo ("<li>");
+            echo "<li>";
             echo elgg_view('input/checkbox', array('name' => 'menuitems[]', 'value' => '+' . $value, 'class' => 'cvinsert', 'checked' => $checkoptions, 'default' => '-' . $value));
             //maybe make this a label instead of an anchor
             echo "<label  for ='$value'>$name.$value.$checkoptions</label>";
-      
+            
+            /* we need to flag any menuitems of type professor so that they are only assigned a checkbox the first time they 
+             * are display.  Theoretically, a professor running two cohorts of the same course at the same time could end up
+             * with two of the cohorts showing up in the tree.  If that is the case, we only want the prof to be able to change
+             * the actual course scaffolding content in the first cohort displayed for that course
+             */
+            
             if ($menuitem->menutype == 'professor' )
                 {
                     $prof_menu_item_already_used [] = $menuitem->guid;
@@ -109,8 +113,20 @@ echo '</div>';
 echo '<br>';
 echo '</div>';
 
+/*
+ * Builds and returns the String that will be used to determine if a relationship entity exists between the 
+ *  menuitem currently being examined and the content object associated with the current view.
+ * 
+ * @param $menuitem the menuitem object that we are currently examining
+ * @param $cohortguid the guid of the current cohort.
+ * 
+ * @return the string that represents potential the relationship between the menuitem and the content object
+ */
 
-function buildRelationship ($menuitem, $cohortguid)
+
+//move functions into a library instead of in a view
+
+function cv_build_relationship ($menuitem, $cohortguid)
 {
     $rel = 'content';
         //however, if the $menuitem is not of type 'professor' (ie, of type 'student'), then we need to append the particulart  cohort to 'content'
@@ -121,6 +137,13 @@ function buildRelationship ($menuitem, $cohortguid)
         return $rel;
 }
 
+/* Determines whether the html checkbox that is being generated to represent the current menuitem should have a checkmark
+ * in it or not.
+ * 
+ * @param $menuitem the menuitem object that we are currently examining
+ */
+
+//consider placing all of these arguments into an associative array (string keys)
 function setCheckStatus ($menuitem, $rel, $current_content_entity,$cvmenuguid, $cvcohortguid, $cohortguid)
 {
    //if a relationship exists, them set we need the menu item to have a check in the checkbox

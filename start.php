@@ -14,7 +14,7 @@ function courseviewInit()
     elgg_load_library('elgg:cv_debug');
 
     //if the user is not a member of any cohorts, not a prof, and not an admin then don't bother running anything.
-    if (!cv_is_courseview_user()  && !cv_isprof(elgg_get_logged_in_user_entity()) && !elgg_is_admin_logged_in())
+    if (!cv_is_courseview_user() && !cv_isprof(elgg_get_logged_in_user_entity()) && !elgg_is_admin_logged_in())
     {
         return;
     }
@@ -66,8 +66,10 @@ function courseviewInit()
 
     //this is an experiment to intercept the database call and make changes to the ACLs as needed
     elgg_register_plugin_hook_handler('access:collections:read', 'all', 'richtest', 999);
+    elgg_register_plugin_hook_handler('access:collections:write', 'all', 'richtest2', 999);
 
-    //set up our paths and various actions 
+
+//set up our paths and various actions 
     $base_path = dirname(__FILE__); //gives a relative path to the directory where this file exists
 
     elgg_register_action("createcourse", $base_path . '/actions/courseview/createcourse.php');
@@ -88,6 +90,7 @@ function courseviewPageHandler($page, $identifier)
     //TODO:: Matt, do I need to be more worried about gatekeeper functions etc?
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
     group_gatekeeper();
+    $base_path = dirname(__FILE__);
 
     /* Since it is possible to require the current cohort and menuitem while on a non-courseview page, we push
      * this information into the session
@@ -137,11 +140,11 @@ function cvinterceptupdate($event, $type, $object)
     $validkeys = array_keys($validplugins);
     $valid_plugin = false;
     //looping through all approved plugins to ensure that this content can be added to courseview
-    cv_debug ("Is this valid: ".is_valid_plugin($object->getSubtype()), "cvinterceptupdate",6);
-    
+    cv_debug("Is this valid: " . is_valid_plugin($object->getSubtype()), "cvinterceptupdate", 6);
+
     foreach ($validkeys as $plugin)
     {
-        cv_debug("Checking:  " . $plugin . '--' . $object->getSubtype(), "cvinterceptupdate",6);
+        cv_debug("Checking:  " . $plugin . '--' . $object->getSubtype(), "cvinterceptupdate", 6);
         if ($object->getSubtype() == $plugin)
         {
             $valid_plugin = true;
@@ -150,7 +153,7 @@ function cvinterceptupdate($event, $type, $object)
     }
 
     cv_debug("valid debug? $valid_plugin", "cvinterceptupdate");
-    
+
     /* pull array of checkboxes from the cvaddtocohorttreeview so that we can loop through them to determine what realtionships
      * need to be added or deleted
      */
@@ -172,9 +175,9 @@ function cvinterceptupdate($event, $type, $object)
 
         $menu_item_guid = substr($menu_item, 1, $stop); //substr(strstr($menu_item, '|', true), 1); //This doesn't work in older versions of php
         $guid_one = $menu_item_guid;
-         $guid_two = $object->guid;
-         
-        /*need to check if this is a non-professor type content and change relationship accordingly...If it is of type professor, the relationship
+        $guid_two = $object->guid;
+
+        /* need to check if this is a non-professor type content and change relationship accordingly...If it is of type professor, the relationship
          * String should be simply 'content'.  However, if the relationship is of type student, then the relationship String should have the current
          * $cohort_guid appended to it in the form contentXXX where XXX is the $cohort_guid
          */
@@ -190,8 +193,7 @@ function cvinterceptupdate($event, $type, $object)
             cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cvinterceptupdate", 5);
             $z = add_entity_relationship($guid_one, $relationship, $guid_two);
             cv_debug($z, "cvinterceptupdate");
-        } 
-        else
+        } else
         {
             $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
             if ($rel_to_delete)  //if the module was unchecked and there was a relationship, we need to remove the relationship
@@ -200,9 +202,9 @@ function cvinterceptupdate($event, $type, $object)
             }
         }
     }
- //::TODO:  change this $rootdomain to use this instead 
-  // $rootdomain= dirname(__FILE__); //gives a relative path to the directory where this file exists
-    
+    //::TODO:  change this $rootdomain to use this instead 
+    // $rootdomain= dirname(__FILE__); //gives a relative path to the directory where this file exists
+
     $rootdomain = elgg_get_site_url();
     $cvredirect = $rootdomain . 'courseview/contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
     ElggSession::offsetSet('cvredirect', $cvredirect);
@@ -234,20 +236,94 @@ function cvforwardintercept($hook, $type, $return, $params)
 
 function richtest($hook, $type, $return, $params)
 {
-//    var_dump ($hook);
-//    var_dump($type);
-//    var_dump ($return);
-//    var_dump ($params);
-//    exit;
+    echo 'richtest2<br>';
+    var_dump($hook);
+    echo'<br>';
+    var_dump($type);
+    echo'<br>';
+    var_dump($return);
+    echo'<br>';
+    var_dump($params);
+    echo'<br>';
+//    if (!$cv_active)
+//    {
+//        return $return;
+//    }
+    /* We need to unregister the plugin hook handler before getting the courses or we will crash the php interpreter through
+     * recursion ;->
+     */
+    elgg_unregister_plugin_hook_handler('access:collections:read', 'all', 'richtest');
+    $user = get_user($params["user_id"]);
+    $courses = cv_get_user_courses($user);
 
-
-//    cv_debug("database call made", "", 6);
-//    cv_debug("hook: " . $hook, "", 6);
-//    cv_debug("type: " . $type, "", 6);
-//    cv_debug("params: " . $params, "", 6);
-   // $dbprefix = elgg_get_config('dbprefix');
-//    cv_debug("dbprefix: " . $dbprefix, "", 6);
-   // var_dump(elgg_extract('user_id', $params));
-   // var_dump (get_metastring_id('member_acl'));
+    foreach ($courses as $course)
+    {
+        if ($course->cv_acl)
+        {
+            $return [] = (int) $course->cv_acl; //add the course acl to the acl list being returned
+            //we also have to add the user to the acl collection.
+            add_user_to_access_collection($user->guid, $course->cv_acl);
+        }
+    }
+    echo 'modified $return:<br>';
+    var_dump($return);
+    echo'<br>';
     return $return;
+}
+
+function richtest2($hook, $type, $return, $params)
+{
+    
+    /*
+     * Think about just adding the current cohort's course to the access list...I think that's all I need.
+     */
+//    echo 'richtest2<br>';
+//    var_dump($hook);
+//    echo'<br>';
+//    var_dump($type);
+//    echo'<br>';
+//    var_dump($return);
+//    echo'<br>';
+//    var_dump($params);
+//    echo'<br>';
+
+    $user = get_user($params["user_id"]);
+    $cv_active = ElggSession::offsetGet('courseview');
+//    if (!cv_isprof($user) || !$cv_active)
+//    {
+//        return $return;
+//    }
+    elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'richtest2');
+    $courses = cv_get_user_courses($user);
+
+    //var_dump ($courses);
+    // echo 'Num courses: '.sizeof($courses).'<br>';
+    foreach ($courses as $course)
+    {
+//       echo 'accessid: '.$course->cv_acl.'<br>';
+//       echo 'courseguid: '.$course->guid.'<br>';
+//       echo 'coursename: '.$course->title.'<br>';
+// echo 'Looping through courses'.$course->cv_acl;
+        // if ($course->cv_acl)
+        {
+            $return [$course->cv_acl] = $course->title . '-' . $course->cv_acl;  //cast this to int...
+            //echo "ACL: ". $return [$course->cv_acl]."<br>";
+        }
+    }
+
+
+
+
+    return $return;
+
+
+    //use userid to make sure that the user is a professor (if not, just return $return)
+    /*
+     * get all of the professors courses, iterate through and get all of the acls that
+     * belong to each course and add to the return 
+     * 
+     * return is associative array - key is accessid and the value is what gets displayed (course name)
+     * 
+     * maybe check to see if courseview is active first...write code to allow profs to archive courses or cohorts.
+     */
 }

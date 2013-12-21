@@ -28,8 +28,9 @@ if ( !cv_is_courseview_user()|| strpos($action, 'vote')!==false)
     return;
 }
 
-//$entity = ($vars['entity']);
-
+/* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
+ * valid plugins for courseview is set in the settings view under the administration section of Elgg.
+ */
 $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
 $validkeys = array_keys($validplugins);
 $donotdisplay = true;
@@ -79,5 +80,4 @@ foreach ($validkeys as $plugin)
     <?php
      //echo elgg_view('courseview/debug');
         echo elgg_view('courseview/cvaddtocohorttreeview',$vars);  //what $vars???
-   
-    ?>
+

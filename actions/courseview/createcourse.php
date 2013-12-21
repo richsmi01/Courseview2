@@ -18,9 +18,11 @@ $cvcourse->title = $cvcoursename;
 $cvcourse->access_id = ACCESS_PUBLIC;
 $cvcourse->owner_guid = elgg_get_logged_in_user_guid();
 $cvcourse->container_guid = elgg_get_logged_in_user_guid();
+$cvcourse->description = $cvcoursedescription;
 $cvcourse->save();
 $cvcourse->cvcourse = true;
-$cvcourse->description = $cvcoursedescription;
+$id = create_access_collection ("cv_id",$cvcourse->guid);
+$cvcourse->cv_acl = $id;
 $cvcourse->save();
 //echo elgg_echo("Course Created! ");
 

@@ -54,20 +54,34 @@ function cv_is_courseview_user ()
 
 
 
-function cv_get_users_cohorts()
+function cv_get_users_cohorts($user = null) //default of null 
 {
-    $userguid = elgg_get_logged_in_user_guid();
+    
+    if (elgg_instanceof ($user, "user"))
+    {
+        $userguid = $user->guid;
+    }
+    else 
+    {
+        $userguid = elgg_get_logged_in_user_guid ();
+    }
+  //echo get_entity($userguid)->name;
+  //echo "searchcriteria<br>";
     $searchcriteria = array
         ('type' => 'group',
         'metadata_names' => array('cvcohort'),
         'metadata_values' => array(1),
         'limit' => false,
         'relationship' => 'member',
-        'relationship_guid' => $userguid,
+        'relationship_guid' => $userguid
     );
-    $groupsmember = elgg_get_entities_from_relationship($searchcriteria);
-    // var_dump ($groupsmember);
-    return $groupsmember;
+          
+   $usersgroups = elgg_get_entities_from_relationship($searchcriteria);
+//    
+ //  echo 'num cohorts returned: '.sizeof($usersgroups);
+   
+//   
+   return $usersgroups;
 }
 
 function cv_isprof($user)
@@ -87,6 +101,48 @@ function cv_isprof($user)
     {
         return $profsgroup->isMember($user);
     }
+}
+
+function cv_get_user_courses ($user)
+{
+
+    $cohorts =  cv_get_users_cohorts($user);
+    
+    if (!$cohorts)
+    {
+        return array();
+    }
+  
+    $courses = array();
+
+    foreach ($cohorts as $cohort)
+    {   
+        $cvcourse = get_entity($cohort->getContainerGUID());
+      //  echo 'cohortname: '.$cohort->title.'<br>';
+     //   echo 'coursename: '.$cvcourse->title.'<br>';
+        
+        if (!$cvcourse->cv_acl)
+        {
+            echo "nope<br>";
+            $id = create_access_collection ("cv_id",$cvcourse->guid);
+            $cvcourse->cv_acl = $id;
+            $cvcourse->save();
+            echo'generating...'. $cvcourse->cv_acl;
+        }
+//        else
+//        {
+//            echo 'yep!<br>';
+//        }
+//       $id = create_access_collection ("cv_id",$cvcourse->guid);
+//$cvcourse->cv_acl = $id;
+        
+        $courses[$cohort->getContainerGUID()]= $cvcourse;  //placeholder value
+    }
+
+    
+   $temp = array_values($courses);
+  // var_dump ($temp);
+   return $temp;
 }
 
 function cv_get_cohorts_by_courseguid($courseguid)

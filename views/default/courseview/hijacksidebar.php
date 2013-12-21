@@ -35,6 +35,7 @@ cv_debug("Entering hijacksidebar.php", 'stuff');
 
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
+
 cv_debug($cohorts, "test");
 echo '<h3>CourseView</h3><br>';
 $count = 0;
@@ -69,7 +70,7 @@ foreach ($cohorts as $cohort)
         $name = $menuitem->name;
         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
         {
-            $name = $cohort->title;
+            $name = $cohort->title .'-'. get_entity($cohort->getcontainerGUID ())->cv_acl;
         }
         $id1 = $count; //$menuitem->menuorder;
         $count++;
