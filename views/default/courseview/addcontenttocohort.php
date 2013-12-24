@@ -1,15 +1,16 @@
 <?php
+
 //Check to see if the action string contains any of our approved plugins...If it does, and the user is in a cohort, display the page.
- 
+
 
 elgg_load_library('elgg:courseview');
 elgg_load_library('elgg:cv_debug');
- 
+
 
 $action = $vars['action'];
-cv_debug ("action: $action", "",5);
+cv_debug("action: $action", "", 5);
 
-/*first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
+/* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
  * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cvaddtocohorttreeview to
  * pop up when desiging a poll.  However, we don't want it to pop up when taking the poll.  The only way to do this is to look for
  * a particular word in the $action string that is created by the plugin.  Again, for the poll plugin, this $action String looks something
@@ -23,7 +24,7 @@ cv_debug ("action: $action", "",5);
  * all possible logging activities.  One could be 'Show Actions' which the administrator could select and have all actions added to the log file. 
  *  That way the administrator could look for filter words.
  */
-if ( !cv_is_courseview_user()|| strpos($action, 'vote')!==false)
+if (!cv_is_courseview_user() || strpos($action, 'vote') !== false)
 {
     return;
 }
@@ -37,47 +38,57 @@ $donotdisplay = true;
 
 foreach ($validkeys as $plugin)
 {
-  //  echo "Plugin :".$plugin.'<br>';
-    if (strpos($action, $plugin)!==false)
+    //  echo "Plugin :".$plugin.'<br>';
+    if (strpos($action, $plugin) !== false)
     {
-        $donotdisplay=false;
+        $donotdisplay = false;
         break;
     }
 }
 
-    if ($donotdisplay)
-    {
-       return true;
-    }
+if ($donotdisplay)
+{
+    return true;
+}
 ?>
 <script>
     /**
      * A bit of javascript to collapse the cohorttree unless the user clicks on the topline
      */
     function showCVAdd() {
-       
+
         myDiv = document.querySelector("#addToCohort");
         //alert (myDiv.style.visibility);
-        if (myDiv.style.visibility=="visible") {
-            myDiv.style.visibility='hidden';
-            myDiv.style.height='0px';
-                 
+        if (myDiv.style.visibility == "visible") {
+            myDiv.style.visibility = 'hidden';
+            myDiv.style.height = '0px';
+
         }
         else
         {
-            myDiv.style.visibility='visible';
-            myDiv.style.height='auto';
-                 
-        } 
+            myDiv.style.visibility = 'visible';
+            myDiv.style.height = 'auto';
+
+        }
     }
 </script>
 
 
 <div id='add_entity_to_cohort_menus'>
-    <input onclick = "showCVAdd ()" id ="showtree" type ='checkbox' style='display:inline' />
-    <label  for ="showtree" style="display:inline">Add this content to a CourseView module </label><br><br>
-    <div id ='addToCohort'>
-    <?php
-     //echo elgg_view('courseview/debug');
-        echo elgg_view('courseview/cvaddtocohorttreeview',$vars);  //what $vars???
+    <input onclick = "showCVAdd()" id ="showtree" type ='checkbox' style='display:inline' />
 
+    <label  for ="showtree" style="display:inline">Add this content to a CourseView cohort </label><br><br>
+    <div id ='addToCohort'>
+        <?php
+
+        $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
+
+        //echo elgg_view('courseview/debug');
+        $cv_menuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
+
+        $vars = array('cv_menutype' => $cvmenuitem->menutype);
+        echo elgg_view('courseview/cvaddtocohorttreeview', $vars);
+
+
+
+        
