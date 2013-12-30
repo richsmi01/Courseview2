@@ -5,9 +5,12 @@
 
 elgg_load_library('elgg:courseview');
 elgg_load_library('elgg:cv_debug');
-
+//var_dump($vars);
+$attributes = $vars['attibutes'];
+//var_dump ($attributes);
 
 $action = $vars['action'];
+//echo 'action:'.$action;
 cv_debug("action: $action", "", 5);
 
 /* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
@@ -51,7 +54,7 @@ if ($donotdisplay)
     return true;
 }
 ?>
-<script>
+<!--<script>
     /**
      * A bit of javascript to collapse the cohorttree unless the user clicks on the topline
      */
@@ -71,22 +74,23 @@ if ($donotdisplay)
 
         }
     }
-</script>
+</script>-->
 
 
-<div id='add_entity_to_cohort_menus'>
+<!--<div id='add_entity_to_cohort_menus'>
     <input onclick = "showCVAdd()" id ="showtree" type ='checkbox' style='display:inline' />
 
     <label  for ="showtree" style="display:inline">Add this content to a CourseView cohort </label><br><br>
-    <div id ='addToCohort'>
+    <div id ='addToCohort'>-->
         <?php
-
-        $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-
+        
+         
+//        $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
+//        $entity = $current_content_entity->guid;
         //echo elgg_view('courseview/debug');
         $cv_menuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
-
-        $vars = array('cv_menutype' => $cvmenuitem->menutype);
+       
+ //       $vars = array('cv_menutype' => $cvmenuitem->menutype, 'entity'=>$entity);
         echo elgg_view('courseview/cvaddtocohorttreeview', $vars);
 
 

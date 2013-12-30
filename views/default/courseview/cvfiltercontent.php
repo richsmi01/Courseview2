@@ -65,4 +65,4 @@ if ($createbutton != '')  //if there is a currently filtered plugin type, give t
         'href' => $createbutton));
 }
 echo '</form><br/>';
-?>
+

@@ -14,6 +14,7 @@ if ((cv_isprof($user)))
 }
 echo '<h1>'.$menuitem->name.'</h1><br>';
 //depending on what type of module is selected, load the correct view for folder, professor or student
+
 switch ($menutype)
 {
     case "folder":
@@ -24,7 +25,7 @@ switch ($menutype)
         echo elgg_view('courseview/professorcontentview'); 
         break;
     case "student": 
-         echo elgg_view('courseview/studentcontentview');
+        echo elgg_view('courseview/studentcontentview');
         break;
     default:
         echo elgg_echo("<BR><BR><BR><div id ='cvwelcome' >WELCOME TO COURSEVIEW!</div>");

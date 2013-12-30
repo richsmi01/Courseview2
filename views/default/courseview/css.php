@@ -53,7 +53,7 @@ min-width: 850px;
 .css-treeview input
 {
 position: absolute;
-opacity: 0;  //dfskjalsdflkjfdslkjfdsfdkjllkdfjlkdsjf;lkdsjfldskfj;ldsjf;lkdsjf;lkdsjf;lkdsjf;ldsjf;lkjds
+opacity: 0;  
 }
 
 .css-treeview input.cvinsert{
@@ -111,7 +111,7 @@ display: block;
 }
 
 .css-treeview label,
-.css-treeview label::before
+.css-treeview label:before
 {
 
 background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/icons.png) no-repeat;
@@ -127,13 +127,15 @@ line-height: 16px;
 vertical-align: middle;
 }
 
-.css-treeview label
+.css-treeview label 
 {
 background-position: 18px 0;
 }
 
-.css-treeview label::before
+/*.css-treeview label::before*/
+.css-treeview label:before
 {
+
 content: "";
 width: 16px;
 margin: 0 22px 0 0;
@@ -252,11 +254,13 @@ margin:5px 5px 5px 15px;
 font-style: italic;
 }
 
-.cvtreeaddtocohort {
+#cvaddtocohort, #cvaddtocourse {
 
 //color :red;
 border: 1px solid black;
-padding:10px;
+//padding:10px;
+visibility:hidden;
+height:0px;
 }
 
 /*        #editmenuitem, #addmenuitem{
@@ -270,11 +274,11 @@ display:block;
 
 }*/
 
-#addToCohort
+/*#addToCohort
 {
 visibility:hidden;
 height:0px;
-}
+}*/
 
 #cvwelcome {
     font-size:300%;

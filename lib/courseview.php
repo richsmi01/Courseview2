@@ -7,11 +7,11 @@
 //    return $cvcourseview[0]->profsgroup;
 //}
 
-function cv_get_menu_items_for_cohort($cvcohortguid)
+function cv_get_menu_items_for_course($courseguid)
 {
-    //echo "<br>Getting menu items from relationship:".get_entity($cvcohortguid)->container_guid.'-- menu --';
+   // echo "<br>Getting menu items from relationship:". $courseguid;
     $menu = elgg_get_entities_from_relationship(array
-        ('relationship_guid' => get_entity($cvcohortguid)->container_guid,
+        ('relationship_guid' => $courseguid,
         'relationship' => 'menu',
         'type' => 'object',
         'subtype' => 'cvmenu',
@@ -23,6 +23,30 @@ function cv_get_menu_items_for_cohort($cvcohortguid)
     //var_dump($menu);
     return $menu;
 }
+
+function cv_get_menu_items_for_cohort($cvcohortguid)
+{
+   // echo $cohortguid->get_entity(container_guid);
+    $menu = cv_get_menu_items_for_course (get_entity($cvcohortguid)->container_guid);
+    
+    return $menu;
+}
+
+function cv_get_cohorts_by_courseguid($courseguid)
+{
+
+    $options = array
+        ('type' => 'group',
+        'metadata_names' => array('cvcohort'),
+        'metadata_values' => array(1),
+        'limit' => false,
+        'container_guid' => $courseguid,
+    );
+
+    $value = elgg_get_entities_from_metadata($options);
+    return $value;
+}
+
 
 function is_valid_plugin($arg1)
 {
@@ -138,26 +162,23 @@ function cv_get_user_courses ($user)
         
         $courses[$cohort->getContainerGUID()]= $cvcourse;  //placeholder value
     }
-
-    
-   $temp = array_values($courses);
-  // var_dump ($temp);
-   return $temp;
 }
-
-function cv_get_cohorts_by_courseguid($courseguid)
+    function cv_get_prof_owned_courses ($user)
 {
-
-    $options = array
-        ('type' => 'group',
-        'metadata_names' => array('cvcohort'),
+        $searchcriteria = array
+        ('type' => 'object',
+            'owner_guid' => $user->guid,
+            'metadata_names' => array('cvcourse'),
         'metadata_values' => array(1),
+        //'subtype' => 'cvcourse',
         'limit' => false,
-        'container_guid' => $courseguid,
+        //'relationship' => 'owner',
+       // 'relationship_guid' => $user->guid,
     );
-
-    $value = elgg_get_entities_from_metadata($options);
-    return $value;
+          
+   $ownedcourses = elgg_get_entities_from_relationship($searchcriteria);
+   return $ownedcourses;
+   
 }
 
 function cv_is_valid_plugin($arg1)
@@ -300,4 +321,3 @@ function courseview_listplugins()
     return $returnvalue;
 }
 
-?>

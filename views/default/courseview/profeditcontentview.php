@@ -3,6 +3,7 @@
  * used to create the administration views that are presented to a professor
  */
 ?>
+
 <ul>
     <li>
         <input type='checkbox' name='a' id='cp-2'>CourseView Administration

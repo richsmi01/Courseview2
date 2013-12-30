@@ -158,6 +158,8 @@ function cvinterceptupdate($event, $type, $object)
      * need to be added or deleted
      */
     $menu_items = get_input('menuitems');
+    //var_dump ($menu_items);
+    //exit;
 
     cv_debug("Number of menuitems: " . sizeof($menu_items), "cvinterceptupdate");
     foreach ($menu_items as $menu_item)
@@ -236,19 +238,13 @@ function cvforwardintercept($hook, $type, $return, $params)
 
 function richtest($hook, $type, $return, $params)
 {
-    echo 'richtest2<br>';
-    var_dump($hook);
-    echo'<br>';
-    var_dump($type);
-    echo'<br>';
-    var_dump($return);
-    echo'<br>';
-    var_dump($params);
-    echo'<br>';
-//    if (!$cv_active)
-//    {
-//        return $return;
-//    }
+    //If courseview is not active, we just want to continue on as usual
+    $cv_active = ElggSession::offsetGet('courseview');
+    if (!$cv_active)
+    {
+        return $return;
+    }
+    
     /* We need to unregister the plugin hook handler before getting the courses or we will crash the php interpreter through
      * recursion ;->
      */
@@ -265,65 +261,54 @@ function richtest($hook, $type, $return, $params)
             add_user_to_access_collection($user->guid, $course->cv_acl);
         }
     }
-    echo 'modified $return:<br>';
-    var_dump($return);
-    echo'<br>';
+   
     return $return;
 }
 
+ 
+    /*
+     * When the professor creates content, we want to add an option to the access dropdown
+     * to allow viewing to any users who are members of any of the cohorts attached to the current
+     * course.
+     * 
+     * We do this by intercepting the access:collections:write and adding the ACL of the course
+     * object to the ACL array before returning it back to elgg.
+     * 
+     * The ACL array is an associative array where the key is the accessid and the value is what gets displayed 
+     * in the ACCESS dropdown.
+     * 
+     * I orginally wrote this to show all courses owned by the prof but I'm starting to think that it should just
+     * be the current course that the prof is in within courseview.  I need to run this past the other guys to 
+     * get their thoughts....
+     */
+
 function richtest2($hook, $type, $return, $params)
 {
-    
-    /*
-     * Think about just adding the current cohort's course to the access list...I think that's all I need.
-     */
-//    echo 'richtest2<br>';
-//    var_dump($hook);
-//    echo'<br>';
-//    var_dump($type);
-//    echo'<br>';
-//    var_dump($return);
-//    echo'<br>';
-//    var_dump($params);
-//    echo'<br>';
-
     $user = get_user($params["user_id"]);
     $cv_active = ElggSession::offsetGet('courseview');
-//    if (!cv_isprof($user) || !$cv_active)
-//    {
-//        return $return;
-//    }
-    elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'richtest2');
-    $courses = cv_get_user_courses($user);
-
-    //var_dump ($courses);
-    // echo 'Num courses: '.sizeof($courses).'<br>';
-    foreach ($courses as $course)
+    if (!cv_isprof($user)|| !$cv_active)
     {
-//       echo 'accessid: '.$course->cv_acl.'<br>';
-//       echo 'courseguid: '.$course->guid.'<br>';
-//       echo 'coursename: '.$course->title.'<br>';
-// echo 'Looping through courses'.$course->cv_acl;
-        // if ($course->cv_acl)
-        {
-            $return [$course->cv_acl] = $course->title . '-' . $course->cv_acl;  //cast this to int...
-            //echo "ACL: ". $return [$course->cv_acl]."<br>";
-        }
+        return $return;
     }
+    elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'richtest2');
+//    $courses = cv_get_user_courses($user);
+//    foreach ($courses as $course)
+//    { 
+//        if ($course->cv_acl)
+//        {
+//            $return [$course->cv_acl] = $course->title . '-' . $course->cv_acl;  
+//            //echo "ACL: ". $return [$course->cv_acl]."<br>";
+//        }
+//    }
 
-
-
-
+    $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
+   
+    $course = get_entity ($cv_cohort->getContainerGUID());
+    //if the course has been assigned a custom acl (stored in cv_acl) then add it to the list
+    if ($course->cv_acl)
+    {
+        $return [$course->cv_acl] = 'Course: '.$course->title; 
+    }
+    
     return $return;
-
-
-    //use userid to make sure that the user is a professor (if not, just return $return)
-    /*
-     * get all of the professors courses, iterate through and get all of the acls that
-     * belong to each course and add to the return 
-     * 
-     * return is associative array - key is accessid and the value is what gets displayed (course name)
-     * 
-     * maybe check to see if courseview is active first...write code to allow profs to archive courses or cohorts.
-     */
 }
