@@ -32,7 +32,6 @@
                         echo elgg_view_form('addacohort');
                         echo elgg_view_form('editacohort');
                         echo elgg_view_form('deleteacohort');
-                        
                         ?>
                     </div>
                 </li>

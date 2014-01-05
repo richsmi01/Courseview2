@@ -6,7 +6,7 @@
  */
 elgg_load_library('elgg:courseview');
 $cohortguid = ElggSession::offsetGet('cvcohortguid');
-$cvmenuitemname = get_input('cvmodulename');
+
 $cvmenuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
  //echo "menu item indent ".$cvmenuitem->indent;
 //echo "TEST:" . get_input('buttonchoice');
@@ -86,14 +86,21 @@ switch (get_input('buttonchoice'))
 
     case 'Change Name':
        // echo 'Change Name has been selected';
+        $cvmenuitemname = get_input('cvmodulename');
         $cvmenuitem->name = $cvmenuitemname;
+        
+        //remove later - just for debugging
+        $cvmenutype = get_input('cvmenutype');
+        $cvmenuitem->menutype = $cvmenutype;
+        
+        
         $cvmenuitem->save();
         break;
     
     case 'Delete Menu Item':
         //echo"delelting menu item: ".$cvmenuitem->id;
         
-        echo "menu items: ".sizeof($menuitems)."<br>";
+        //echo "menu items: ".sizeof($menuitems)."<br>";
         //var_dump($menuitems);
         for ($a=$cvmenuitem->menuorder; $a<sizeof($menuitems); $a++)
         {

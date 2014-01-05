@@ -1,6 +1,6 @@
 <?php
 
-  elgg_load_library('elgg:courseview');
+elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');  //current menu item guid (stored in session)
 $menuitem = get_entity($cvmenuguid);  //get the menuitem object
@@ -18,7 +18,18 @@ echo '<h1>'.$menuitem->name.'</h1><br>';
 switch ($menutype)
 {
     case "folder":
-        echo elgg_echo("<br><p id = 'cvfolderdescription'>" . $menuitem->name."</p>");
+       
+        if ($menuitem->menuorder==0)
+        {
+            echo "<br><p id = 'cvfolderdescription'>Welcome to " . $menuitem->name."</p>";
+            $cvcohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
+            $cvcourse = get_entity ($cvcohort->getContainerGUID());
+            echo "<br> $cvcourse->description";
+        }
+        else
+        {
+            echo "<br><p id = 'cvfolderdescription'>" . $menuitem->name."</p>";
+        }
         break;
     case "professor":
     case "bundle":    //delete this down the road

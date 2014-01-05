@@ -14,11 +14,11 @@ $action = $vars['action'];
 cv_debug("action: $action", "", 5);
 
 /* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
- * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cvaddtocohorttreeview to
+ * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
  * pop up when desiging a poll.  However, we don't want it to pop up when taking the poll.  The only way to do this is to look for
  * a particular word in the $action string that is created by the plugin.  Again, for the poll plugin, this $action String looks something
  * like this: http://localhost/elgg/action/polls/vote  -- In this case we are able to pull out the word vote as being unique to this page and check 
- * for it.  If we find it, we don't want to add cvaddtocohorttreeview to the page.
+ * for it.  If we find it, we don't want to add cv_content_tree to the page.
  * 
  * Note - For now, I've just hard-coded the 'vote' but what I really should do is eventually add a text input to the settings form that will allow
  * the user to type in a set of keywords, separated by spaces, and use them instead of a hardcoded 'vote'.  
@@ -91,7 +91,7 @@ if ($donotdisplay)
         $cv_menuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
        
  //       $vars = array('cv_menutype' => $cvmenuitem->menutype, 'entity'=>$entity);
-        echo elgg_view('courseview/cvaddtocohorttreeview', $vars);
+        echo elgg_view('courseview/cv_content_tree', $vars);
 
 
 

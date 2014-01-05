@@ -13,6 +13,15 @@ echo '<br/>Enter name of new module';
 echo elgg_view('input/text', array(
     'name' => 'cvmodulename',
     'value' => $cvmenu->name));
+
+
+echo elgg_view('input/text', array(
+    'name' => 'cvmenutype',
+    'value' => $cvmenu->menutype));
+
+
+
+
 echo elgg_view('input/submit', array(
     'value' => 'Change Name',
      'name' =>'buttonchoice'));

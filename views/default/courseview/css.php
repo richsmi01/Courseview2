@@ -65,12 +65,19 @@ font: normal 11px "Segoe UI", Arial, Sans-serif;
 -moz-user-select: none;
 -webkit-user-select: none;
 user-select: none;
+overflow-y:hidden;
+overflow-x:hidden;
 }
 
 .css-treeview a
 {
 color: #00f;
 text-decoration: none;
+
+}
+
+.elgg-sidebar {
+//overflow-x:scroll;
 }
 /*I added this to make branch nodes push in a little bit--Rich.*/
 .css-treeview  .indent {
@@ -169,6 +176,9 @@ padding: 0;
 }
 }
 
+
+
+
 #editbox {
 border: solid 1px black;
 padding:10px;
@@ -199,24 +209,33 @@ width:30px;
 height:30px;
 
 }
-//.uparrowcontainer, downarrowcontainer {
-//}
 
-//.uparrow {
-//height:15px;
-//width: 15px;
-//background-color:blue;
-//border: solid black;
-//margin:3px;
+.grey {
+color:grey;
+font-style:italic;
+}
 
-//}
-//.downarrow {
-//height:15px;
-//width: 15px;
-//background-color:red;
-//border: solid black;
-//margin:3px;
-//}
+.uparrowcontainer, downarrowcontainer {
+}
+
+.uparrow {
+    height:15px;
+    width: 15px;
+    background-color:blue;
+    //border: 1px solid black;
+    margin:1px;
+    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/uparrow.png);
+
+}
+.downarrow {
+    height:15px;
+    width: 15px;
+   // background-color:red;
+    //border: 1px solid black;
+    margin:1px;
+    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/downarrow.png);
+    background-height:15px;
+}
 
 #cvfolderdescription {
 font-size: 400%;

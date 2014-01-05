@@ -2,7 +2,7 @@
 <!--move our link to just above the save button-->
 <script>
     $(document).ready(function() {
-        $(".elgg-form input[type='submit']").before($("#add_entity_to_cohort_menus"));
+        $(".elgg-form input[type='submit']input[value='Save']").before($("#add_entity_to_cohort_menus"));
     });
 </script>
 
@@ -196,10 +196,10 @@ foreach ($cohorts as $cohort)
              * the actual course scaffolding content in the first cohort displayed for that course
              */
 
-            if ($menuitem->menutype == 'professor')
-            {
-                $prof_menu_item_already_used [] = $menuitem->guid;
-            }
+//            if ($menuitem->menutype == 'professor')
+//            {
+//                $prof_menu_item_already_used [] = $menuitem->guid;
+//            }
         }
     }
     echo '</div>';
@@ -241,20 +241,25 @@ function setCheckStatus($menuitem, $rel, $current_content_entity, $cvmenuguid, $
 {
     //if a relationship exists, them set we need the menu item to have a check in the checkbox
    // echo '<br>&&&'.$menuitem->guid. $rel. $current_content_entity->guid.'<br>';
+    $checkoptions =false;
+    
     if (check_entity_relationship($menuitem->guid, $rel, $current_content_entity->guid)->guid_one > 0)
     {
         $checkoptions = true;
        // echo'$$$';
-    } else
-    {
-        $checkoptions = false;
-       // echo '###';
-    }
+    } 
     //also, if the menu item and cohort is same menu item and cohort that the courseview interface is currently on, it must be checked
     if ($cvmenuguid == $menuitem->guid && $cohortguid == $cvcohortguid)   //and correct cohort???
     {
         $checkoptions = true;
     }
+    //if the menuitem is of type professor, ignore all the cohort stuff and check to see if the menuitem we are examining
+    //is the same one as CV is currently displaying.  If so, add a check to the checkbox.
+    if ($menuitem->menutype =='professor'  && $cvmenuguid == $menuitem->guid)
+    {
+        $checkoptions=true;
+    }
+    
     return $checkoptions;
 }
 

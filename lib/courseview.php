@@ -127,9 +127,13 @@ function cv_isprof($user)
     }
 }
 
+function cv_is_course_owner ($user, $cohort)
+{
+    return ($user->guid == $cohort->getOwnerGUID());
+}
+
 function cv_get_user_courses ($user)
 {
-
     $cohorts =  cv_get_users_cohorts($user);
     
     if (!$cohorts)
@@ -142,16 +146,16 @@ function cv_get_user_courses ($user)
     foreach ($cohorts as $cohort)
     {   
         $cvcourse = get_entity($cohort->getContainerGUID());
-      //  echo 'cohortname: '.$cohort->title.'<br>';
-     //   echo 'coursename: '.$cvcourse->title.'<br>';
+      //cv_debug( 'cohortname: '.$cohort->title.'<br>',"",100);
+      //cv_debug('coursename:: '.$cvcourse->title.'<br>',"",100);
         
         if (!$cvcourse->cv_acl)
         {
-            echo "nope<br>";
+           // echo "nope<br>";
             $id = create_access_collection ("cv_id",$cvcourse->guid);
             $cvcourse->cv_acl = $id;
             $cvcourse->save();
-            echo'generating...'. $cvcourse->cv_acl;
+           // echo'generating...'. $cvcourse->cv_acl;
         }
 //        else
 //        {
@@ -162,6 +166,7 @@ function cv_get_user_courses ($user)
         
         $courses[$cohort->getContainerGUID()]= $cvcourse;  //placeholder value
     }
+    return $courses;
 }
     function cv_get_prof_owned_courses ($user)
 {

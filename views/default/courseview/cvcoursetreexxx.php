@@ -7,7 +7,7 @@
 
 //Here we are building the html of the treeview control and adding the correct css classes so that my css
 //can turn it into a tree that can be manipulated by the user 
-
+echo 'In cvcoursetree!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!';
 $cvcohort=ElggSession::offsetGet('cvcohortguid');
 $cvmenu = ElggSession::offsetGet('cvmenuguid');
 

@@ -70,7 +70,7 @@ foreach ($cohorts as $cohort)
         $name = $menuitem->name;
         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
         {
-            $name = $cohort->title .'-'. get_entity($cohort->getcontainerGUID ())->cv_acl;
+            $name = $cohort->title.'<br>' ;
         }
         $id1 = $count; //$menuitem->menuorder;
         $count++;
@@ -91,11 +91,13 @@ foreach ($cohorts as $cohort)
         //otherwise, let's just create a link to the contentpane and pass the guid of the menu object...the css class indent is also added here
         else
         {
-            echo elgg_echo("<li><a abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' href ='" . elgg_get_site_url() . "courseview/contentpane/" . $cohortguid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
+    
+            echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' href ='" . elgg_get_site_url() . "courseview/contentpane/" . $cohortguid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
+       
+            
         }
     }
     // echo '<br>' . $abc;
     echo elgg_echo('</div>');
 }
 echo '<br>';
-?>

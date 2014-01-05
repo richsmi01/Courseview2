@@ -50,8 +50,12 @@ if (get_entity($menuguid)->menutype=='student')
     'name' => 'cohortfilter',   //need to finish this code so the cohort filter works
     'value' => $cfilter,
     'options_values' => $dropdownlist));
+    echo ' filter by:  ';
 }
-echo ' filter by:  ';
+else
+{
+    echo 'Type of Content to Create';
+}
 echo elgg_view('input/dropdown', array(
     'name' => 'filter',
     'value' => $filter,
