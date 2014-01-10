@@ -74,7 +74,8 @@ foreach ($content_items as $content_item)
             $content_item->sort_order = $content_item->time_created;
             $content_item->save();
         }
-        echo '<form method="get" action="' . current_page_url() . '">';
+        //*Guessing that we don't really need a form here...
+        echo '<form method="get" action=""' . current_page_url() . '">';
         echo elgg_view('output/url', array(
             'text' => 'move up ',
             'href' => current_page_url() . '/up/' . $content_item->guid,

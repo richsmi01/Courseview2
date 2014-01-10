@@ -1,5 +1,10 @@
 Next discussion
 
+- Discussion of acl interception
+- walk through professorcontentview with Matt and move relevant stuff to actions
+- discuss cvforwardintercept and why: 
+- discuss stories  object view how to detect full or not full view
+
 - How do I create a page that spans the entire width and doesn't have a sidebar.
 - How can I change the header section completely
 - When logged out, how can I change the splash screen to my own instead of activity list

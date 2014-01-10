@@ -25,7 +25,6 @@ function courseviewInit()
     //register menu item to switch to CourseView
     register_courseview_menu();
 
-
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so that we can add our menu
     elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cvsidebarintercept');
 
@@ -212,16 +211,6 @@ function cvforwardintercept($hook, $type, $return, $params)
     return $return;
 }
 
-//function cventitymenu($hook, $type, $return, $params)
-//{
-//    if (is_valid_plugin($params['entity']->getSubtype()))
-//    {
-//        $item = new ElggMenuItem('cvpin', 'add to Cohort', '#');
-//        $return [] = $item;
-//    }
-//    return $return;
-//}
-
 
 /*  I think there may be an easier/more effective way to do this?  Instead of looping through
  * all of the courses, couldn't we just look at the current cohort's container (which should) be
@@ -246,7 +235,6 @@ function intercept_ACL_read($hook, $type, $return, $params)
 
     cv_debug("Entering intercept_ACL_read:: ", "", 100);
     cv_debug($return, "", 100);
-
 
     /* I'm thinking that we don't need to do this for all user courses, just the current one??? */
 
