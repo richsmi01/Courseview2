@@ -21,43 +21,8 @@ $content_items = elgg_get_entities_from_relationship(array(
     'relationship_guid' => $cvmenuguid,
     'relationship' => 'content'));
 
+//echo 'number of prof elements:  '. sizeof($content_items);
 
-//this whole thing should be moved to an action file...Matt, help!!!
-$updown = $params[3];
-$guid_to_move = $params[4];
-if ($updown)
-{
-    $updown = $params[3];
-    $guid_to_move = $params[4];
-    $previous_content_item = $content_items[0];
-    $movedown = false;
-
-    foreach ($content_items as $content_item)
-    {
-        if ($updown == 'up' && $guid_to_move == $content_item->guid)
-        {
-            $temp = $content_item->sort_order;
-            $content_item->sort_order = $previous_content_item->sort_order;
-            $previous_content_item->sort_order = $temp;
-        }
-
-        if ($movedown)
-        {
-            $temp = $content_item->sort_order;
-            $content_item->sort_order = $previous_content_item->sort_order;
-            $previous_content_item->sort_order = $temp;
-        }
-
-        if ($updown == 'down' && $content_item->guid == $guid_to_move)
-        {
-            $movedown = true;
-        }
-
-        $previous_content_item = $content_item;
-    }
-
-    //need a way to call this page again.
-}
 
 
 
@@ -78,16 +43,20 @@ foreach ($content_items as $content_item)
         echo '<form method="get" action=""' . current_page_url() . '">';
         echo elgg_view('output/url', array(
             'text' => 'move up ',
-            'href' => current_page_url() . '/up/' . $content_item->guid,
-            'class' => 'grey'));
+           // 'href' => current_page_url() . '/up/' . $content_item->guid,
+            'href'=>  elgg_get_site_url()."/action/updown/?guidtomove=$content_item->guid&updown=up",
+            'class' => 'grey',
+            'is_action'=>true));
         echo elgg_view('output/url', array(
             'text' => '-  move down',
-            'href' => current_page_url() . '/down/' . $content_item->guid,
-            'class' => 'grey'));
+               'href'=>  elgg_get_site_url()."/action/updown/?guidtomove=$content_item->guid&updown=down",
+            'class' => 'grey',
+            'is_action'=>true));
 
-        echo elgg_echo("<div class='editcourse'><a class ='uparrowcontainer' id = '$content_item->guid href='http://sheridancollege.ca'></a>");
-        echo elgg_echo("<a class ='downarrowcontainer' href='http://sheridancollege.ca/$content_item->guid'></a>");
-        echo elgg_echo('</div>');
+
+        //echo elgg_echo("<div class='editcourse'><a class ='uparrowcontainer' id = '$content_item->guid href='http://sheridancollege.ca'></a>");
+       // echo elgg_echo("<a class ='downarrowcontainer' href='http://sheridancollege.ca/$content_item->guid'></a>");
+      //  echo elgg_echo('</div>');
         //echo '@@@' . $content_item->guid;
         echo '</form>';
     }

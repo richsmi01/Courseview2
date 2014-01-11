@@ -12,7 +12,7 @@ $cvcourseguid = get_input('cvcourse');
 
 $cvcourse = get_entity($cvcourseguid);
 //echo $cvcourse->title;
-
+delete_access_collection ($cvcourse->cv_acl);
 //echo 'Course:  '.$cvcourse->title.' has been deleted';
 $cvcourse->delete();
 //exit;

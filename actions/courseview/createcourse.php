@@ -25,6 +25,7 @@ $id = create_access_collection ("cv_id",$cvcourse->guid);
 $cvcourse->cv_acl = $id;
 $cvcourse->save();
 //echo elgg_echo("Course Created! ");
+add_user_to_access_collection(elgg_get_logged_in_user_guid(), $id);
 
 $cvmenu = new ElggObject();
     $cvmenu->subtype = 'cvmenu';

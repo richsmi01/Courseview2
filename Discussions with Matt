@@ -1,13 +1,18 @@
-Next discussion
+Next discussion - Jan 9
 
-- Discussion of acl interception
-- walk through professorcontentview with Matt and move relevant stuff to actions
+--- Discussion of acl interception
+---- walk through professorcontentview with Matt and move relevant stuff to actions
 - discuss cvforwardintercept and why: 
 - discuss stories  object view how to detect full or not full view
 
 - How do I create a page that spans the entire width and doesn't have a sidebar.
 - How can I change the header section completely
 - When logged out, how can I change the splash screen to my own instead of activity list
+
+Note to Rich - Probably need to add a metatag to cohorts called active and then add a form to allow the
+professor to choose which cohorts to make active for his/her view.  Then, when building the treeview of the
+menu, only cohorts whose active tag is set to true will be listed.  Could just add this to the manage courseview div
+
 
 
 December 19 -
