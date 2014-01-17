@@ -19,13 +19,16 @@
                 <li class ='sub'>
                     <input type='checkbox' >Add new menu item below the current menu item
                     <div > 
-                        <?php echo elgg_view_form('addmenuitem'); ?>
+                        <?php echo elgg_view_form('addmenuitem');
+                        echo '&&&&&&&&&&&&&&&&&'; ?>
+                        <p>$$$$$$$$$$$$$$$$$</p>
                     </div>
                 </li>
                 <li class ='sub'>
                     <input type='checkbox'  >Manage Courses and Cohorts
                     <div>
                         <?php
+                        echo '^^^^^^^^^^^^^^^';
                         echo elgg_view_form('createcourse');
                         echo elgg_view_form('cveditacourse');
                         echo elgg_view_form('deletecourse');

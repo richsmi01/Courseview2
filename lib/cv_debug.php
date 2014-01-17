@@ -23,7 +23,7 @@ function cv_debug ($message, $filter="stuff", $sev =0)
             $a=$message;
         }
         error_log("CV# $timestamp - $a \n", 3, "courseview_log.txt");
-       // echo $a;
+        //echo $a;
         
 //         if (is_array($data))
 //        $output = "<script>console.log( 'Debug Objects: " . implode(',', $data) . "' );</script>";

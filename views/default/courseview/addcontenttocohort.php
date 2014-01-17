@@ -10,8 +10,10 @@ $attributes = $vars['attibutes'];
 //var_dump ($attributes);
 
 $action = $vars['action'];
+
+//$actionsequence= $action;//.'discussion/edit';  //had to add this to make group forums work...need to think about how to fix this
 //echo 'action:'.$action;
-cv_debug("action: $action", "", 5);
+//cv_debug("actionsequence: $actionsequence", "", 5);
 
 /* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
  * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
@@ -32,19 +34,29 @@ if (!cv_is_courseview_user() || strpos($action, 'vote') !== false)
     return;
 }
 
+
+if (strpos($action, 'reply') )
+{
+    return;
+}
+
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
  * valid plugins for courseview is set in the settings view under the administration section of Elgg.
  */
 $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
 $validkeys = array_keys($validplugins);
+        $validkeys[ ] = "discussion";
 $donotdisplay = true;
+
+cv_debug( "addcontent to cohort action :".$action."<br>","",9);
 
 foreach ($validkeys as $plugin)
 {
-    //  echo "Plugin :".$plugin.'<br>';
+    cv_debug( "Plugin :".$plugin.'<br>',"",9);
     if (strpos($action, $plugin) !== false)
     {
         $donotdisplay = false;
+        cv_debug( "Match! :".$plugin.'<br>',"",9);
         break;
     }
 }

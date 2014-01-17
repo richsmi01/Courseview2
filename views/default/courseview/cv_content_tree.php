@@ -3,6 +3,8 @@
 <script>
     $(document).ready(function() {
         $(".elgg-form input[type='submit']input[value='Save']").before($("#add_entity_to_cohort_menus"));
+        $(".elgg-form input[type='submit']input[value='Post']").before($("#add_entity_to_cohort_menus"));
+        $(".elgg-form input[type='submit']input[value='Upload']").before($("#add_entity_to_cohort_menus"));
     });
 </script>
 

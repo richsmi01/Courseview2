@@ -4,7 +4,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+//echo 'professor content view';
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $cohortguid = ElggSession::offsetGet('cvcohortguid');
 //echo "professorcontentview<br>";
@@ -48,7 +48,7 @@ foreach ($content_items as $content_item)
             'class' => 'grey',
             'is_action'=>true));
         echo elgg_view('output/url', array(
-            'text' => '-  move down',
+            'text' => '-  move down '.$content_item->sort_order,
                'href'=>  elgg_get_site_url()."/action/updown/?guidtomove=$content_item->guid&updown=down",
             'class' => 'grey',
             'is_action'=>true));
@@ -60,6 +60,7 @@ foreach ($content_items as $content_item)
         //echo '@@@' . $content_item->guid;
         echo '</form>';
     }
+    
     echo elgg_echo(elgg_view_entity($content_item, array(full_view => false)));
     echo '<br>';
     //var_dump($content_item);

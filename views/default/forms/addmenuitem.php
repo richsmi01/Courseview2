@@ -38,3 +38,4 @@ echo elgg_view('input/submit', array(
     'value' => elgg_echo('Indent'),
      'name' =>'buttonchoice'));
 echo '</div>';
+echo '^^^^^^^^^^^^^^^';

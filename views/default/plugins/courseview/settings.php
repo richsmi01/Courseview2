@@ -6,7 +6,7 @@ echo elgg_view('input/text', array(
     'value' => $vars['entity']->profsgroup,
     'disabled' => false));
 
-echo 'Plugins to be reconginized by Courseview';
+echo 'Plugins to be recoginized by Courseview';
 
 //this doesn't work on the linux elgg:  $plugins = get_registered_entity_types()['object'];  -- Why???
 $regentitytypes = get_registered_entity_types();
@@ -34,7 +34,7 @@ foreach ($plugins as $plugin)
     echo elgg_view('input/text', array(
         'name' => 'params[' . $friendly . ']',
         'value' => $vars['entity']->$friendly));
-    //'class' => 'cssclassname'));  //::TODO: this doesn't work -- Check with Matt
+    
 
     echo elgg_view('input/text', array(
         'name' => 'params[' . $pluginname . ']',
