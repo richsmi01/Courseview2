@@ -7,6 +7,24 @@
 //    return $cvcourseview[0]->profsgroup;
 //}
 
+function cv_is_valid_content_to_display ($object)
+{
+    $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview')); //a list of approved plugins for courseview
+    $validkeys = array_keys($validplugins);
+    $valid_plugin = false;
+    //looping through all approved plugins to ensure that this content is to be displayed
+   
+    foreach ($validkeys as $plugin)
+    {
+        if ($object->getSubtype() == $plugin)
+        {
+            $valid_plugin = true;
+        }
+    }
+    return $valid_plugin;
+}
+
+
 function cv_get_menu_items_for_course($courseguid)
 {
    // echo "<br>Getting menu items from relationship:". $courseguid;

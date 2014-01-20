@@ -1,12 +1,12 @@
 <?php
 
 /*
- * This action will create a course using information provided by the createcourse form
+ * This action will create a course using information provided by the cv_create_course form
  */
 
 //I need to place the code to build the course object here and then redirect some sort of course editing page...
 //I should check to make sure that the user is a professor.
-//echo'createcourse action called';
+//echo'cv_create_course action called';
 //exit;
 $cvcoursename = get_input('cvcoursename');  //this pulls the text from the title textbox in the form...
 //echo $cvcoursename;

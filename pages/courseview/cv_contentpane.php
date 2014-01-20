@@ -1,9 +1,9 @@
 <?php
 
 elgg_load_library('elgg:cv_debug');
-cv_debug("Entering pages/contentpane.php","contentpane" ,0);
+cv_debug("Entering pages/cv_contentpane.php","cv_contentpane" ,0);
 
-$content = elgg_view('courseview/contentpane');
+$content = elgg_view('courseview/cv_contentpane');
 //$content .='@@@';
 //$content .= elgg_view_form('treeview');
  

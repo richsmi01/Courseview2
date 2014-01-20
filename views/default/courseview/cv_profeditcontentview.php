@@ -1,8 +1,5 @@
-<?php
-/*
- * used to create the administration views that are presented to a professor
- */
-?>
+
+  <!--used to create the administration views that are presented to a professor-->
 
 <ul>
     <li>
@@ -12,27 +9,23 @@
                 <li class ='sub'>
                     <input type='checkbox' name='a' >Edit the current menu item
                     <div>
-                        <?php echo elgg_view_form('editmenuitem'); ?>
+                            <?php echo elgg_view_form('editmenuitem'); ?>
                     </div>
                 </li>
-
                 <li class ='sub'>
                     <input type='checkbox' >Add new menu item below the current menu item
                     <div > 
-                        <?php echo elgg_view_form('addmenuitem');
-                        echo '&&&&&&&&&&&&&&&&&'; ?>
-                        <p>$$$$$$$$$$$$$$$$$</p>
+                        <?php echo elgg_view_form('cv_add_menu_item');?>
                     </div>
                 </li>
                 <li class ='sub'>
                     <input type='checkbox'  >Manage Courses and Cohorts
                     <div>
                         <?php
-                        echo '^^^^^^^^^^^^^^^';
-                        echo elgg_view_form('createcourse');
+                        echo elgg_view_form('cv_create_course');
                         echo elgg_view_form('cveditacourse');
                         echo elgg_view_form('deletecourse');
-                        echo elgg_view_form('addacohort');
+                        echo elgg_view_form('cv_add_a_cohort');
                         echo elgg_view_form('editacohort');
                         echo elgg_view_form('deleteacohort');
                         ?>

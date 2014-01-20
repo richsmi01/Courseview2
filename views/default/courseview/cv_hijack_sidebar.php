@@ -31,7 +31,6 @@ $userguid = elgg_get_logged_in_user_guid();
 //we'll need some of the library methods here
 elgg_load_library('elgg:courseview');
 elgg_load_library('elgg:cv_debug');
-cv_debug("Entering hijacksidebar.php", 'stuff');
 
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
@@ -85,19 +84,17 @@ foreach ($cohorts as $cohort)
             echo "<li>";
             echo "<input type ='checkbox' abc ='m' name='$indent' class ='cvmenuitem $class2' id ='$id1' />";
             echo "<label>";
-            echo "<a href='" . elgg_get_site_url() . "courseview/contentpane/" . $cohortguid . "/" . $menuitem->guid . "'> " . $name . "</a>";
+            echo "<a href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cohortguid . "/" . $menuitem->guid . "'> " . $name . "</a>";
             echo "</label>";
         }
-        //otherwise, let's just create a link to the contentpane and pass the guid of the menu object...the css class indent is also added here
+        //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         else
         {
     
-            echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' href ='" . elgg_get_site_url() . "courseview/contentpane/" . $cohortguid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
-       
-            
+            echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' "
+                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cohortguid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
         }
     }
-    // echo '<br>' . $abc;
     echo elgg_echo('</div>');
 }
 echo '<br>';

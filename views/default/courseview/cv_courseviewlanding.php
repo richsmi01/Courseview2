@@ -27,5 +27,5 @@ if (cv_isprof($user))
 }
 
 //add the actual content
-echo elgg_view('courseview/contentpane');
+echo elgg_view('courseview/cv_contentpane');
 ?>

@@ -176,7 +176,7 @@ foreach ($cohorts as $cohort)
             echo $name;
             echo "</label>";
         }
-        //otherwise, let's just create a link to the contentpane and pass the guid of the menu object...the css class indent is also added here
+        //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         elseif ($menuitem->menutype == 'professor')// && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
         {
             echo "<p class ='indent  disabled'>$name.</p>";

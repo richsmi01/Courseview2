@@ -82,12 +82,12 @@ $menu = elgg_get_entities_from_relationship(array
     if ($menuitem->menutype=="folder")
     {
          echo elgg_echo("<ul>
-           <li><input type ='checkbox'/><label><a href='".elgg_get_site_url()."courseview/contentpane/".$cohortguid."/".$menuitem->guid."'> ".$name."</a></label>");
+           <li><input type ='checkbox'/><label><a href='".elgg_get_site_url()."courseview/cv_contentpane/".$cohortguid."/".$menuitem->guid."'> ".$name."</a></label>");
     }
-    //otherwise, let's just create a link to the contentpane and pass the guid of the menu object...the css class indent is also added here
+    //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
  else
     {
-        echo elgg_echo("<li><a class = 'indent' href ='".  elgg_get_site_url()."courseview/contentpane/".$cohortguid."/".$menuitem->guid."' >".$name."</a></li>");
+        echo elgg_echo("<li><a class = 'indent' href ='".  elgg_get_site_url()."courseview/cv_contentpane/".$cohortguid."/".$menuitem->guid."' >".$name."</a></li>");
     }
      
 echo elgg_echo ('</div>')  ;  
@@ -95,8 +95,3 @@ echo elgg_echo ('</div>')  ;
 
 }
 
-
-
-
-    
-?>

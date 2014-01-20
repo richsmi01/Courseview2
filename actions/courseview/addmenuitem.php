@@ -1,5 +1,5 @@
 <?php
-//echo 'entering addmenuitem.php';
+//echo 'entering cv_add_menu_item.php';
 $currentcvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $currentcvmenu= get_entity($currentcvmenuguid);
 $indent=0;

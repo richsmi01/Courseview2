@@ -9,7 +9,7 @@
 echo "In addcourse.php<br>";
 exit;
 
-$html = elgg_view_form('createcourse');
+$html = elgg_view_form('cv_create_course');
 //echo elgg_echo("Testing");
 //$group = elgg_get_entities_from_metadata(array(guid=>51));
 //$group = elgg_get_entities_from_metadata(array(type=>'group', name=>'RichGroup1'));

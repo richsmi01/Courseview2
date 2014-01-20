@@ -6,7 +6,7 @@
  */
 
 
-//forward('courseview/contentpane');
+//forward('courseview/cv_contentpane');
            $plugin_path = elgg_get_plugins_path().'courseview/pages/courseview';
            $elgg_path =elgg_get_site_url();	
             $status = ElggSession::offsetGet('courseview');

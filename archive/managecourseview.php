@@ -23,10 +23,10 @@ $content .=  elgg_echo('Remove a cohort from courseview<br>');
 $content .=  elgg_echo('edit courses, and cohorts');
 
 
-$content.= elgg_view_form('createcourse');
+$content.= elgg_view_form('cv_create_course');
 $content.=elgg_view_form('cveditacourse');
 $content.= elgg_view_form ('deletecourse');
-$content.= elgg_view_form('addacohort');
+$content.= elgg_view_form('cv_add_a_cohort');
 $content.=elgg_view_form('deleteacohort');
 
 
