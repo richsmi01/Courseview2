@@ -9,7 +9,7 @@ $menutype = $menuitem->menutype;  //there are three types of menu items:  folder
 //if the user is a prof, include the ability to edit the course
 if ((cv_isprof($user)))
 {
-    echo elgg_view('courseview/cv_profeditcontentview');  
+    echo elgg_view('courseview/cv_profedit_contentview');  
 }
 echo '<h1>'.$menuitem->name.'</h1><br>';
 
@@ -30,11 +30,11 @@ switch ($menutype)
         break;
         
     case "professor":
-        echo elgg_view('courseview/cv_professorcontentview'); 
+        echo elgg_view('courseview/cv_professor_contentview'); 
         break;
     
     case "student": 
-        echo elgg_view('courseview/cv_studentcontentview');
+        echo elgg_view('courseview/cv_student_contentview');
         break;
     
     //if menutype isn't folder, student or professor then we must have just logged in

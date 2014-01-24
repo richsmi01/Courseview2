@@ -24,10 +24,10 @@ $content .=  elgg_echo('edit courses, and cohorts');
 
 
 $content.= elgg_view_form('cv_create_course');
-$content.=elgg_view_form('cveditacourse');
-$content.= elgg_view_form ('deletecourse');
+$content.=elgg_view_form('cv_edit_a_course');
+$content.= elgg_view_form ('cv_delete_course');
 $content.= elgg_view_form('cv_add_a_cohort');
-$content.=elgg_view_form('deleteacohort');
+$content.=elgg_view_form('cv_delete_a_cohort');
 
 
 

@@ -18,7 +18,9 @@ $cvcourses = elgg_get_entities_from_relationship(array
 
 foreach ($cvcourses as $cvcourse)
 {
-    $radioname = $cvcourse->title . '<br> - ' . $cvcourse->description.'<br>';
+    $radioname = $cvcourse->title . ' <p> ' . $cvcourse->description.'</p>';
+    echo "<div id='contentitem'>";
     echo elgg_view('input/radio', array('internalid' => $cvcourse->guid, 'name' => 'cvcourse', 'options' => array($radioname => $cvcourse->guid)));
+    echo"</div>";
 }
 ?>

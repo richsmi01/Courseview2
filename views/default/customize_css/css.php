@@ -316,3 +316,15 @@ font-style:italic;
                       background:lightgrey;
 }
 */
+
+#contentitem {
+padding: 10px;
+background-color:rgba(192,192,192,0.1);
+border: solid 1px;
+margin:4px;
+box-shadow: black 2px 2px 2px;
+}
+
+#contentitem p {
+    padding:5px 5px 5px 15px;
+}

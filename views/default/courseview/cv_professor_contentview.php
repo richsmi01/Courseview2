@@ -9,7 +9,7 @@ $cohortguid = ElggSession::offsetGet('cvcohortguid');
 
 if (cv_isprof(elgg_get_logged_in_user_entity()))
 {
-    echo elgg_view('courseview/cv_filtercontent');
+    echo elgg_view('courseview/cv_filter_content');
 }
 
 $params = get_input('params');
@@ -35,21 +35,21 @@ foreach ($content_items as $content_item)
         //*Guessing that we don't really need a form here...
 //        echo '<form method="get" action=""' . current_page_url() . '">';
         //echo'xxx';
+        
         echo elgg_view('output/url', array(
             'text' => 'move up ',
-            'href' => elgg_get_site_url() . "/action/updown/?guidtomove=$content_item->guid&updown=up",
+            'href' => elgg_get_site_url() . "/action/cv_move_prof_content/?guidtomove=$content_item->guid&updown=up",
             'class' => 'grey',
             'is_action' => true));
         echo ' - ';
         echo elgg_view('output/url', array(
             'text' => 'move down ', // . $content_item->sort_order,
-            'href' => elgg_get_site_url() . "/action/updown/?guidtomove=$content_item->guid&updown=down",
+            'href' => elgg_get_site_url() . "/action/cv_move_prof_content/?guidtomove=$content_item->guid&updown=down",
             'class' => 'grey',
             'is_action' => true));
-   //     echo '</form>';
     }
-
-    echo elgg_echo(elgg_view_entity($content_item, array(full_view => false)));
-    echo '<br>';
+    echo "<div id= 'contentitem'>";
+            echo elgg_echo(elgg_view_entity($content_item, array(full_view => false)));
+    echo "</div>";
 }
 

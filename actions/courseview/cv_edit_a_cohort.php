@@ -9,7 +9,7 @@ $cohortguid = ElggSession::offsetGet('cvcohortguid');
 $cohort = get_entity($cohortguid);
 //echo get_input('cvcohortname');
 $cohort->title = get_input('cvcohortname');
-$cohort->save;
+$cohort->save();
 
 
 ?>

@@ -2,18 +2,11 @@
 
 //Check to see if the action string contains any of our approved plugins...If it does, and the user is in a cohort, display the page.
 
-
 elgg_load_library('elgg:courseview');
 elgg_load_library('elgg:cv_debug');
-//var_dump($vars);
 $attributes = $vars['attibutes'];
-//var_dump ($attributes);
-
 $action = $vars['action'];
 
-//$actionsequence= $action;//.'discussion/edit';  //had to add this to make group forums work...need to think about how to fix this
-//echo 'action:'.$action;
-//cv_debug("actionsequence: $actionsequence", "", 5);
 
 /* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
  * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
@@ -34,29 +27,24 @@ if (!cv_is_courseview_user() || strpos($action, 'vote') !== false)
     return;
 }
 
-
-if (strpos($action, 'reply') )
+if (strpos($action, 'reply'))
 {
     return;
 }
 
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
- * valid plugins for courseview is set in the settings view under the administration section of Elgg.
- */
+ * valid plugins for courseview is set in the settings view under the administration section of Elgg. */
 $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
 $validkeys = array_keys($validplugins);
-        $validkeys[ ] = "discussion";
+$validkeys[] = "discussion";
 $donotdisplay = true;
-
-cv_debug( "addcontent to cohort action :".$action."<br>","",9);
 
 foreach ($validkeys as $plugin)
 {
-    cv_debug( "Plugin :".$plugin.'<br>',"",9);
     if (strpos($action, $plugin) !== false)
     {
         $donotdisplay = false;
-        cv_debug( "Match! :".$plugin.'<br>',"",9);
+        cv_debug("Match! :" . $plugin . '<br>', "", 9);
         break;
     }
 }
@@ -65,46 +53,10 @@ if ($donotdisplay)
 {
     return true;
 }
-?>
-<!--<script>
-    /**
-     * A bit of javascript to collapse the cohorttree unless the user clicks on the topline
-     */
-    function showCVAdd() {
 
-        myDiv = document.querySelector("#addToCohort");
-        //alert (myDiv.style.visibility);
-        if (myDiv.style.visibility == "visible") {
-            myDiv.style.visibility = 'hidden';
-            myDiv.style.height = '0px';
-
-        }
-        else
-        {
-            myDiv.style.visibility = 'visible';
-            myDiv.style.height = 'auto';
-
-        }
-    }
-</script>-->
-
-
-<!--<div id='add_entity_to_cohort_menus'>
-    <input onclick = "showCVAdd()" id ="showtree" type ='checkbox' style='display:inline' />
-
-    <label  for ="showtree" style="display:inline">Add this content to a CourseView cohort </label><br><br>
-    <div id ='addToCohort'>-->
-        <?php
-        
-         
-//        $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-//        $entity = $current_content_entity->guid;
-        //echo elgg_view('courseview/debug');
-        $cv_menuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
-       
- //       $vars = array('cv_menutype' => $cvmenuitem->menutype, 'entity'=>$entity);
-        echo elgg_view('courseview/cv_content_tree', $vars);
+//finally, if this is a page that needs the cv_content_tree, then load it.
+//$cv_menuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
+echo elgg_view('courseview/cv_content_tree', $vars);
 
 
 
-        

@@ -4,6 +4,9 @@
 - Move up/move down complicated by hidden objects like poll choices that do not print 
 - How to display pdf files without the need for a google docs acct
 - code cleanup discussion
+    -cv_add_a_cohort
+    -start
+    -etc
 
 
 Jan 16
@@ -17,7 +20,7 @@ ajax with elgg
 Next discussion - Jan 9
 
 --- Discussion of acl interception
----- walk through cv_professorcontentview with Matt and move relevant stuff to actions
+---- walk through cv_professor_contentview with Matt and move relevant stuff to actions
 - discuss cvforwardintercept and why: 
 - discuss stories  object view how to detect full or not full view
 

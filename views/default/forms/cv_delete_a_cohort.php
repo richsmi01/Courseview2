@@ -16,5 +16,5 @@ $base_path = elgg_get_plugins_path() . 'courseview/views/default/courseview';
 echo elgg_view ("courseview/cv_list_cohorts");
 echo elgg_view('input/submit');
 echo "</div>";
-echo 'deleteacohort form';
+
 

@@ -8,7 +8,7 @@
 echo 'Manage Courses<br>';
 
  $rs_type = ElggSession::offsetSet('object_type', 'course');
-  //require "$base_path/contentpane.php";
+  //require "$base_path/cv_contentpane.php";
 
   
  //$content = elgg_view ('courseview/cv_contentpane').'<br>';

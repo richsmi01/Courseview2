@@ -17,6 +17,8 @@ $userguid =  elgg_get_logged_in_user_guid();
     foreach ($cvcohorts as $cvcohort)
     {
         $radioname =$cvcohort->title.' - '.$cvcohort->description;
-        echo elgg_view ('input/radio',array('internalid' => $cvcohort->guid,'name' => 'cvcohort', 'options'=>array($radioname=> $cvcohort->guid)));
+        echo "<div id='contentitem'>";
+            echo elgg_view ('input/radio',array('internalid' => $cvcohort->guid,'name' => 'cvcohort', 'options'=>array($radioname=> $cvcohort->guid)));
+       echo"</div>";
     }
-?>
+
