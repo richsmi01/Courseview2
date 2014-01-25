@@ -92,7 +92,7 @@ if (cv_isprof($cvuser))
     echo "</div>";
 }
 
-echo "<input onclick = 'showCVAdd(" . '"cv_add_to_cohort"' . ")' id ='cohort_menu_items' type ='checkbox' style='display:inline' />";
+echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id ='cohort_menu_items' type ='checkbox' style='display:inline' />";
 echo "<label  for ='cohort_menu_items' style='display:inline'>Add this content to Courseview Cohorts </label>";
 echo "<div id ='cvaddtocohort'>";
 

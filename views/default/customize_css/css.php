@@ -323,8 +323,23 @@ background-color:rgba(192,192,192,0.1);
 border: solid 1px;
 margin:4px;
 box-shadow: black 2px 2px 2px;
+-webkit-animation: unroll 1s  ease-in-out ;
 }
 
 #contentitem p {
     padding:5px 5px 5px 15px;
+}
+
+
+
+@-webkit-keyframes unroll{
+0% 
+{ 
+        opacity: 0;
+        top:-5px;
+        background-color:black;
+}
+
+100% { opacity:1;
+top: 0px;}
 }

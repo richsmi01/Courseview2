@@ -10,6 +10,9 @@ function courseviewInit()
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
+    elgg_register_simplecache_view ('js/courseview/js');
+    $jsurl = elgg_get_simplecache_url('js','courseview/js');
+    elgg_register_js ('cv_sidebar_js',$jsurl);
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
@@ -80,7 +83,7 @@ function courseviewPageHandler($page, $identifier)
 {
     //TODO:: Matt, do I need to be more worried about gatekeeper functions etc?
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
-    group_gatekeeper();
+    gatekeeper();
     $base_path = dirname(__FILE__);
 
     /* Since it is possible to require the current cohort and menuitem while on a non-courseview page, we push
@@ -100,6 +103,9 @@ function courseviewPageHandler($page, $identifier)
         case 'courseview':   //this is the landing page when a user first clicks on coursview
             set_input("object_type", 'all');
             require "$base_path/pages/courseview/cv_contentpane.php";
+            break;
+        case 'cv_testing':
+             require "$base_path/pages/courseview/cv_testing.php";
             break;
         default:
             echo "courseview request for " . $page[0];
@@ -127,9 +133,6 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
     }
     return $returnvalue;
 }
-
-
-
 
 /**
   * Runs whenever a user joins a group.  If that group is actually a cvcohort then we need to add the users guid to the 
@@ -204,11 +207,9 @@ function cv_intercept_update($event, $type, $object)
     //looping through all approved plugins to ensure that this content can be added to courseview
     foreach ($validkeys as $plugin)
     {
-        cv_debug("Checking:  " . $plugin . '--' . $object->getSubtype() . '<br>', "cv_intercept_update", 6);
         if ($object->getSubtype() == $plugin)
         {
             $valid_plugin = true;
-            cv_debug("Match!!!Match!!!Match!!!", "cv_intercept_update", 5);
         }
     }
     
