@@ -13,21 +13,25 @@ $ia = elgg_set_ignore_access (true);
 
 $options = array (
     'type' => 'user',
-//    'subtype' => 'user',
-    'limit' => '500',
+   // 'metadata_name_value_pairs' =>array ('name'=>'banned', 'value'=>'yes', 'operand'=>'='),
+    'limit' => false,
 );
 
 
-        //$batch = new ElggBatch ('elgg_get_entities_from _metadata', $options, null, 25, false);
+ //$batch = new ElggBatch ('elgg_get_entities_from _metadata', $options, null, 25, false);
 
 $batch = elgg_get_entities_from_metadata ($options);
         echo 'number of users: '.sizeof($batch);
         foreach ($batch as $user)
         {
-            if (!$user->banned)
+            if ($user->banned==yes)
             {
-                echo 'user: '.$user->name.' '.$user->banned;
+                echo 'banned user: '.$user->name.' '.$user->banned.'<br>';
+               // $user->delete();
             }
+ else {
+      echo 'not banned user: '.$user->name.' '.$user->banned.'<br>';
+ }
         }
         
         elgg_set_ignore_access($ia);

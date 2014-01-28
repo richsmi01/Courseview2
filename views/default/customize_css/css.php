@@ -11,11 +11,236 @@
 
 
 
-/*.elgg-page-default .elgg-page-header > .elgg-inner {
+.elgg-page-default .elgg-page-header  {
 
- background-color: red;
+  background-image:url("http://montanaflynn.me/lab/css-clouds/images/cloud_two.png") ;
+  background-color:blue;
+  
 
-}*/
+}
+
+
+
+
+.sky {
+    height:480px;
+    background:#007fd5;
+    position:relative;
+    overflow:hidden;
+    -webkit-animation:sky_background 50s ease-out infinite;
+    -moz-animation:sky_background 50s ease-out infinite;
+    -o-animation:sky_background 50s ease-out infinite;
+    -webkit-transform:translate3d(0,0,0);
+    -moz-transform:translate3d(0,0,0);
+    -o-transform:translate3d(0,0,0)
+}
+
+
+.moon {
+    background:url("http://montanaflynn.me/lab/css-clouds/images/moon.png");
+    position:absolute;
+    left:0;
+    height:100%;
+    width:300%;
+    -webkit-animation:moon 50s linear infinite;
+    -moz-animation:moon 50s linear infinite;
+    -o-animation:moon 50s linear infinite;
+    -webkit-transform:translate3d(0,0,0);
+    -moz-transform:translate3d(0,0,0);
+    -o-transform:translate3d(0,0,0)
+}
+
+
+.clouds_one {
+    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_one.png");
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    width:300%;
+    -webkit-animation:cloud_one 50s linear infinite;
+    -moz-animation:cloud_one 50s linear infinite;
+    -o-animation:cloud_one 50s linear infinite;
+    -webkit-transform:translate3d(0,0,0);
+    -moz-transform:translate3d(0,0,0);
+    -o-transform:translate3d(0,0,0)
+}
+
+.clouds_two {
+    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_two.png");
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    width:300%;
+    -webkit-animation:cloud_two 75s linear infinite;
+    -moz-animation:cloud_two 75s linear infinite;
+    -o-animation:cloud_two 75s linear infinite;
+    -webkit-transform:translate3d(0,0,0);
+    -moz-transform:translate3d(0,0,0);
+    -o-transform:translate3d(0,0,0)
+}
+
+.clouds_three {
+    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_three.png");
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    width:300%;
+    -webkit-animation:cloud_three 100s linear infinite;
+    -moz-animation:cloud_three 100s linear infinite;
+    -o-animation:cloud_three 100s linear infinite;
+    -webkit-transform:translate3d(0,0,0);
+    -moz-transform:translate3d(0,0,0);
+    -o-transform:translate3d(0,0,0)
+}
+
+@-webkit-keyframes sky_background {
+    0% {
+        background:#007fd5;
+        color:#007fd5
+    }
+
+    50% {
+        background:#000;
+        color:#a3d9ff
+    }
+
+    100% {
+        background:#007fd5;
+        color:#007fd5
+    }
+}
+
+@-webkit-keyframes moon {
+    0% {
+        opacity: 0;
+        left:-200%;
+            -moz-transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        -moz-transform: scale(1);
+        left:0%;
+            bottom: 250px;
+        -webkit-transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        bottom:500px;
+        -moz-transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+    }
+}
+
+@-webkit-keyframes cloud_one {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+@-webkit-keyframes cloud_two {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+@-webkit-keyframes cloud_three {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+@-moz-keyframes sky_background {
+    0% {
+        background:#007fd5;
+        color:#007fd5
+    }
+
+    50% {
+        background:#000;
+        color:#a3d9ff
+    }
+
+    100% {
+        background:#007fd5;
+        color:#007fd5
+    }
+}
+
+@-moz-keyframes moon {
+    0% {
+        opacity: 0;
+        left:-200%
+            -moz-transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        -moz-transform: scale(1);
+        left:0%
+            bottom:250px;
+        -webkit-transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        bottom:500px;
+        -moz-transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+    }
+}
+
+@-moz-keyframes cloud_one {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+@-moz-keyframes cloud_two {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+@-moz-keyframes cloud_three {
+    0% {
+        left:0
+    }
+
+    100% {
+        left:-200%
+    }
+}
+
+
+
+
 /*
 .elgg-page-default {
 min-width: 850px;
@@ -97,6 +322,9 @@ margin: 0 0 0 22px;
 .css-treeview input ~ ul
 {
 display: none;
+/*max-height: 0;
+overflow: hidden;
+-webkit-transition:  max-height .5s;*/
 }
 
 .css-treeview label,
@@ -115,6 +343,10 @@ opacity: .6;
 .css-treeview input:checked:not(:disabled) ~ ul
 {
 display: block;
+/*max-height:109px;
+
+-webkit-transition: max-height 1s;*/
+    
 }
 
 .css-treeview label,
@@ -240,6 +472,14 @@ font-style:italic;
 #cvfolderdescription {
 font-size: 400%;
 text-align:center;
+-webkit-animation: flyin 2s ease-in-out;
+position:relative;
+}
+
+#menuitem {
+
+-webkit-animation: flyin 1s ease-in;
+position:relative;
 }
 
 .cvminiview 
@@ -303,7 +543,160 @@ height:0px;
     font-size:300%;
     text-align: center;
     font-weight: bold;
+   -webkit-animation: blurFadeIn 2s ease-in-out;
+    animation:glow 10s ease-in-out infinite;
+    position: relative;
+    
+     text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+
+    
+    
+    /*color: #fff;
+        text-shadow: 0px -1px 4px white, 0px -2px 10px yellow, 0px -10px 20px #ff8000, 0px -18px 40px red;
+        font: 80px 'BlackJackRegular';
+        background-color:black;*/
 }
+
+
+@-webkit-keyframes blurFadeIn{
+	0%{
+		opacity: 0;
+		text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+
+		-webkit-transform: scale(3.3);
+                top:400px;
+	}
+	
+	100%{
+		opacity: 1;
+		text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+
+		-webkit-transform: scale(1);
+                                            top:0px;
+	}
+}
+
+
+    
+/*    -webkit-animation-name: lightSpeedIn, swinging;
+    -webkit-animation-duration: 5s, 5s;
+  animation-name: lightSpeedIn;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+    -webkit-animation: moving 5s;*/
+/*-webkit-animation: swinging 10s ease-in-out 6s infinite;  Safari and Chrome */
+}
+
+@-webkit-keyframes lightSpeedIn {
+  0% {
+    -webkit-transform: translateX(100%) skewX(-30deg);
+    -ms-transform: translateX(100%) skewX(-30deg);
+    transform: translateX(100%) skewX(-30deg);
+    opacity: 0;
+  }
+
+  60% {
+    -webkit-transform: translateX(-20%) skewX(30deg);
+    -ms-transform: translateX(-20%) skewX(30deg);
+    transform: translateX(-20%) skewX(30deg);
+    opacity: 1;
+  }
+
+  80% {
+    -webkit-transform: translateX(0%) skewX(-15deg);
+    -ms-transform: translateX(0%) skewX(-15deg);
+    transform: translateX(0%) skewX(-15deg);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translateX(0%) skewX(0deg);
+    -ms-transform: translateX(0%) skewX(0deg);
+    transform: translateX(0%) skewX(0deg);
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+    
+
+@-webkit-keyframes moving{
+0% 
+{ 
+        margin:50px auto;
+        left: 1500px;
+        -webkit-transform: rotate(-9deg);
+}
+
+100% { margin:50px auto;
+-webkit-transform: rotate(-9deg);}
+}
+
+@-webkit-keyframes swinging{
+0% { -webkit-transform: rotate(0);
+        margin:50px auto }
+5% { -webkit-transform: rotate(10deg); }
+10% { -webkit-transform: rotate(-9deg); }
+15% { -webkit-transform: rotate(8deg); }
+20% { -webkit-transform: rotate(-7deg); }
+25% { -webkit-transform: rotate(6deg); }
+30% { -webkit-transform: rotate(-5deg); }
+35% { -webkit-transform: rotate(4deg); }
+40% { -webkit-transform: rotate(-3deg); }
+45% { -webkit-transform: rotate(2deg); }
+50% { -webkit-transform: rotate(0); } /* Come to rest at 50%. The rest is just stillness */
+100% { -webkit-transform: rotate(0);
+            margin:50px auto }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .disabled {
 color:grey;
@@ -323,7 +716,8 @@ background-color:rgba(192,192,192,0.1);
 border: solid 1px;
 margin:4px;
 box-shadow: black 2px 2px 2px;
--webkit-animation: unroll 1s  ease-in-out ;
+-webkit-animation: zoom .5s  ease-in ;
+position:relative;
 }
 
 #contentitem p {
@@ -332,14 +726,34 @@ box-shadow: black 2px 2px 2px;
 
 
 
-@-webkit-keyframes unroll{
+@-webkit-keyframes zoom{
 0% 
 { 
         opacity: 0;
-        top:-5px;
-        background-color:black;
+     
+        background-color:grey;
+        -webkit-transform: scale(5)
 }
 
 100% { opacity:1;
-top: 0px;}
+
+-webkit-transform: scale(1)
+background-color:rgba(192,192,192,0.1);
 }
+
+}
+
+@-webkit-keyframes flyin{
+0% 
+{ 
+        opacity: 0;
+     left: -100px;
+}
+
+100% { opacity:1;
+
+left:0px;
+}
+
+}
+

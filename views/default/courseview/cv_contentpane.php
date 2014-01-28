@@ -11,21 +11,21 @@ if ((cv_isprof($user)))
 {
     echo elgg_view('courseview/cv_profedit_contentview');  
 }
-echo '<h1>'.$menuitem->name.'</h1><br>';
+echo '<h1 id="menuitem">'.$menuitem->name.'</h1><br>';
 
 switch ($menutype)
 {
     case "folder":    
         if ($menuitem->menuorder==0)  //if this is the first menu item in a course, display welcome
         {
-            echo "<br><p id = 'cvfolderdescription'>Welcome to " . $menuitem->name."</p>";
+            echo "<br><p id = 'cvwelcome'>Welcome to " . $menuitem->name."</p>";
             $cvcohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
             $cvcourse = get_entity ($cvcohort->getContainerGUID());
-            echo "<br> $cvcourse->description";
+            echo "<br><div id='contentitem'> $cvcourse->description</div>";
         }
         else
         {
-            echo "<br><p id = 'cvfolderdescription'>" . $menuitem->name."</p>";
+            echo "<br><p id = 'cvwelcome'>" . $menuitem->name."</p>";
         }
         break;
         

@@ -75,7 +75,7 @@ function courseviewInit()
     //push breadcrumb to allow user to return to the current courseview cv_contentpane 
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-    elgg_push_breadcrumb('Return to CourseView', '/courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid);
+   // elgg_push_breadcrumb('Return to CourseView', '/courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid);
 }
 
 //the method that gets called when one of the courseview urls is called.  
@@ -93,7 +93,7 @@ function courseviewPageHandler($page, $identifier)
     set_input('params', $page);  //place the $page into params
     
     //if the courseview page is being displayed, then we don't need the return to courseview breadcrumb--pop it off
-    elgg_pop_breadcrumb();
+    //elgg_pop_breadcrumb();
 
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {

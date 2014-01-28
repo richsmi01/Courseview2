@@ -50,7 +50,7 @@ $cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged
 echo "<div id='add_entity_to_cohort_menus'>";
 if (cv_isprof($cvuser))
 {
-    echo "<input onclick = 'showCVAdd(" . '"cvaddtocourse"' . ")' id ='cohort_menu_items' type ='checkbox' style='display:inline' />";
+    echo "<input onclick = 'showCVAdd(" . '"cvaddtocourse"' . ")' id ='course_menu_items' type ='checkbox' style='display:inline' />";
     echo "<label  for ='course_menu_items' style='display:inline'>Add this content to the professor content areas of Courseview Courses </label>";
     echo "<div id ='cvaddtocourse'>";
 
