@@ -20,8 +20,8 @@ $count = 0;
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)
 {
-    $cohortguid = $cohort->guid;
-    $menuitems = cv_get_menu_items_for_cohort($cohortguid);
+    $cv_cohort_guid = $cohort->guid;
+    $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
 
     //Here we are building the html of the treeview control and adding the correct css classes so that my css
     //can turn it into a tree that can be manipulated by the user 
@@ -54,7 +54,7 @@ foreach ($cohorts as $cohort)
         $count++;
         $class2 = "";
         $indent = $menuitem->indent;
-        if ($menuitem->guid == $cvmenuguid && $cohortguid == $cvcohortguid)
+        if ($menuitem->guid == $cvmenuguid && $cv_cohort_guid == $cvcohortguid)
         {
             $class2 = " cvcurrent";  //setting the current menu item
         }
@@ -63,7 +63,7 @@ foreach ($cohorts as $cohort)
             echo "<li>";
             echo "<input type ='checkbox' abc ='m' name='$indent' class ='cvmenuitem $class2' id ='$id1' />";
             echo "<label>";
-            echo "<a href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cohortguid . "/" . $menuitem->guid . "'> " . $name . "</a>";
+            echo "<a href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "'> " . $name . "</a>";
             echo "</label>";
         }
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
@@ -71,7 +71,7 @@ foreach ($cohorts as $cohort)
         {
     
             echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' "
-                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cohortguid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
+                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
         }
     }
     echo elgg_echo('</div>');

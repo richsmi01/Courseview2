@@ -23,8 +23,8 @@ $moduleindent = get_input('newmoduleindent');
 
 //echo '<br>$$$:  '.get_input('newmoduleindent').'<br>';
 
-$cohortguid = ElggSession::offsetGet('cvcohortguid');
-$cvcourseguid = get_entity($cohortguid)->container_guid;
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
+$cvcourseguid = get_entity($cv_cohort_guid)->container_guid;
 //echo 'courseguid:  '.$cvcourseguid;
 //echo'name of module: '.$modulename;
 //echo 'module type: '.$moduletype;

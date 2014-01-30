@@ -7,8 +7,8 @@
 //$cohortFilter =$vars['cohortFilter'];
 
 
-$cohortguid= ElggSession::offsetGet('cvcohortguid');  
-$courseguid = get_entity($cohortguid)->container_guid;
+$cv_cohort_guid= ElggSession::offsetGet('cvcohortguid');  
+$courseguid = get_entity($cv_cohort_guid)->container_guid;
 $menuguid= ElggSession::offsetGet('cvmenuguid');
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
 //echo '$filter '.$filter;
@@ -19,7 +19,7 @@ $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'cours
 $createbutton = $createString[$filter];      //elgg_get_plugin_setting('blogadd', 'courseview');
 $createbutton = str_replace('{url}', elgg_get_site_url(), $createbutton);
 $createbutton = str_replace('{user_guid}', elgg_get_logged_in_user_guid(), $createbutton);
-
+$createbutton = str_replace('{cohort_guid}', $cv_cohort_guid, $createbutton);
 //create and populate a pulldown menu using the list of authorized plugins from the setup screen   
 $availableplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));  //pull down list of authorized plugin types
 $availableplugins['all'] = 'All';  //add the ability for the student to select all content
@@ -40,7 +40,7 @@ foreach ($availablecohorts as $availablecohort)
     $dropdownlist [$availablecohort->guid] = $availablecohort->title;
 }
 //echo 'cohort filter was '.get_input('cohortfilter').'<br>';
-$cfilter =get_input('cohortfilter', $cohortguid); 
+$cfilter =get_input('cohortfilter', $cv_cohort_guid); 
 //echo 'cohort filter now is '.$cfilter.'<br>';
 echo '<form method="get" action="' . current_page_url() . '">';
 if (get_entity($menuguid)->menutype=='student')

@@ -63,11 +63,11 @@ if (cv_isprof($cvuser))
         foreach ($menuitems as $menuitem)
         {
             $name = $menuitem->name;
-            $relationship = cv_build_relationship($menuitem, $cohortguid);
-            $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cohortguid);
+            $relationship = cv_build_relationship($menuitem, $cv_cohort_guid);
+            $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cv_cohort_guid);
             echo buildindentstring($menuitem, $indentlevel);
             $indentlevel = $menuitem->indent;
-            $value = $menuitem->guid . "|" . $cohortguid;
+            $value = $menuitem->guid . "|" . $cv_cohort_guid;
             if ($menuitem->menutype == "folder")
             {
                 echo "<li>";
@@ -98,7 +98,7 @@ echo "<div id ='cvaddtocohort'>";
 
 foreach ($cohorts as $cohort)
 {
-    $cohortguid = $cohort->guid;
+    $cv_cohort_guid = $cohort->guid;
 
     // building the html of the treeview control and adding the correct css classes so that the css
     //can turn it into a tree that can be manipulated by the user 
@@ -106,7 +106,7 @@ foreach ($cohorts as $cohort)
     //we start our tree with indentlevel at 0.  The only menu items that will be at indent level 0 will be the course container folder
     $indentlevel = 0;
     //now, loop through each menu item (by menusort order)
-    $menuitems = cv_get_menu_items_for_cohort($cohortguid);
+    $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
      
     /* We will check each $menuitem to see whether or not we should add a check in the checkbox associated with this
          * tree item.  If a relationship exists between the $menuitem and the current_content_entity, then the tree item needs to 
@@ -129,10 +129,10 @@ foreach ($cohorts as $cohort)
     //figure out the correct $relationship string  (professor content is "content", studen content is "content<GUID> where guid is the cohort guid.
     foreach ($menuitems as $menuitem)
     {
-        $relationship = cv_build_relationship($menuitem, $cohortguid);
+        $relationship = cv_build_relationship($menuitem, $cv_cohort_guid);
 
         //decide whether or not the current $menuitem should have the checkbox checked when it is rendered.
-        $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cohortguid);
+        $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cv_cohort_guid);
 
         //figure out whether this item should be indented, outdented or stay the same.
         echo buildindentstring($menuitem, $indentlevel);
@@ -142,7 +142,7 @@ foreach ($cohorts as $cohort)
         //set up attributes to insert into the html tags
         $name = $menuitem->name;
         $indent = $menuitem->indent;
-        $value = $menuitem->guid . "|" . $cohortguid;
+        $value = $menuitem->guid . "|" . $cv_cohort_guid;
         //build html depending on menu type: student, professor, or folder
         if ($menuitem->menutype == "folder")
         {

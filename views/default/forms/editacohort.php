@@ -4,8 +4,8 @@
  *A form used to edit a cohort name
  */
 $userguid = elgg_get_logged_in_user_guid();
-$cohortguid = ElggSession::offsetGet('cvcohortguid');
-$cvcohort = get_entity($cohortguid);
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
+$cvcohort = get_entity($cv_cohort_guid);
 echo "<div class='cvminiview'>";
 echo  "<em>Edit  A COHORT Name:</em><br/><br/>";
 echo "Please type in the name of the cohort that you wish to edit:";

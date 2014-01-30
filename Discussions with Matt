@@ -1,4 +1,10 @@
 
+Bug!!!  Some professor content not showing up when logged in as student
+Can we build a view to output every bit of data about an object? including acls
+Adding friends/groups etc...can I automatically add new users to be my friend or be in my group?
+Can we set up a media type that defaults to group mode?  So we set up a section in settings that allows us to pass the group id instead of the user id
+video plugin?
+
 - Elgg account Hacked!
                 - wiki permission issues
                 - Move up/move down complicated by hidden objects like poll choices that do not print 

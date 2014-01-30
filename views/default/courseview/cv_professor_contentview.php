@@ -5,7 +5,7 @@
          */
 
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$cohortguid = ElggSession::offsetGet('cvcohortguid');
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 
 if (cv_isprof(elgg_get_logged_in_user_entity()))
 {
@@ -22,6 +22,10 @@ $content_items = elgg_get_entities_from_relationship(array(
 
 foreach ($content_items as $content_item)
 {
+    $sort_order = $content_item->sort_order;
+    $my_guid = $content_item->guid;
+    echo "guid: ".$my_guid;
+    echo "sort_order:  ".$sort_order;
     if (cv_isprof($user))
     {
 //                /* If the content doesn't have a sort_order metadata, then add one and set it to the time_created value of the object.  We

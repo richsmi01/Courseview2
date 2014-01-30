@@ -5,13 +5,13 @@
  * and open the template in the editor.
  */
 elgg_load_library('elgg:courseview');
-$cohortguid = ElggSession::offsetGet('cvcohortguid');
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 
 $cvmenuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
  //echo "menu item indent ".$cvmenuitem->indent;
 //echo "TEST:" . get_input('buttonchoice');
  //echo "menu item indent ".$cvmenuitem->indent;
-$menuitems = cv_get_menu_items_for_cohort ($cohortguid);
+$menuitems = cv_get_menu_items_for_cohort ($cv_cohort_guid);
 switch (get_input('buttonchoice'))
 {
     case 'Indent':

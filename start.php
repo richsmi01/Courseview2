@@ -301,42 +301,42 @@ function cvforwardintercept($hook, $type, $return, $params)
   *
   * @return void
   */
-function intercept_ACL_read($hook, $type, $return, $params)
-{
-    //If courseview is not active, we just want to continue on as usual
-    $cv_active = ElggSession::offsetGet('courseview');
-    if (!$cv_active)
-    {
-        return $return;
-    }
-    /* We need to unregister the plugin hook handler before getting the courses or we will crash the php interpreter through
-     * recursion ;->
-     */
-    elgg_unregister_plugin_hook_handler('access:collections:read', 'all', 'intercept_ACL_read');
-
-
-    cv_debug("Entering intercept_ACL_read:: ", "", 100);
-    cv_debug($return, "", 100);
-
-    /* I'm thinking that we don't need to do this for all user courses, just the current one??? */
-
-    $user = get_user($params["user_id"]);
-    $courses = cv_get_user_courses($user);
-
-    foreach ($courses as $course)
-    {
-        if ($course->cv_acl)
-        {
-            //cv_debug("***", "", 100);
-            $return [] = (int) $course->cv_acl; //add the course acl to the acl list being returned
-            //we also have to add the user to the acl collection. --hmmm..what happens when a user leaves a cohort?
-            // add_user_to_access_collection($user->guid, $course->cv_acl);
-        }
-    }
-    cv_debug("Exiting intercept_ACL_read: ", "", 100);
-    cv_debug($return, "", 100);
-    return $return;
-}
+//function intercept_ACL_read($hook, $type, $return, $params)
+//{
+//    //If courseview is not active, we just want to continue on as usual
+//    $cv_active = ElggSession::offsetGet('courseview');
+//    if (!$cv_active)
+//    {
+//        return $return;
+//    }
+//    /* We need to unregister the plugin hook handler before getting the courses or we will crash the php interpreter through
+//     * recursion ;->
+//     */
+//    elgg_unregister_plugin_hook_handler('access:collections:read', 'all', 'intercept_ACL_read');
+//
+//
+//    cv_debug("Entering intercept_ACL_read:: ", "", 100);
+//    cv_debug($return, "", 100);
+//
+//    /* I'm thinking that we don't need to do this for all user courses, just the current one??? */
+//
+//    $user = get_user($params["user_id"]);
+//    $courses = cv_get_user_courses($user);
+//
+//    foreach ($courses as $course)
+//    {
+//        if ($course->cv_acl)
+//        {
+//            //cv_debug("***", "", 100);
+//            $return [] = (int) $course->cv_acl; //add the course acl to the acl list being returned
+//            //we also have to add the user to the acl collection. --hmmm..what happens when a user leaves a cohort?
+//            // add_user_to_access_collection($user->guid, $course->cv_acl);
+//        }
+//    }
+//    cv_debug("Exiting intercept_ACL_read: ", "", 100);
+//    cv_debug($return, "", 100);
+//    return $return;
+//}
 
 
 /**
@@ -367,15 +367,17 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         return $return;
     }
     elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write');
-    $menu_items = get_input('menuitems');
+    //$menu_items = get_input('menuitems');
 
     $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-
-    $course = get_entity($cv_cohort->getContainerGUID());
-    //if the course has been assigned a custom acl (stored in cv_acl) then add it to the list
-    if ($course->cv_acl)
+    if ($cv_cohort)  //::TODO: this is a test to fix an error that I got:Fatal error: Call to a member function getContainerGUID() on a non-object in /home/richsmit/public_html/mod/courseview/start.php on line 374
     {
-        $return [$course->cv_acl] = 'Course: ' . $course->title;
+        $course = get_entity($cv_cohort->getContainerGUID());
+        //if the course has been assigned a custom acl (stored in cv_acl) then add it to the list
+        if ($course->cv_acl)
+        {
+            $return [$course->cv_acl] = 'Course: ' . $course->title;
+        }
     }
 
     return $return;

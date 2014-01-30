@@ -4,14 +4,14 @@
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $defaultcohortguid = ElggSession::offsetGet('cvcohortguid');
-$cohortguid=get_input ('cohortfilter',$defaultcohortguid);
+$cv_cohort_guid=get_input ('cohortfilter',$defaultcohortguid);
 
-$cohortname = get_entity($cohortguid)->title;
+$cohortname = get_entity($cv_cohort_guid)->title;
 //echo "dropdown info: ".$cohortname;
 
 
 //$relationship = 'content' . $cvcohortguid;
-$relationship = 'content' . $cohortguid;
+$relationship = 'content' . $cv_cohort_guid;
 
 //echo elgg_echo("Relationship name:  " . $relationship);
 //echo elgg_echo("Relationship GUID:  " . $cvmenuguid);
