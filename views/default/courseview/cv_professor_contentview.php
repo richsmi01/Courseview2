@@ -4,6 +4,7 @@
          * Displays all content that has been created within a 'professor' type menu item
          */
 
+
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 
@@ -24,8 +25,8 @@ foreach ($content_items as $content_item)
 {
     $sort_order = $content_item->sort_order;
     $my_guid = $content_item->guid;
-    echo "guid: ".$my_guid;
-    echo "sort_order:  ".$sort_order;
+  //  echo "guid: ".$my_guid;
+  //  echo "sort_order:  ".$sort_order;
     if (cv_isprof($user))
     {
 //                /* If the content doesn't have a sort_order metadata, then add one and set it to the time_created value of the object.  We
@@ -53,6 +54,9 @@ foreach ($content_items as $content_item)
             'is_action' => true));
     }
     echo "<div id= 'contentitem'>";
+    //echo 'Container: '.$content_item->getContainerGUID ();
+    //var_dump($content_item);
+  //  echo 'Owner:'.$content_item->getOwnerGUID();
             echo elgg_echo(elgg_view_entity($content_item, array(full_view => false)));
     echo "</div>";
 }

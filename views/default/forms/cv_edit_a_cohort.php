@@ -8,7 +8,7 @@ $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $cvcohort = get_entity($cv_cohort_guid);
 echo "<div class='cvminiview'>";
 echo  "<em>Edit  A COHORT Name:</em><br/><br/>";
-echo "Please type in the name of the cohort that you wish to edit:";
+echo "Please type in the name of the cohort that you wish to edit:".$cv_cohort_guid;
 echo elgg_view('input/text', array('name' => 'cvcohortname', 'value'=>$cvcohort->title));
 
 

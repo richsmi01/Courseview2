@@ -14,11 +14,12 @@ echo '<em>EDIT CURRENT COURSE NAME:</em><br/><br/>';
 //echo "Please type in the name of the cohort that you wish to edit:";
 //echo elgg_view('input/text', array('name' => 'cvcohortname', 'value'=>$cvcohort->title));
 
-$currentcourse = get_entity (get_entity(ElggSession::offsetGet('cvcohortguid'))->container_guid)->title;
-echo '<br>Make any changes to the course title and click on submit : ';
+$currentcourse = get_entity (get_entity(ElggSession::offsetGet('cvcohortguid'))->container_guid);
+$currentcoursename = $currentcourse->title;
+echo '<br>Make any changes to the course title and click on submit : '.$currentcourse->guid;
 echo elgg_view('input/text', array(
     'name' => 'newcoursename',
-    'value' => "$currentcourse"));
+    'value' => "$currentcoursename"));
 echo ('Please choose course name to edit: ');
 
 //$base_path = elgg_get_plugins_path() . 'courseview/views/default/courseview';

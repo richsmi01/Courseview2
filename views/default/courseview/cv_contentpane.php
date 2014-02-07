@@ -1,4 +1,19 @@
+<script>
+    $(document).ready(function() {
+       $header = document.querySelector('.elgg-page-header');
+       $header.innerHTML ="<div id='cvcloud1'></div><div id='cvcloud2'></div><div id='cvcloud3'></div>"+$header.innerHTML;
+
+//        document.getElementById('elgg-page-header').innerHtml += "<div id='cvcloud1'>div abc</div>";
+    });
+</script>
 <?php
+
+//if we're not logged into courseview then return
+$status = ElggSession::offsetGet('courseview');
+if (!$status)
+{
+    return;
+}
 
 elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();

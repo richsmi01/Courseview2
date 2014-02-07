@@ -9,27 +9,38 @@
  */
 ?>
 
-
-
-.elgg-page-default .elgg-page-header  {
-
-  background-image:url("http://montanaflynn.me/lab/css-clouds/images/cloud_two.png") ;
-  background-color:blue;
-  
-
+#cvcloud1, #cvcloud2, #cvcloud3{
+position:absolute;
+top:0px;
+left:0px;
+height:100%;
+width:100%;
+//background-color:blue;
+color:green;
 }
 
 
+body {
+  //  background-color:lightblue;
+   overflow-x:hidden;
+}
+.elgg-page-default .elgg-page-body > .elgg-inner{
+width:90%;
+}
 
-
+.elgg-sidebar{
+ //   width:310px;
+  //  background-color:lightgrey;
+  //  float:left;
+}
 .sky {
     height:480px;
     background:#007fd5;
     position:relative;
     overflow:hidden;
-    -webkit-animation:sky_background 50s ease-out infinite;
-    -moz-animation:sky_background 50s ease-out infinite;
-    -o-animation:sky_background 50s ease-out infinite;
+    -webkit-animation:sky_background 70s ease-out infinite;
+    -moz-animation:sky_background 70s ease-out infinite;
+    -o-animation:sky_background 70s ease-out infinite;
     -webkit-transform:translate3d(0,0,0);
     -moz-transform:translate3d(0,0,0);
     -o-transform:translate3d(0,0,0)
@@ -42,55 +53,58 @@
     left:0;
     height:100%;
     width:300%;
-    -webkit-animation:moon 50s linear infinite;
-    -moz-animation:moon 50s linear infinite;
-    -o-animation:moon 50s linear infinite;
+    -webkit-animation:moon 70s linear infinite;
+    -moz-animation:moon 70s linear infinite;
+    -o-animation:moon 70s linear infinite;
     -webkit-transform:translate3d(0,0,0);
     -moz-transform:translate3d(0,0,0);
     -o-transform:translate3d(0,0,0)
 }
 
 
-.clouds_one {
-    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_one.png");
+#cvcloud1 {
+    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_onea.png) ;
     position:absolute;
     left:0;
     top:0;
     height:100%;
+   // overflow:hidden;
     width:300%;
-    -webkit-animation:cloud_one 50s linear infinite;
-    -moz-animation:cloud_one 50s linear infinite;
-    -o-animation:cloud_one 50s linear infinite;
+    -webkit-animation:cloud_one 70s linear infinite;
+    -moz-animation:cloud_one 70s linear infinite;
+    -o-animation:cloud_one 70s linear infinite;
     -webkit-transform:translate3d(0,0,0);
     -moz-transform:translate3d(0,0,0);
     -o-transform:translate3d(0,0,0)
 }
 
-.clouds_two {
-    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_two.png");
+#cvcloud2 {
+    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_twoa.png) ;
     position:absolute;
     left:0;
     top:0;
     height:100%;
     width:300%;
-    -webkit-animation:cloud_two 75s linear infinite;
-    -moz-animation:cloud_two 75s linear infinite;
-    -o-animation:cloud_two 75s linear infinite;
+   // overflow:hidden;
+    -webkit-animation:cloud_two 95s linear infinite;
+    -moz-animation:cloud_two 95s linear infinite;
+    -o-animation:cloud_two 95s linear infinite;
     -webkit-transform:translate3d(0,0,0);
     -moz-transform:translate3d(0,0,0);
     -o-transform:translate3d(0,0,0)
 }
 
-.clouds_three {
-    background:url("http://montanaflynn.me/lab/css-clouds/images/cloud_three.png");
+#cvcloud3 {
+    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_threea.png) ;
     position:absolute;
     left:0;
     top:0;
     height:100%;
+   // overflow:hidden;
     width:300%;
-    -webkit-animation:cloud_three 100s linear infinite;
-    -moz-animation:cloud_three 100s linear infinite;
-    -o-animation:cloud_three 100s linear infinite;
+    -webkit-animation:cloud_three 120s linear infinite;
+    -moz-animation:cloud_three 120s linear infinite;
+    -o-animation:cloud_three 120s linear infinite;
     -webkit-transform:translate3d(0,0,0);
     -moz-transform:translate3d(0,0,0);
     -o-transform:translate3d(0,0,0)
@@ -480,6 +494,19 @@ position:relative;
 
 -webkit-animation: flyin 1s ease-in;
 position:relative;
+
+text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
 }
 
 .cvminiview 
@@ -495,32 +522,34 @@ font-weight:bold;
 color:red;
 }
 
-li  input[type=checkbox] ~ div{
+/*li  input[type=checkbox] ~ div{
 display: none;
-/*background-color:blue;*/
+background-color:blue;
 }
 
 li  input[type=checkbox]:checked  ~ div {
 display: block;
-/*background-color:yellow;*/
-}
+background-color:green;
+}*/
 
 .sub {
 margin:5px 5px 5px 15px;
 }
-
+.sub2 {
+margin:5px 5px 5px 30px;
+}
 .cvcurrent {
 font-style: italic;
 }
 
-#cvaddtocohort, #cvaddtocourse {
+/*#cvaddtocohort, #cvaddtocourse {
 
-//color :red;
+color :green;
 border: 1px solid black;
-//padding:10px;
+padding:10px;
 visibility:hidden;
 height:0px;
-}
+}*/
 
 /*        #editmenuitem, #addmenuitem{
 display:none;
@@ -757,3 +786,36 @@ left:0px;
 
 }
 
+.cv_collapsible
+{
+    display:none;
+}
+
+
+.cv_collapsible + label
+{
+background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+padding:3px 3px 3px 16px;
+background-position:0 -48px;
+font-weight:bold;
+color:blue;
+display:block;
+}
+
+.cv_collapsible:checked + label
+{
+background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+padding:3px 3px 3px 16px;
+background-position:0 -68px;
+font-weight:bold;
+color:red;
+}
+
+.cv_collapsible +label + div{
+display: none;
+}
+
+.cv_collapsible:checked +label + div {
+display: block;
+
+}

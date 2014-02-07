@@ -10,9 +10,9 @@ function courseviewInit()
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
-    elgg_register_simplecache_view ('js/courseview/js');
-    $jsurl = elgg_get_simplecache_url('js','courseview/js');
-    elgg_register_js ('cv_sidebar_js',$jsurl);
+    elgg_register_simplecache_view('js/courseview/js');
+    $jsurl = elgg_get_simplecache_url('js', 'courseview/js');
+    elgg_register_js('cv_sidebar_js', $jsurl);
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
@@ -75,7 +75,7 @@ function courseviewInit()
     //push breadcrumb to allow user to return to the current courseview cv_contentpane 
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-   // elgg_push_breadcrumb('Return to CourseView', '/courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid);
+    // elgg_push_breadcrumb('Return to CourseView', '/courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid);
 }
 
 //the method that gets called when one of the courseview urls is called.  
@@ -91,7 +91,6 @@ function courseviewPageHandler($page, $identifier)
     ElggSession::offsetSet('cvcohortguid', $page[1]);
     ElggSession::offsetSet('cvmenuguid', $page[2]);
     set_input('params', $page);  //place the $page into params
-    
     //if the courseview page is being displayed, then we don't need the return to courseview breadcrumb--pop it off
     //elgg_pop_breadcrumb();
 
@@ -105,7 +104,10 @@ function courseviewPageHandler($page, $identifier)
             require "$base_path/pages/courseview/cv_contentpane.php";
             break;
         case 'cv_testing':
-             require "$base_path/pages/courseview/cv_testing.php";
+            require "$base_path/pages/courseview/cv_testing.php";
+            break;
+        case 'examine':
+             require "$base_path/pages/courseview/examine.php";
             break;
         default:
             echo "courseview request for " . $page[0];
@@ -113,17 +115,16 @@ function courseviewPageHandler($page, $identifier)
     return true;
 }
 
-
 /**
-  * When the sidebar plugin hook fires, cv_sidebar_intercept takes over and adds the course menu tree as needed
-  *
-  * @param string $hook  not actually needed or used
-  * @param string $entity_type  not actually needed or used
-  * @param string $returnvalue  If CourseView is enabled, the tree menu is added to the $returnvalue and returned to elgg
-  * @param string $entity_type  not actually needed or used
-  *
-  * @return Returns the value of of $returnvalue that was passed by the hook.  This value may now have our tree view menu in it
-  */
+ * When the sidebar plugin hook fires, cv_sidebar_intercept takes over and adds the course menu tree as needed
+ *
+ * @param string $hook  not actually needed or used
+ * @param string $entity_type  not actually needed or used
+ * @param string $returnvalue  If CourseView is enabled, the tree menu is added to the $returnvalue and returned to elgg
+ * @param string $entity_type  not actually needed or used
+ *
+ * @return Returns the value of of $returnvalue that was passed by the hook.  This value may now have our tree view menu in it
+ */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
@@ -135,16 +136,16 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 }
 
 /**
-  * Runs whenever a user joins a group.  If that group is actually a cvcohort then we need to add the users guid to the 
+ * Runs whenever a user joins a group.  If that group is actually a cvcohort then we need to add the users guid to the 
  * acl of the cvcourse which is the container of that particluar cvcohort
-  *
-  * @param array $event  - not used
-  * @param array  $type - not used
-  * @param array $params - the params array contains the group entity that the user is being added to and the user entity
-  *                                            that is being added to the group. 
-  *
-  * @return void
-  */
+ *
+ * @param array $event  - not used
+ * @param array  $type - not used
+ * @param array $params - the params array contains the group entity that the user is being added to and the user entity
+ *                                            that is being added to the group. 
+ *
+ * @return void
+ */
 function cv_join_group($event, $type, $params)
 {
     $cv_group = $params['group'];
@@ -152,22 +153,24 @@ function cv_join_group($event, $type, $params)
     {
         return;
     }
-    $cv_course = $cv_group->getContainerEntity();
-    $cv_user = $params['user'];
-    add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
+  //  $ia = elgg_set_ignore_access(true); // grants temporary permission overrides
+        $cv_course = $cv_group->getContainerEntity();
+        $cv_user = $params['user'];
+        $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
+  //  elgg_set_ignore_access($ia); // restore permissions
 }
 
 /**
-  * Runs whenever a user leaves a group.  If that group is actually a cvcohort then we need to remove the users guid from the 
+ * Runs whenever a user leaves a group.  If that group is actually a cvcohort then we need to remove the users guid from the 
  * acl of the cvcourse which is the container of that particluar cvcohort
-  *
-  * @param array $event  - not used
-  * @param array  $type - not used
-  * @param array $params - the params array contains the group entity that the user is being removed from and the user entity
-  *                                            that is being removed from the group. 
-  *
-  * @return void
-  */
+ *
+ * @param array $event  - not used
+ * @param array  $type - not used
+ * @param array $params - the params array contains the group entity that the user is being removed from and the user entity
+ *                                            that is being removed from the group. 
+ *
+ * @return void
+ */
 function cv_leave_group($event, $type, $params)
 {
     $cv_group = $params['group'];
@@ -178,22 +181,21 @@ function cv_leave_group($event, $type, $params)
 
     $cv_course = $cv_group->getContainerEntity();
     $cv_user = $params['user'];
-    remove_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
+    remove_user_from_access_collection($cv_user->guid, $cv_course->cv_acl);
 }
 
-
 /**
-  * Intercepts any new content creation, content updates, or content deletions.  If the content type is one of our valid 
-  * plugins (as specified in the setup page, we will loop through the treeview generated by cv_content_tree
-  * view that is appended to appropriate pages and use  the checkboxes in this to determine any 
-  * relationships between the current menu item and the content to be created or removed. 
-  *
-  * @param string $event  not actually needed or used
-  * @param string $type  not actually needed or used
-  * @param string $object  --
-  *
-  * @return void
-  */
+ * Intercepts any new content creation, content updates, or content deletions.  If the content type is one of our valid 
+ * plugins (as specified in the setup page, we will loop through the treeview generated by cv_content_tree
+ * view that is appended to appropriate pages and use  the checkboxes in this to determine any 
+ * relationships between the current menu item and the content to be created or removed. 
+ *
+ * @param string $event  not actually needed or used
+ * @param string $type  not actually needed or used
+ * @param string $object  --
+ *
+ * @return void
+ */
 function cv_intercept_update($event, $type, $object)
 {
     elgg_load_library('elgg:cv_debug');
@@ -212,12 +214,12 @@ function cv_intercept_update($event, $type, $object)
             $valid_plugin = true;
         }
     }
-    
-   // pull array of checkboxes (associated with menu items) from the cv_content_tree 
-   // so that we can loop through them in order to determine what realtionships need to be added or deleted
-   // Note that $menu_items is an array of Strings passed from cv_add_to_cohort_tree where each 
-   // element contains three pieces of information in the format Xmenuitemguid|cohortguid where
-   //  X is a + if a new relationship should be created and a - if it should be removed.
+
+    // pull array of checkboxes (associated with menu items) from the cv_content_tree 
+    // so that we can loop through them in order to determine what realtionships need to be added or deleted
+    // Note that $menu_items is an array of Strings passed from cv_add_to_cohort_tree where each 
+    // element contains three pieces of information in the format Xmenuitemguid|cohortguid where
+    //  X is a + if a new relationship should be created and a - if it should be removed.
     $menu_items = get_input('menuitems');
     foreach ($menu_items as $menu_item)
     {
@@ -233,7 +235,7 @@ function cv_intercept_update($event, $type, $object)
         //If it is of type professor, the relationship String should be simply 'content'.  However, if 
         //the relationship is of type student, then the relationship String should have the current
         //$cohort_guid appended to it in the form contentXXX where XXX is the $cohort_guid
-         
+
         $relationship = 'content';
         //however, if the $menuitem is not of type 'professor' (ie, of type 'student'), then we need to append the particulart  cohort to 'content'
         if (get_entity($menu_item_guid)->menutype != 'professor')
@@ -253,8 +255,7 @@ function cv_intercept_update($event, $type, $object)
             $z = add_entity_relationship($guid_one, $relationship, $guid_two);
             cv_debug("Added relationship", "", 5);
             cv_debug($z, "cv_intercept_update", 5);
-        } 
-        else
+        } else
         {
             $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
             if ($rel_to_delete)  //if the module was unchecked and there was a relationship, we need to remove the relationship
@@ -264,7 +265,7 @@ function cv_intercept_update($event, $type, $object)
             }
         }
     }
-    
+
     $rootdomain = elgg_get_site_url();
     $cvredirect = $rootdomain . 'courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
     ElggSession::offsetSet('cvredirect', $cvredirect);
@@ -273,14 +274,14 @@ function cv_intercept_update($event, $type, $object)
 //::TODO:  Matt, I want to better understand why I had to do this
 
 /**
-  * 
-  *
-  * @param type 
-  * @param type 
-  * @param type 
-  *
-  * @return void
-  */
+ * 
+ *
+ * @param type 
+ * @param type 
+ * @param type 
+ *
+ * @return void
+ */
 function cvforwardintercept($hook, $type, $return, $params)
 {
     $cvredirect = ElggSession::offsetGet('cvredirect');
@@ -293,14 +294,14 @@ function cvforwardintercept($hook, $type, $return, $params)
 }
 
 /**
-  * 
-  *
-  * @param type 
-  * @param type 
-  * @param type 
-  *
-  * @return void
-  */
+ * 
+ *
+ * @param type 
+ * @param type 
+ * @param type 
+ *
+ * @return void
+ */
 //function intercept_ACL_read($hook, $type, $return, $params)
 //{
 //    //If courseview is not active, we just want to continue on as usual
@@ -338,7 +339,6 @@ function cvforwardintercept($hook, $type, $return, $params)
 //    return $return;
 //}
 
-
 /**
  * When the professor creates content, we want to add an option to the access dropdown
  * to allow viewing to any users who are members of any of the cohorts attached to the current
@@ -349,24 +349,27 @@ function cvforwardintercept($hook, $type, $return, $params)
  * 
  * The ACL array is an associative array where the key is the accessid and the value is what gets displayed 
  * in the ACCESS dropdown.
-  *
-  * @param type $hook
-  * @param type $type
-  * @param type $return
-  * @param type $params
-  *
-  * @return void
-  */
+ *
+ * @param type $hook
+ * @param type $type
+ * @param type $return
+ * @param type $params
+ *
+ * @return void
+ */
 function cv_intercept_ACL_write($hook, $type, $return, $params)
 {
 
     $user = get_user($params["user_id"]);
     $cv_active = ElggSession::offsetGet('courseview');
-    if (!cv_isprof($user) || !$cv_active)
+    if ( !$cv_active)
     {
         return $return;
     }
-    elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write');
+    
+    var_dump($return);
+    
+    //elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write');
     //$menu_items = get_input('menuitems');
 
     $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
@@ -377,6 +380,10 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         if ($course->cv_acl)
         {
             $return [$course->cv_acl] = 'Course: ' . $course->title;
+            var_dump ($return);
+            
+            $return [$cv_cohort->cv_acl] = 'Cohort: ' . $cv_cohort->title;
+            var_dump ($return);
         }
     }
 
@@ -384,17 +391,15 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
 }
 
 /**
-  * When the CourseView menu item is clicked, set the CourseView session variable to true or false and set the
-  * menu title accordingly
-  *
-  * @param type 
-  * @param type 
-  * @param type 
-  *
-  * @return void
-  */
-
-
+ * When the CourseView menu item is clicked, set the CourseView session variable to true or false and set the
+ * menu title accordingly
+ *
+ * @param type 
+ * @param type 
+ * @param type 
+ *
+ * @return void
+ */
 function cv_register_courseview_menu()
 {
     $status = ElggSession::offsetGet('courseview');

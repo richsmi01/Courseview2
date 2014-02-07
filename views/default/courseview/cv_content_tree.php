@@ -14,20 +14,20 @@
 <script>
     function showCVAdd(selected_menu) {
         // alert (selected_menu);
-        myDiv = document.querySelector("#" + selected_menu);
+       // myDiv = document.querySelector("#" + selected_menu);
+       // alert (myDiv.id);
+      //  if (myDiv.style.visibility == "visible") {
+     //       myDiv.style.visibility = 'hidden';
+     //       myDiv.style.height = '0px';
+       //     myDiv.style.padding = '0px';
 
-        if (myDiv.style.visibility == "visible") {
-            myDiv.style.visibility = 'hidden';
-            myDiv.style.height = '0px';
-            myDiv.style.padding = '0px';
-
-        }
-        else
-        {
-            myDiv.style.visibility = 'visible';
-            myDiv.style.height = 'auto';
-            myDiv.style.padding = '10px';
-        }
+        //}
+        //else
+        //{
+       //     myDiv.style.visibility = 'visible';
+      //      myDiv.style.height = 'auto';
+    //        myDiv.style.padding = '10px';
+   //     }
     }
 </script>
 
@@ -50,9 +50,9 @@ $cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged
 echo "<div id='add_entity_to_cohort_menus'>";
 if (cv_isprof($cvuser))
 {
-    echo "<input onclick = 'showCVAdd(" . '"cvaddtocourse"' . ")' id ='course_menu_items' type ='checkbox' style='display:inline' />";
-    echo "<label  for ='course_menu_items' style='display:inline'>Add this content to the professor content areas of Courseview Courses </label>";
-    echo "<div id ='cvaddtocourse'>";
+    echo "<input  id ='cv_check1' type ='checkbox' class='cv_collapsible' />";
+    echo "<label  for ='cv_check1' >Add this content to the professor content areas of Courseview Courses </label>";
+    echo "<div>";
 
     $cvcourses = cv_get_prof_owned_courses($cvuser);
     $indentlevel = 0;
@@ -92,9 +92,10 @@ if (cv_isprof($cvuser))
     echo "</div>";
 }
 
-echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id ='cohort_menu_items' type ='checkbox' style='display:inline' />";
-echo "<label  for ='cohort_menu_items' style='display:inline'>Add this content to Courseview Cohorts </label>";
-echo "<div id ='cvaddtocohort'>";
+
+echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' class ='cv_collapsible' type ='checkbox'  />";
+echo "<label  for ='cv_check2' id ='test1'>    This item will be added to the $menuitem->name menu item in $cv_cohort->title </label>";
+echo "<div>";
 
 foreach ($cohorts as $cohort)
 {
