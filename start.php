@@ -153,11 +153,13 @@ function cv_join_group($event, $type, $params)
     {
         return;
     }
-  //  $ia = elgg_set_ignore_access(true); // grants temporary permission overrides
+    $ia = elgg_set_ignore_access(true); // grants temporary permission overrides
         $cv_course = $cv_group->getContainerEntity();
         $cv_user = $params['user'];
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-  //  elgg_set_ignore_access($ia); // restore permissions
+    elgg_set_ignore_access($ia); // restore permissions
+    echo $result;
+    //exit;
 }
 
 /**
@@ -367,7 +369,7 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         return $return;
     }
     
-    var_dump($return);
+    //var_dump($return);
     
     //elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write');
     //$menu_items = get_input('menuitems');
@@ -380,10 +382,10 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         if ($course->cv_acl)
         {
             $return [$course->cv_acl] = 'Course: ' . $course->title;
-            var_dump ($return);
+            //var_dump ($return);
             
-            $return [$cv_cohort->cv_acl] = 'Cohort: ' . $cv_cohort->title;
-            var_dump ($return);
+            $return [$cv_cohort->group_acl] = 'Cohort: ' . $cv_cohort->title;
+            //var_dump ($return);
         }
     }
 

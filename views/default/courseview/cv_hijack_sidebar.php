@@ -58,6 +58,15 @@ foreach ($cohorts as $cohort)
         {
             $class2 = " cvcurrent";  //setting the current menu item
         }
+        
+        if ($menuitem->menutype == "professor")
+        {
+            $class3 = "professor_item";
+        }
+        else 
+        {
+            $class3 ="student_item";
+        }
         if ($menuitem->menutype == "folder")
         {
             echo "<li>";
@@ -70,7 +79,7 @@ foreach ($cohorts as $cohort)
         else
         {
     
-            echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 indent' id ='$id1' "
+            echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 $class3 indent' id ='$id1' "
                 . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
         }
     }

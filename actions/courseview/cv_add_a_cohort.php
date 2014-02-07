@@ -21,12 +21,12 @@ $cvcourse = get_entity($cvcourseguid);
     $cvcohort->cvcohort = true;
       //echo elgg_echo ("Cohort Created:  ".$cvcohort->guid);
       //$id = create_access_collection ("cv_id",$cvcohort->guid);
-      $id = create_access_collection ($cvcohort->title,$cvcohort->guid);
-    $cvcohort->cv_acl = $id;
+      //$id = create_access_collection ($cvcohort->title,$cvcohort->guid);
+   // $cvcohort->cv_acl = $id;
 //$cvcourse->save();
 
 //echo elgg_echo("Course Created! ");
-    add_user_to_access_collection(elgg_get_logged_in_user_guid(), $id);
+    add_user_to_access_collection(elgg_get_logged_in_user_guid(), $cvcohort->group_acl);
       
       //make the professor a member of the group (cohort)
       $cvcohort->join($user);

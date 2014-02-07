@@ -320,7 +320,7 @@ text-decoration: none;
 }
 /*I added this to make branch nodes push in a little bit--Rich.*/
 .css-treeview  .indent {
-margin-left: 25px;
+margin-left: 10px;
 }
 
 .css-treeview a:hover
@@ -798,7 +798,7 @@ background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png)
 padding:3px 3px 3px 16px;
 background-position:0 -48px;
 font-weight:bold;
-color:blue;
+//color:blue;
 display:block;
 }
 
@@ -808,7 +808,7 @@ background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png)
 padding:3px 3px 3px 16px;
 background-position:0 -68px;
 font-weight:bold;
-color:red;
+//color:red;
 }
 
 .cv_collapsible +label + div{
@@ -818,4 +818,14 @@ display: none;
 .cv_collapsible:checked +label + div {
 display: block;
 
+}
+
+.professor_item {
+padding:3px 3px 3px 16px;
+background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+background-position:0 -88px;
+}
+
+.student_item{
+padding:3px 3px 3px 16px;
 }
