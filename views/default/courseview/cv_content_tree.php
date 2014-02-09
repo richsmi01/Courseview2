@@ -39,8 +39,10 @@ $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
 $entity = ($vars['entity']);
 $current_content_entity = $entity;
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
+$cvmenuitem = get_entity ($cvmenuguid);
 $userguid = elgg_get_logged_in_user_guid();
 $cvuser = get_entity($userguid);
+
 
 elgg_load_library('elgg:courseview');
 
@@ -92,18 +94,18 @@ if (cv_isprof($cvuser))
     echo "</div>";
 }
 
-
+echo "<label class = 'sub'> This content will be posted to the $cvmenuitem->name menu item<br></label>";
 echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' class ='cv_collapsible' type ='checkbox'  />";
-echo "<label  for ='cv_check2' id ='test1'>    This item will be added to the $menuitem->name menu item in $cv_cohort->title </label>";
+echo "<label  for ='cv_check2' id ='paddown' > in the $cv_cohort->title  cohort.  Click here to change destination</label>";
 echo "<div>";
-
+echo"<label class ='bluesub'> Check any of the CourseView menu items below that you wish this content to be posted to:</label>";
 foreach ($cohorts as $cohort)
 {
     $cv_cohort_guid = $cohort->guid;
 
     // building the html of the treeview control and adding the correct css classes so that the css
     //can turn it into a tree that can be manipulated by the user 
-    echo '<div class ="css-treeview">';
+    echo '<div class ="css-treeview sub">';
     //we start our tree with indentlevel at 0.  The only menu items that will be at indent level 0 will be the course container folder
     $indentlevel = 0;
     //now, loop through each menu item (by menusort order)

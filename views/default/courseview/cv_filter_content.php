@@ -50,7 +50,8 @@ if (get_entity($menuguid)->menutype=='student')
     'name' => 'cohortfilter',   //need to finish this code so the cohort filter works
     'value' => $cfilter,
     'options_values' => $dropdownlist));
-    echo ' filter by:  ';
+    echo ' Create or filter by:  ';
+    
 }
 else
 {

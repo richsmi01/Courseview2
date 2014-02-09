@@ -148,6 +148,7 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
  */
 function cv_join_group($event, $type, $params)
 {
+    echo 'intercepting group join';
     $cv_group = $params['group'];
     if (!$cv_group->cvcohort)
     {
@@ -159,7 +160,7 @@ function cv_join_group($event, $type, $params)
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
     elgg_set_ignore_access($ia); // restore permissions
     echo $result;
-    //exit;
+    exit;
 }
 
 /**

@@ -535,6 +535,12 @@ background-color:green;
 .sub {
 margin:5px 5px 5px 15px;
 }
+
+.bluesub {
+margin:15px 5px 5px 15px;
+color:blue;
+}
+
 .sub2 {
 margin:5px 5px 5px 30px;
 }
@@ -749,9 +755,9 @@ box-shadow: black 2px 2px 2px;
 position:relative;
 }
 
-#contentitem p {
+/*#contentitem p {
     padding:5px 5px 5px 15px;
-}
+}*/
 
 
 
@@ -795,8 +801,8 @@ left:0px;
 .cv_collapsible + label
 {
 background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
-padding:3px 3px 3px 16px;
-background-position:0 -48px;
+padding:0px 3px 0px 16px;
+background-position:0 -50px;
 font-weight:bold;
 //color:blue;
 display:block;
@@ -805,7 +811,7 @@ display:block;
 .cv_collapsible:checked + label
 {
 background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
-padding:3px 3px 3px 16px;
+padding:0px 3px 0px 16px;
 background-position:0 -68px;
 font-weight:bold;
 //color:red;
@@ -821,11 +827,15 @@ display: block;
 }
 
 .professor_item {
-padding:3px 3px 3px 16px;
+padding:0px 3px 0px 16px;
 background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
 background-position:0 -88px;
 }
 
 .student_item{
-padding:3px 3px 3px 16px;
+padding:0px 3px 0px 16px;
+}
+#paddown{
+
+padding-bottom: 5px;
 }
