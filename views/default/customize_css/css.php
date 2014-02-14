@@ -367,7 +367,7 @@ display: block;
 .css-treeview label:before
 {
 
-background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
 }
 
 .css-treeview label,
@@ -800,7 +800,7 @@ left:0px;
 
 .cv_collapsible + label
 {
-background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
 padding:0px 3px 0px 16px;
 background-position:0 -50px;
 font-weight:bold;
@@ -810,7 +810,7 @@ display:block;
 
 .cv_collapsible:checked + label
 {
-background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
 padding:0px 3px 0px 16px;
 background-position:0 -68px;
 font-weight:bold;
@@ -828,7 +828,7 @@ display: block;
 
 .professor_item {
 padding:0px 3px 0px 16px;
-background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png) no-repeat;
+background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
 background-position:0 -88px;
 }
 

@@ -159,8 +159,8 @@ function cv_join_group($event, $type, $params)
         $cv_user = $params['user'];
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
     elgg_set_ignore_access($ia); // restore permissions
-    echo $result;
-    exit;
+    //echo $result;
+   // exit;
 }
 
 /**
@@ -201,6 +201,9 @@ function cv_leave_group($event, $type, $params)
  */
 function cv_intercept_update($event, $type, $object)
 {
+   // var_dump($event);
+    //var_dump ($type);
+   // var_dump ($object);
     elgg_load_library('elgg:cv_debug');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
@@ -268,7 +271,31 @@ function cv_intercept_update($event, $type, $object)
             }
         }
     }
-
+   
+    elgg_unregister_event_handler('update', 'object', 'cv_intercept_update');
+   
+    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
+    $cohort = get_entity ($cvcohortguid);
+    $course = get_entity ($cohort->getContainerGUID());
+    $cv_course_permission_level ='Course: ' . $course->title;
+    $cv_cohort_permission_level ='Cohort: '.$cohort->title;
+   
+    if (get_readable_access_level ($object->access_id )==$cv_course_permission_level && $object->container_guid != $course->guid)
+    {
+         $object->container_guid  = $course->guid;
+         $object->save();
+    }
+    else if (get_readable_access_level ($object->access_id )==$cv_cohort_permission_level && $object->container_guid != $cohort->guid)
+    {
+            $object->container_guid  = $cohort->guid;
+            $object->save();
+    } 
+    else
+    {
+            $object->container_guid  = $object->owner_guid;
+            $object->save();
+    }
+   elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     $rootdomain = elgg_get_site_url();
     $cvredirect = $rootdomain . 'courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
     ElggSession::offsetSet('cvredirect', $cvredirect);
@@ -362,7 +389,10 @@ function cvforwardintercept($hook, $type, $return, $params)
  */
 function cv_intercept_ACL_write($hook, $type, $return, $params)
 {
-
+//    var_dump ($params);
+//     var_dump ($hook);
+//      var_dump ($type);
+//       var_dump ($return);
     $user = get_user($params["user_id"]);
     $cv_active = ElggSession::offsetGet('courseview');
     if ( !$cv_active)

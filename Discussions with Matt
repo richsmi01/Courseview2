@@ -1,6 +1,13 @@
+--My new permissions don't quite work...almost, but not completely
+-- Elgg bug???  elgg_register_event_handler('join', 'group', 'cv_join_group'); doesn't fire when logged in as non-admin
+--Cron 
+-- How do I get my stories object to show up in my plugins list in the courseview settings?
+
+
+
 ---Walk through ACL's one last time!
 ---Bug - understood now but not sure how to fix it.
---- How do I get my stories object to show up in my plugins list in the courseview settings?
+
 ---Can I control the width of elgg and/or sidebar? NO! DON'T DO THIS
 
 
