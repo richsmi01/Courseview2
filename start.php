@@ -148,7 +148,8 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
  */
 function cv_join_group($event, $type, $params)
 {
-    echo 'intercepting group join';
+
+   
     $cv_group = $params['group'];
     if (!$cv_group->cvcohort)
     {
@@ -272,30 +273,30 @@ function cv_intercept_update($event, $type, $object)
         }
     }
    
-    elgg_unregister_event_handler('update', 'object', 'cv_intercept_update');
-   
-    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-    $cohort = get_entity ($cvcohortguid);
-    $course = get_entity ($cohort->getContainerGUID());
-    $cv_course_permission_level ='Course: ' . $course->title;
-    $cv_cohort_permission_level ='Cohort: '.$cohort->title;
-   
-    if (get_readable_access_level ($object->access_id )==$cv_course_permission_level && $object->container_guid != $course->guid)
-    {
-         $object->container_guid  = $course->guid;
-         $object->save();
-    }
-    else if (get_readable_access_level ($object->access_id )==$cv_cohort_permission_level && $object->container_guid != $cohort->guid)
-    {
-            $object->container_guid  = $cohort->guid;
-            $object->save();
-    } 
-    else
-    {
-            $object->container_guid  = $object->owner_guid;
-            $object->save();
-    }
-   elgg_register_event_handler('update', 'object', 'cv_intercept_update');
+//    elgg_unregister_event_handler('update', 'object', 'cv_intercept_update');
+//   
+//    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
+//    $cohort = get_entity ($cvcohortguid);
+//    $course = get_entity ($cohort->getContainerGUID());
+//    $cv_course_permission_level ='Course: ' . $course->title;  //course->cv_acl
+//    $cv_cohort_permission_level ='Cohort: '.$cohort->title;//course->group_acl
+//   
+//    if (get_readable_access_level ($object->access_id )==$cv_course_permission_level && $object->container_guid != $course->guid)
+//    {
+//         $object->container_guid  = $course->guid;
+//         $object->save();
+//    }
+//    else if (get_readable_access_level ($object->access_id )==$cv_cohort_permission_level && $object->container_guid != $cohort->guid)
+//    {
+//            $object->container_guid  = $cohort->guid;
+//            $object->save();
+//    } 
+//    else
+//    {
+//            $object->container_guid  = $object->owner_guid;
+//            $object->save();
+//    }
+//   elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     $rootdomain = elgg_get_site_url();
     $cvredirect = $rootdomain . 'courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
     ElggSession::offsetSet('cvredirect', $cvredirect);

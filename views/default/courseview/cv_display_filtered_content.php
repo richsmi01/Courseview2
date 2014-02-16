@@ -20,7 +20,6 @@ $content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship
 foreach ($content_items as $content_item)
 {
     echo "<div id='contentitem'>";
-    echo $content_item->container_guid;
         echo elgg_view_entity($content_item, array(full_view => false));
     echo "</div>";
 }
