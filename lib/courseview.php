@@ -147,7 +147,15 @@ function cv_isprof($user)
 
 function cv_is_course_owner ($user, $cohort)
 {
-    return ($user->guid == $cohort->getOwnerGUID());
+   //echo 'in cv_is_course_owner..userguid: '.$user->guid.' courseguid: ' .$cohort->getOwnerGUID();
+    //return true;
+    if(!$user || !$cohort)
+    {
+        return 0;
+    }
+    
+    $cv_course_owner = $cohort->getOwnerEntity ();
+    return ($user->guid == $cv_course_owner->guid);
 }
 
 function cv_get_user_courses ($user)
@@ -259,6 +267,7 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship)
         'relationship' => $relationship,
         'type' => 'object',
         'subtype' => $filter,
+        'limit' => false,
     );
     if ($filter == 'all')
     {

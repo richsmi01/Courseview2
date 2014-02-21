@@ -18,11 +18,13 @@ if (!$status)
 elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');  
+$cvcohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
 $menuitem = get_entity($cvmenuguid);  
 $menutype = $menuitem->menutype;  //there are three types of menu items:  folder, professor, and student
 
-//if the user is a prof, include the ability to edit the course
-if ((cv_isprof($user)))
+//if the user is a prof and owns the course, include the ability to edit the course
+//echo 'owner?'.cv_is_course_owner ($user, $cvcohort);
+if ((cv_isprof($user)) && cv_is_course_owner ($user, $cvcohort))
 {
     echo elgg_view('courseview/cv_profedit_contentview');  
 }
@@ -34,7 +36,6 @@ switch ($menutype)
         if ($menuitem->menuorder==0)  //if this is the first menu item in a course, display welcome
         {
             echo "<br><p id = 'cvwelcome'>Welcome to " . $menuitem->name."</p>";
-            $cvcohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
             $cvcourse = get_entity ($cvcohort->getContainerGUID());
             echo "<br><div id='contentitem'> $cvcourse->description</div>";
         }

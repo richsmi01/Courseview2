@@ -21,10 +21,10 @@
                         <?php echo elgg_view_form('cv_add_menu_item'); ?>
                     </div>
                 </li>
-                <li class ='sub'>
+                <li class='sub'>
                     <input type='checkbox' id='cv_check4' class = 'cv_collapsible'/>
                     <label for='cv_check4' >Manage Courses and Cohorts</label>
-                    <div>
+                    <div class='sub'>
                         <input type='checkbox' id='cv_check5' class = 'cv_collapsible'/>
                         <label for='cv_check5' >Add a Course</label>
                         <div class ='sub2' >
@@ -46,7 +46,7 @@
                             <?php echo elgg_view_form('cv_add_a_cohort'); ?>
                         </div>
                         <input type='checkbox' id='cv_check9' class = 'cv_collapsible'/>
-                        <label for='cv_check9' >..Edit a Cohort</label>
+                        <label for='cv_check9' >Edit a Cohort</label>
                         <div class ='sub2'>
                             <?php echo elgg_view_form('cv_edit_a_cohort'); ?>
                         </div class ='sub2'>

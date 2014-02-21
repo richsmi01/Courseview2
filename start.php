@@ -93,7 +93,7 @@ function courseviewPageHandler($page, $identifier)
     set_input('params', $page);  //place the $page into params
     //if the courseview page is being displayed, then we don't need the return to courseview breadcrumb--pop it off
     //elgg_pop_breadcrumb();
-
+    
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {
         case 'cv_contentpane':    //this is the main course content page

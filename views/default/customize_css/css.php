@@ -8,6 +8,10 @@
  *
  */
 ?>
+.elgg-layout-one-sidebar{
+background-image:none;
+}
+
 
 #cvcloud1, #cvcloud2, #cvcloud3{
 position:absolute;
@@ -534,6 +538,7 @@ background-color:green;
 
 .sub {
 margin:5px 5px 5px 15px;
+padding-left:15px;
 }
 
 .bluesub {

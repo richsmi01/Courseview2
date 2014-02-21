@@ -7,8 +7,11 @@
 
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
+$user = elgg_get_logged_in_user_entity();
 
-if (cv_isprof(elgg_get_logged_in_user_entity()))
+$cvcohort= get_entity ($cv_cohort_guid);
+
+if (cv_isprof($user) && cv_is_course_owner ($user, $cvcohort))
 {
     echo elgg_view('courseview/cv_filter_content');
 }
@@ -19,7 +22,8 @@ $params = get_input('params');
 $content_items = elgg_get_entities_from_relationship(array(
     'order_by_metadata' => array('name' => 'sort_order', 'direction' => 'ASC', 'as' => 'integer'),
     'relationship_guid' => $cvmenuguid,
-    'relationship' => 'content'));
+    'relationship' => 'content',
+    'limit' => false));
 
 foreach ($content_items as $content_item)
 {
@@ -27,7 +31,7 @@ foreach ($content_items as $content_item)
     $my_guid = $content_item->guid;
   //  echo "guid: ".$my_guid;
   //  echo "sort_order:  ".$sort_order;
-    if (cv_isprof($user))
+    if (cv_isprof($user)&&cv_is_course_owner ($user, $cvcohort))
     {
 //                /* If the content doesn't have a sort_order metadata, then add one and set it to the time_created value of the object.  We
 //                 * can now use this sort_order metadata to move content up or down in the professor content area

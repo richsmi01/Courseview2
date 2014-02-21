@@ -1,3 +1,10 @@
+What the heck is bookmarkList?  Where did it come from?
+stories checkbox issues.
+intercepting creating users 
+paypal plugin
+
+
+
 --My new permissions don't quite work...almost, but not completely
 -- Elgg bug???  elgg_register_event_handler('join', 'group', 'cv_join_group'); doesn't fire when logged in as non-admin
 --Cron 
