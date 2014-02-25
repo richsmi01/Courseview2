@@ -23,8 +23,8 @@ function courseviewInit()
     }
 
     //set up our link to css rulesets
-    elgg_extend_view('css/elgg', 'customize_css/css', 1000);
-
+    elgg_extend_view('css/elgg', 'customize_css/courseview_css', 1000);
+    //elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
 
@@ -49,6 +49,11 @@ function courseviewInit()
     elgg_register_event_handler('create', 'object', 'cv_intercept_update');
     elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
+    
+    
+    // elgg_register_event_handler('create', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.
+    // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
+    //or check grouptools plugin...
 
     //when a user joins a cohort, we need to add them to a acl list attached to the container course
     //when they leave a cohort, we need to remove them.

@@ -8,35 +8,7 @@
  *
  */
 ?>
-.elgg-layout-one-sidebar{
-background-image:none;
-}
 
-
-#cvcloud1, #cvcloud2, #cvcloud3{
-position:absolute;
-top:0px;
-left:0px;
-height:100%;
-width:100%;
-//background-color:blue;
-color:green;
-}
-
-
-body {
-  //  background-color:lightblue;
-   overflow-x:hidden;
-}
-.elgg-page-default .elgg-page-body > .elgg-inner{
-width:90%;
-}
-
-.elgg-sidebar{
- //   width:310px;
-  //  background-color:lightgrey;
-  //  float:left;
-}
 .sky {
     height:480px;
     background:#007fd5;
