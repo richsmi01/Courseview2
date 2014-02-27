@@ -94,9 +94,9 @@ if (cv_isprof($cvuser))
     echo "</div>";
 }
 
-echo "<label class = 'sub'> This content will be posted to the $cvmenuitem->name menu item<br></label>";
+echo "<label class = 'sub3'>This content will be posted to the $cvmenuitem->name menu item<br></label>";
 echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' class ='cv_collapsible' type ='checkbox'  />";
-echo "<label  for ='cv_check2' id ='paddown' > in the $cv_cohort->title  cohort.  Click here to change destination</label>";
+echo "<label  for ='cv_check2'  > in the $cv_cohort->title  cohort.  Click here to change destination</label>";
 echo "<div>";
 echo"<label class ='bluesub'> Check any of the CourseView menu items below that you wish this content to be posted to:</label>";
 foreach ($cohorts as $cohort)

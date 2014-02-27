@@ -7,6 +7,12 @@
 //    return $cvcourseview[0]->profsgroup;
 //}
 
+function cv_hp ()
+{
+
+    return ElggSession::offsetGet('cv_hp');
+}
+
 function cv_is_valid_content_to_display ($object)
 {
     $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview')); //a list of approved plugins for courseview

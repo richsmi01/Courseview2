@@ -7,6 +7,7 @@ elgg_register_event_handler('init', 'system', 'courseviewInit'); //call coursevi
 
 function courseviewInit()
 {
+    ElggSession::offsetSet('cv_hp', false);
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
@@ -24,7 +25,11 @@ function courseviewInit()
 
     //set up our link to css rulesets
     elgg_extend_view('css/elgg', 'customize_css/courseview_css', 1000);
-    //elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
+ 
+    if (cv_hp())
+    {
+        elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
+    }
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
 
@@ -86,7 +91,8 @@ function courseviewInit()
 //the method that gets called when one of the courseview urls is called.  
 function courseviewPageHandler($page, $identifier)
 {
-    //TODO:: Matt, do I need to be more worried about gatekeeper functions etc?
+    
+//TODO:: Matt, do I need to be more worried about gatekeeper functions etc?
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
     gatekeeper();
     $base_path = dirname(__FILE__);

@@ -10,12 +10,12 @@ $userguid = elgg_get_logged_in_user_guid();
 //we'll need some of the library methods here
 elgg_load_library('elgg:courseview');
 elgg_load_library('elgg:cv_debug');
-
+$cv_home_url = elgg_get_site_url ().'courseview/courseview';
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
 
 cv_debug($cohorts, "test");
-echo '<h3>CourseView</h3><br>';
+echo "<h3><a href = '$cv_home_url'>CourseView</a></h3><br>";
 $count = 0;
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)

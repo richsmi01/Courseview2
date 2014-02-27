@@ -9,6 +9,35 @@
  */
 ?>
 
+#notHidden
+{
+    color:red;
+    font-weight:bold;
+    text-align:center;
+    font-size:300%;
+    height:inherit;
+    
+}
+
+
+
+
+body {
+  //  background-color:lightblue;
+   overflow-x:hidden;
+}
+
+.elgg-topbar-logo img{
+ visibility:hidden;
+ /*border: 5px black solid;*/
+}
+
+.sub3{
+padding-left:15px;
+margin-top: 8px;
+display:block;
+}
+
 .sky {
     height:480px;
     background:#007fd5;

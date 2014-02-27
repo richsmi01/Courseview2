@@ -1,4 +1,3 @@
-
 <!--used to create the administration views that are presented to a professor-->
 
 <ul>
@@ -7,20 +6,31 @@
         <label for='cv_check1' >CourseView Administration</label>
         <div>
             <ul>
-                <li class ='sub'>
+                <?php
+                elgg_load_library('elgg:courseview');
+                $user = elgg_get_logged_in_user_entity();
+                $cvcohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
+                if (cv_is_course_owner($user, $cvcohort))
+                {
+                    echo "<li class ='sub'>
                     <input type='checkbox' id='cv_check2' class='cv_collapsible'/>
                     <label for='cv_check2' >Edit the current menu item</label>
-                    <div>
-                        <?php echo elgg_view_form('cv_edit_menuitem'); ?>
-                    </div>
+                    <div>";
+                    echo elgg_view_form('cv_edit_menuitem');
+                    echo"</div>
                 </li>
                 <li class ='sub'>
                     <input type='checkbox' id='cv_check3' class = 'cv_collapsible'/>
                     <label for='cv_check3' >Add new menu item below the current menu item</label>
-                    <div > 
-                        <?php echo elgg_view_form('cv_add_menu_item'); ?>
-                    </div>
-                </li>
+                    <div > ";
+                    echo elgg_view_form('cv_add_menu_item');
+                    echo"</div>
+                </li>";
+                }
+                ?>
+                
+                
+                
                 <li class='sub'>
                     <input type='checkbox' id='cv_check4' class = 'cv_collapsible'/>
                     <label for='cv_check4' >Manage Courses and Cohorts</label>
