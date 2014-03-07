@@ -7,19 +7,19 @@
 //    return $cvcourseview[0]->profsgroup;
 //}
 
-function cv_hp ()
+function cv_hp()
 {
 
     return ElggSession::offsetGet('cv_hp');
 }
 
-function cv_is_valid_content_to_display ($object)
+function cv_is_valid_content_to_display($object)
 {
     $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview')); //a list of approved plugins for courseview
     $validkeys = array_keys($validplugins);
     $valid_plugin = false;
     //looping through all approved plugins to ensure that this content is to be displayed
-   
+
     foreach ($validkeys as $plugin)
     {
         if ($object->getSubtype() == $plugin)
@@ -30,10 +30,9 @@ function cv_is_valid_content_to_display ($object)
     return $valid_plugin;
 }
 
-
 function cv_get_menu_items_for_course($courseguid)
 {
-   // echo "<br>Getting menu items from relationship:". $courseguid;
+    // echo "<br>Getting menu items from relationship:". $courseguid;
     $menu = elgg_get_entities_from_relationship(array
         ('relationship_guid' => $courseguid,
         'relationship' => 'menu',
@@ -50,9 +49,9 @@ function cv_get_menu_items_for_course($courseguid)
 
 function cv_get_menu_items_for_cohort($cvcohortguid)
 {
-   // echo $cohortguid->get_entity(container_guid);
-    $menu = cv_get_menu_items_for_course (get_entity($cvcohortguid)->container_guid);
-    
+    // echo $cohortguid->get_entity(container_guid);
+    $menu = cv_get_menu_items_for_course(get_entity($cvcohortguid)->container_guid);
+
     return $menu;
 }
 
@@ -70,7 +69,6 @@ function cv_get_cohorts_by_courseguid($courseguid)
     $value = elgg_get_entities_from_metadata($options);
     return $value;
 }
-
 
 function is_valid_plugin($arg1)
 {
@@ -94,27 +92,24 @@ function cv_get_student_menu_items_by_cohort($cvcohortguid)
     return $menu;
 }
 
-function cv_is_courseview_user ()
+function cv_is_courseview_user()
 {
-     $cohorts = cv_get_users_cohorts();
+    $cohorts = cv_get_users_cohorts();
     return sizeof($cohorts);
 }
 
-
-
 function cv_get_users_cohorts($user = null) //default of null 
 {
-    
-    if (elgg_instanceof ($user, "user"))
+
+    if (elgg_instanceof($user, "user"))
     {
         $userguid = $user->guid;
-    }
-    else 
+    } else
     {
-        $userguid = elgg_get_logged_in_user_guid ();
+        $userguid = elgg_get_logged_in_user_guid();
     }
-  //echo get_entity($userguid)->name;
-  //echo "searchcriteria<br>";
+    //echo get_entity($userguid)->name;
+    //echo "searchcriteria<br>";
     $searchcriteria = array
         ('type' => 'group',
         'metadata_names' => array('cvcohort'),
@@ -123,13 +118,12 @@ function cv_get_users_cohorts($user = null) //default of null
         'relationship' => 'member',
         'relationship_guid' => $userguid
     );
-          
-   $usersgroups = elgg_get_entities_from_relationship($searchcriteria);
+
+    $usersgroups = elgg_get_entities_from_relationship($searchcriteria);
 //    
- //  echo 'num cohorts returned: '.sizeof($usersgroups);
-   
+    //  echo 'num cohorts returned: '.sizeof($usersgroups);
 //   
-   return $usersgroups;
+    return $usersgroups;
 }
 
 function cv_isprof($user)
@@ -151,43 +145,43 @@ function cv_isprof($user)
     }
 }
 
-function cv_is_course_owner ($user, $cohort)
+function cv_is_course_owner($user, $cohort)
 {
-   //echo 'in cv_is_course_owner..userguid: '.$user->guid.' courseguid: ' .$cohort->getOwnerGUID();
+    //echo 'in cv_is_course_owner..userguid: '.$user->guid.' courseguid: ' .$cohort->getOwnerGUID();
     //return true;
-    if(!$user || !$cohort)
+    if (!$user || !$cohort)
     {
         return 0;
     }
-    
-    $cv_course_owner = $cohort->getOwnerEntity ();
+
+    $cv_course_owner = $cohort->getOwnerEntity();
     return ($user->guid == $cv_course_owner->guid);
 }
 
-function cv_get_user_courses ($user)
+function cv_get_user_courses($user)
 {
-    $cohorts =  cv_get_users_cohorts($user);
-    
+    $cohorts = cv_get_users_cohorts($user);
+
     if (!$cohorts)
     {
         return array();
     }
-  
+
     $courses = array();
 
     foreach ($cohorts as $cohort)
-    {   
+    {
         $cvcourse = get_entity($cohort->getContainerGUID());
-      //cv_debug( 'cohortname: '.$cohort->title.'<br>',"",100);
-      //cv_debug('coursename:: '.$cvcourse->title.'<br>',"",100);
-        
+        //cv_debug( 'cohortname: '.$cohort->title.'<br>',"",100);
+        //cv_debug('coursename:: '.$cvcourse->title.'<br>',"",100);
+
         if (!$cvcourse->cv_acl)
         {
-           // echo "nope<br>";
-            $id = create_access_collection ("cv_id",$cvcourse->guid);
+            // echo "nope<br>";
+            $id = create_access_collection("cv_id", $cvcourse->guid);
             $cvcourse->cv_acl = $id;
             $cvcourse->save();
-           // echo'generating...'. $cvcourse->cv_acl;
+            // echo'generating...'. $cvcourse->cv_acl;
         }
 //        else
 //        {
@@ -195,33 +189,33 @@ function cv_get_user_courses ($user)
 //        }
 //       $id = create_access_collection ("cv_id",$cvcourse->guid);
 //$cvcourse->cv_acl = $id;
-        
-        $courses[$cohort->getContainerGUID()]= $cvcourse;  //placeholder value
+
+        $courses[$cohort->getContainerGUID()] = $cvcourse;  //placeholder value
     }
     return $courses;
 }
-    function cv_get_prof_owned_courses ($user)
+
+function cv_get_prof_owned_courses($user)
 {
-        $searchcriteria = array
+    $searchcriteria = array
         ('type' => 'object',
-            'owner_guid' => $user->guid,
-            'metadata_names' => array('cvcourse'),
+        'owner_guid' => $user->guid,
+        'metadata_names' => array('cvcourse'),
         'metadata_values' => array(1),
         //'subtype' => 'cvcourse',
         'limit' => false,
-        //'relationship' => 'owner',
-       // 'relationship_guid' => $user->guid,
+            //'relationship' => 'owner',
+            // 'relationship_guid' => $user->guid,
     );
-          
-   $ownedcourses = elgg_get_entities_from_relationship($searchcriteria);
-   return $ownedcourses;
-   
+
+    $ownedcourses = elgg_get_entities_from_relationship($searchcriteria);
+    return $ownedcourses;
 }
 
 function cv_is_valid_plugin($arg1)
 {
     $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
-   
+
     return (array_key_exists($arg1, $validplugins));
 }
 
@@ -235,7 +229,6 @@ function cv_is_valid_plugin($arg1)
 //
 //    echo $output;
 //}
-
 //function cv_calc_relationship_string($menuitem)
 //{
 //
@@ -248,7 +241,6 @@ function cv_is_valid_plugin($arg1)
 //    }
 //    return $relationship;
 //}
-
 //    echo elgg_entity_exists(elgg_get_plugin_setting('profsgroup','courseview'));
 //    //echo get_entity($profsgroup)->isMember($user);
 //    if(get_entity($profsgroup)->isMember($user))
@@ -266,21 +258,66 @@ function cv_is_valid_plugin($arg1)
 //        return true;
 //    }
 
-function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship)
+function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono')
 {
-    $options = array
-        ('relationship_guid' => $cvmenuguid,
-        'relationship' => $relationship,
-        'type' => 'object',
-        'subtype' => $filter,
-        'limit' => false,
-    );
+
+    // $options = array(
+//		'container_guid' => $entity->guid,
+//		'annotation_names' => array('likes'),
+//		'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
+//		'order_by' => 'likes DESC',
+//		'full_view' => false
+//	  );
+
+
+
+    if ($sort == 'chrono')
+    {
+        $options = array
+            ('relationship_guid' => $cvmenuguid,
+            'relationship' => $relationship,
+            'type' => 'object',
+            'subtype' => $filter,
+//        'limit' => false,
+            'list_class' => 'contentitem',
+            'full_view' => false,
+        );
+    } 
+    else if ($sort =='likes')
+    {
+        $dbprefix = elgg_get_config('dbprefix');
+        $likes_metastring = get_metastring_id('likes');
+        $options = array(
+            'relationship_guid' => $cvmenuguid,
+             'relationship' => $relationship,
+            'type' => 'object',
+            'list_class' => 'contentitem',
+            'subtype' => $filter,
+           // 'container_guid' => $entity->guid,
+            'annotation_names' => array('likes'),
+            'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
+            'order_by' => 'likes DESC',
+            'full_view' => false
+        );
+//             if ($filter == 'all')
+//    {
+//        unset($options['subtype']);
+//    }
+         //  $content = elgg_list_entities_from_annotations($options);  
+        //    return $content;
+    }
     if ($filter == 'all')
     {
         unset($options['subtype']);
     }
 
-    $content = elgg_get_entities_from_relationship($options);
+    if ($list)
+    {
+        $content = elgg_list_entities_from_relationship($options);
+    } else
+    {
+        $content = elgg_get_entities_from_relationship($options);
+    }
     return $content;
 }
 
@@ -358,4 +395,3 @@ function courseview_listplugins()
 //echo $returnvalue;
     return $returnvalue;
 }
-

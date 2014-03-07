@@ -57,7 +57,7 @@ foreach ($content_items as $content_item)
             'class' => 'grey',
             'is_action' => true));
     }
-    echo "<div id= 'contentitem'>";
+    echo "<div class = 'contentitem'>";
     //echo 'Container: '.$content_item->getContainerGUID ();
     //var_dump($content_item);
   //  echo 'Owner:'.$content_item->getOwnerGUID();

@@ -1,3 +1,21 @@
+<script type="text/javascript" src="C:\xampp\htdocs\elgg\mod\extended_tinymce\vendor\tinymce\js\tinymce\tinymce.min.js"></script>
+<script type="text/javascript">
+tinymce.init({
+    selector: "textarea",
+    plugins: [
+        "advlist autolink lists link image charmap print preview anchor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime media table contextmenu paste moxiemanager"
+    ],
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+});
+</script>
+
+<form method="post" action="somepage">
+    <textarea name="content" style="width:50%%"></textarea>
+</form>
+
+
 <?php
 
 /*
@@ -7,34 +25,36 @@
 
 echo 'CV_Testing!';
 
-set_time_limit(0);
-
-$ia = elgg_set_ignore_access (true);
-
-$options = array (
-    'type' => 'user',
-   // 'metadata_name_value_pairs' =>array ('name'=>'banned', 'value'=>'yes', 'operand'=>'='),
-    'limit' => false,
-);
 
 
- //$batch = new ElggBatch ('elgg_get_entities_from _metadata', $options, null, 25, false);
-
-$batch = elgg_get_entities_from_metadata ($options);
-        echo 'number of users: '.sizeof($batch);
-        foreach ($batch as $user)
-        {
-            if ($user->banned==yes)
-            {
-                echo 'banned user: '.$user->name.' '.$user->banned.'<br>';
-               // $user->delete();
-            }
- else {
-      echo 'not banned user: '.$user->name.' '.$user->banned.'<br>';
- }
-        }
-        
-        elgg_set_ignore_access($ia);
+//set_time_limit(0);
+//
+//$ia = elgg_set_ignore_access (true);
+//
+//$options = array (
+//    'type' => 'user',
+//   // 'metadata_name_value_pairs' =>array ('name'=>'banned', 'value'=>'yes', 'operand'=>'='),
+//    'limit' => false,
+//);
+//
+//
+// //$batch = new ElggBatch ('elgg_get_entities_from _metadata', $options, null, 25, false);
+//
+//$batch = elgg_get_entities_from_metadata ($options);
+//        echo 'number of users: '.sizeof($batch);
+//        foreach ($batch as $user)
+//        {
+//            if ($user->banned==yes)
+//            {
+//                echo 'banned user: '.$user->name.' '.$user->banned.'<br>';
+//               // $user->delete();
+//            }
+// else {
+//      echo 'not banned user: '.$user->name.' '.$user->banned.'<br>';
+// }
+//        }
+//        
+//        elgg_set_ignore_access($ia);
 
 // $object1 = new ElggObject();
 //    $object1->subtype = 'test';

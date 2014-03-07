@@ -752,7 +752,7 @@ font-style:italic;
 }
 */
 
-#contentitem {
+.contentitem > li, .contentitem{
 padding: 10px;
 background-color:rgba(192,192,192,0.1);
 border: solid 1px;

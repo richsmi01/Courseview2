@@ -1,10 +1,11 @@
-    --setting up pagination (maybe the ajax enabled one?)
-    --get tiny mce working?
-    -- creating a what's new plugin that eventually times out an entry
+            --setting up pagination (maybe the ajax enabled one?)
+            --get tiny mce working?
+    --creating a what's new plugin that eventually times out an entry
     --building a new content icon 
     --add upgrade to premium membership menu item
-    --group content vs normal content---how does that work with private?
+    --group content vs normal content---how does that work with private?  Why not make everything group content?
     --paypal
+        --sorting based on likes
 
 
 --how can I move my local git repository
