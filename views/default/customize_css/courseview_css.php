@@ -9,6 +9,10 @@
  */
 ?>
 
+#notHidden:after{
+content: 'abc';
+}
+
 #notHidden
 {
     color:red;
@@ -27,10 +31,7 @@ body {
    overflow-x:hidden;
 }
 
-.elgg-topbar-logo img{
- visibility:hidden;
- /*border: 5px black solid;*/
-}
+
 
 .sub3{
 padding-left:15px;

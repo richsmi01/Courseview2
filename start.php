@@ -29,6 +29,13 @@ function courseviewInit()
     if (cv_hp())
     {
         elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
+          
+           //get rid of the menu items
+          elgg_register_plugin_hook_handler('register', 'menu:site', 'myplugin_sitemenu', 1000);
+          
+          //turn on courseview
+          ElggSession::offsetSet('courseview', true);
+
     }
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
@@ -48,12 +55,15 @@ function courseviewInit()
 
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
-
+    
+  
     //  creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
     // relationships between the content and any menuitems deemed neccesary.
     elgg_register_event_handler('create', 'object', 'cv_intercept_update');
     elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
+    
+    
     
     
     // elgg_register_event_handler('create', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.
@@ -105,6 +115,9 @@ function courseviewPageHandler($page, $identifier)
     //if the courseview page is being displayed, then we don't need the return to courseview breadcrumb--pop it off
     //elgg_pop_breadcrumb();
     
+    //if 5th page view...push $page into session, jump to page and then call the session save url
+    
+    
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {
         case 'cv_contentpane':    //this is the main course content page
@@ -139,6 +152,11 @@ function courseviewPageHandler($page, $identifier)
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
+    if (cv_hp())
+    {
+        $returnvalue="";
+    }
+    
     if (ElggSession::offsetGet('courseview'))
     {
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
@@ -457,4 +475,11 @@ function cv_register_courseview_menu()
     }
     $item = new ElggMenuItem('courseview', $menutext, elgg_add_action_tokens_to_url('action/toggle'));
     elgg_register_menu_item('site', $item);
+}
+
+function myplugin_sitemenu($hook, $type, $return, $params) {
+$item = new ElggMenuItem('courseview', 'Upgrade to Premium Memebership!', elgg_add_action_tokens_to_url('action/upgrade'));
+$returnValue=array();
+$returnValue[0] = $item;
+return $returnValue;
 }

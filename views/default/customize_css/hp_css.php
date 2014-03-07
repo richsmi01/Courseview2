@@ -6,6 +6,12 @@
  * and open the template in the editor.
  */
 ?>
+
+.elgg-topbar-logo img{
+ visibility:hidden;
+ /*border: 5px black solid;*/
+}
+
 .elgg-layout-one-sidebar{
 background-image:none;
 
@@ -40,23 +46,10 @@ float:left;
 width:300px;
 }
 
-#cvcloud1, #cvcloud2, #cvcloud3{
-position:absolute;
-top:0px;
-left:0px;
-height:100%;
-width:100%;
-//background-color:blue;
-color:green;
-}
 
 
-body {
-  //  background-color:lightblue;
-   overflow-x:hidden;
-}
 .elgg-page-default .elgg-page-body > .elgg-inner{
-width:90%;
+width:97%;
 }
 
 .elgg-sidebar{

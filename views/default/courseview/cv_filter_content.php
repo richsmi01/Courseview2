@@ -27,7 +27,9 @@ $test2 = json_encode($createString);
         if (id == 'filterDropDown' || id =='cohortDropDown')
         {
             document.getElementById("hiddenmessage").id="notHidden";
+              document.getElementById("notHidden").innerHTML = "Hi Rich!"; 
             document.getElementById("notHidden").style.visibility = "visible"; 
+          
             setInterval(blinker, 500);
             document.getElementById("myform").submit();
         }
