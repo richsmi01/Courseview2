@@ -24,6 +24,7 @@ $menutype = $menuitem->menutype;  //there are three types of menu items:  folder
 
 //if the user is a prof and owns the course, include the ability to edit the course
 //echo 'owner?'.cv_is_course_owner ($user, $cvcohort);
+echo "<div id='cv_head'>";
 if (cv_isprof($user))
 {
     echo elgg_view('courseview/cv_profedit_contentview');  
@@ -58,8 +59,4 @@ switch ($menutype)
         echo elgg_echo("<BR><BR><BR><div id ='cvwelcome' >WELCOME TO COURSEVIEW!</div>");
         break;
 }
- 
 
- 
- 
- 

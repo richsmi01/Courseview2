@@ -17,6 +17,11 @@ function courseviewInit()
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
+    if (!elgg_get_logged_in_user_entity())
+    {
+        return;
+    }
+    
     //if the user is not a member of any cohorts, not a prof, and not an admin then don't bother running anything.
     if (!cv_is_courseview_user() && !cv_isprof(elgg_get_logged_in_user_entity()) && !elgg_is_admin_logged_in())
     {
@@ -39,6 +44,32 @@ function courseviewInit()
     }
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
+    
+    
+    
+    
+    ///rich test stuff
+    
+    $regentitytypes = get_registered_entity_types();
+    $plugins =$regentitytypes['object'];
+    //var_dump ($plugins);
+    
+    $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
+   
+    foreach ($availableplugins as $plugin)
+    {
+        //echo $plugin;
+        elgg_register_plugin_hook_handler ('view',"object/$plugin",'cv_test');
+    }
+    
+    
+//    elgg_register_plugin_hook_handler('view', 'object/navi', 'cv_test');
+//    elgg_register_plugin_hook_handler('view', 'object/stories', 'cv_test');
+//    elgg_register_plugin_hook_handler('view', 'object/blog', 'cv_test');
+//    elgg_register_plugin_hook_handler('view', 'object/file', 'cv_test');
+    
+    
+    
 
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
     // that we can add our tree menu
@@ -131,6 +162,7 @@ function courseviewPageHandler($page, $identifier)
             require "$base_path/pages/courseview/cv_testing.php";
             break;
         case 'examine':
+        case 'inspect':
              require "$base_path/pages/courseview/examine.php";
             break;
         default:
@@ -482,4 +514,29 @@ $item = new ElggMenuItem('courseview', 'Upgrade to Premium Memebership!', elgg_a
 $returnValue=array();
 $returnValue[0] = $item;
 return $returnValue;
+}
+
+function cv_test ($hook, $type, $return, $params)
+{
+    $return.=$type;
+    $vars=$params['vars'];
+    $attributes = $vars->get_attributes;
+    $return .= $vars['full_view'];
+    $entity = $vars['entity'];
+    $return .= $entity->guid;
+    
+    $user = elgg_get_logged_in_user_entity();
+    
+    if ($entity->last_action>$user->prev_last_login && $vars['full_view']==false)
+    {
+        $return = "<div class='newContent'>New!</div>".$return;
+                //$entity->time_updated.'--'.$user->last_login.$user->prev_last_login;
+    }
+    //var_dump ($user);
+//    var_dump ($entity);
+//    var_dump ($hook);
+//      var_dump ($type);
+//        var_dump ($params);
+//exit;
+    return $return;
 }

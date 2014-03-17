@@ -16,7 +16,21 @@ $relationship = 'content' . $cv_cohort_guid;
 //echo elgg_echo("Relationship name:  " . $relationship);
 //echo elgg_echo("Relationship GUID:  " . $cvmenuguid);
 //
-$content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship,true,'likes');  //I can sort by liked or chrono ---need to add a dropdown to set this
+$user = elgg_get_logged_in_user_entity();
+if (!$user->num_items)  //If the user has never selected pagination or sort by options, assign a default
+{
+    $user->num_items = 10;
+    $user->sort_by='chrono';
+}
+
+
+$num_items =get_input('numItems',$user->num_items);
+$sort_by=get_input ('sortby',$user->sort_by);
+$user->num_items = $num_items;
+$user->sort_by = $sort_by;
+
+echo $num_items.'---'.$sort_by;
+$content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship,true,$sort_by,$num_items);  
 echo $content_items;
 
 

@@ -30,7 +30,9 @@ foreach ($plugins as $plugin)
     echo $plugin;
     $pluginname = "createstring" . $plugin;
     $friendly = "friendly" . $plugin;
-
+    $object_subtype ="object".$plugin;
+    
+    
     echo elgg_view('input/text', array(
         'name' => 'params[' . $friendly . ']',
         'value' => $vars['entity']->$friendly));
@@ -44,10 +46,13 @@ foreach ($plugins as $plugin)
     {
         $pluginaddurl[$plugin] = $vars['entity']->$pluginname;
         $approvedlist [$plugin] = $vars['entity']->$friendly;
+        $approved_subtype [$plugin]= $plugin;
     }
 }
+var_dump($approved_subtype);
 
 //var_dump($pluginaddurl);
 elgg_set_plugin_setting('availableplugins', serialize($approvedlist), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('plugincreatestring', serialize($pluginaddurl), 'courseview');  //need to serialize arrays before putting in settings
-?>
+elgg_set_plugin_setting('approved_subtype', serialize($approved_subtype), 'courseview');  //need to serialize arrays before putting in settings
+

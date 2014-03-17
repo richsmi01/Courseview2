@@ -7,6 +7,10 @@
  */
 ?>
 
+.elgg-page-body{
+/*background:lightblue;*/
+}
+
 .elgg-topbar-logo img{
  visibility:hidden;
  /*border: 5px black solid;*/
@@ -44,8 +48,21 @@ margin-top: 115px;
 .elgg-sidebar {
 float:left;
 width:300px;
+/*background:grey;
+height:600px;*/
+
+/*margin-top:75px;*/
 }
 
+.elgg-list
+{
+   /* margin-left:300px;*/
+}
+
+.elgg-item 
+{
+background-color: lightgrey;
+}
 
 
 .elgg-page-default .elgg-page-body > .elgg-inner{

@@ -13,7 +13,7 @@ $cvcohort= get_entity ($cv_cohort_guid);
 
 if (cv_isprof($user) && cv_is_course_owner ($user, $cvcohort))
 {
-    echo elgg_view('courseview/cv_filter_content');
+  //  echo elgg_view('courseview/cv_filter_content');
 }
 
 $params = get_input('params');
@@ -57,7 +57,7 @@ foreach ($content_items as $content_item)
             'class' => 'grey',
             'is_action' => true));
     }
-    echo "<div class = 'contentitem'>";
+    echo "<div class = 'profcontentitem'>";
     //echo 'Container: '.$content_item->getContainerGUID ();
     //var_dump($content_item);
   //  echo 'Owner:'.$content_item->getOwnerGUID();

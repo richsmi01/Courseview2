@@ -16,6 +16,9 @@ $cohorts = cv_get_users_cohorts();
 
 cv_debug($cohorts, "test");
 echo "<h3><a href = '$cv_home_url'>CourseView</a></h3><br>";
+
+echo elgg_view ('courseview/cv_filter_content');
+
 $count = 0;
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)

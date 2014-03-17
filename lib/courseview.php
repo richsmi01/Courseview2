@@ -258,7 +258,7 @@ function cv_is_valid_plugin($arg1)
 //        return true;
 //    }
 
-function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono')
+function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono',$page_size=10)
 {
 
     // $options = array(
@@ -278,8 +278,10 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
             'relationship' => $relationship,
             'type' => 'object',
             'subtype' => $filter,
-//        'limit' => false,
-            'list_class' => 'contentitem',
+            'limit' => get_input ('limit',$page_size),
+            'count' => get_input ('count',0),
+            'offset'=>get_input ('offset',0),
+            'list_class' => 'studentcontentitem',
             'full_view' => false,
         );
     } 
@@ -291,13 +293,16 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
             'relationship_guid' => $cvmenuguid,
              'relationship' => $relationship,
             'type' => 'object',
-            'list_class' => 'contentitem',
+            'list_class' => 'studentcontentitem',
             'subtype' => $filter,
            // 'container_guid' => $entity->guid,
             'annotation_names' => array('likes'),
             'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
             'order_by' => 'likes DESC',
-            'full_view' => false
+            'full_view' => false,
+            'limit' => get_input ('limit',$page_size),
+            'count' => get_input ('count',0),
+            'offset'=>get_input ('offset',0),
         );
 //             if ($filter == 'all')
 //    {

@@ -8,18 +8,50 @@
  *
  */
 ?>
-
-#notHidden:after{
-content: 'abc';
+.smalltext{
+width: 30px;
 }
+
+#filterDropDown, #cohortDropDown, #createDropDown{
+/*margin-left:10px;*/
+}
+/*
+#cv_head {
+position:fixed;
+top:90px;
+background:white;
+}*/
+
+.newContent {
+    height:20px;
+    width:33px;
+    background-color: lightgreen;
+    border:1px solid black;
+    box-shadow: black 2px 2px 2px;
+    -webkit-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+    -ms-transform: rotate(-30deg);
+    font-weight: bold;
+    position:absolute;
+    top:0px;
+    left:-6px;
+
+}
+
+/*#notHidden:after{
+content: 'abc';
+}*/
 
 #notHidden
 {
-    color:red;
+    color:white;
     font-weight:bold;
     text-align:center;
     font-size:300%;
     height:inherit;
+    position:fixed;
+    top:50px;
+    right:50px;
     
 }
 
@@ -752,9 +784,10 @@ font-style:italic;
 }
 */
 
-.contentitem > li, .contentitem{
+.studentcontentitem > li, .profcontentitem{
 padding: 10px;
 background-color:rgba(192,192,192,0.1);
+/*background-color:lightgrey;*/
 border: solid 1px;
 margin:4px;
 box-shadow: black 2px 2px 2px;

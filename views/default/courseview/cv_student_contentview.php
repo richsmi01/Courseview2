@@ -8,7 +8,7 @@
 //$args=array();
 //$args['cohortFilter'] = $cvcohortguid;
 //echo 'checking...'.$args['cohortFilter'];
-echo elgg_view ('courseview/cv_filter_content');
+//echo elgg_view ('courseview/cv_filter_content');
 echo elgg_view ('courseview/cv_display_filtered_content');
 
 

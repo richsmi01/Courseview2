@@ -24,10 +24,11 @@ $test2 = json_encode($createString);
 
     function onChange(id, value)
     {
-        if (id == 'filterDropDown' || id =='cohortDropDown')
+
+    if (id == 'filterDropDown' || id =='cohortDropDown' || id =='numItemsDropdown' || id=='sortDropDown' )
         {
             document.getElementById("hiddenmessage").id="notHidden";
-              document.getElementById("notHidden").innerHTML = "Hi Rich!"; 
+              //document.getElementById("notHidden").innerHTML = "Hi Rich!"; 
             document.getElementById("notHidden").style.visibility = "visible"; 
           
             setInterval(blinker, 500);
@@ -53,7 +54,7 @@ $test2 = json_encode($createString);
 
 
 
-
+$user = elgg_get_logged_in_user_entity();
 $create = get_input('create');
 //echo 'Testing: ' . $create;
 //build the string used for the create content button...need to substitute real value for the placeholders in the setup page
@@ -93,36 +94,68 @@ $cfilter = get_input('cohortfilter', $cv_cohort_guid);
 //        <option value='type=object&amp;subtype=blog'>Show Blogs</option>
 //        <option value='type=object&amp;subtype=bookmarks'>Show Bookmarks</option>
 //</select>";
-
-
+//$numItems = get_input('numItems',10);
+//$sort_by = get_input ('sortby','likes');
+$numItems= $user->num_items;
+$sort_by=$user->sort_by;
+echo $numItems.'###'.$sort_by;
 echo '<form id = "myform" method="get" action="' . current_page_url() . '">';
 if (get_entity($menuguid)->menutype == 'student')
 {
-    echo' List content in cohort: ';
+    $numItemsDrop = array ();
+    $numItemsDrop ['4'] = '4';
+    $numItemsDrop ['10'] = '10';
+    $numItemsDrop ['25'] = '25';
+    echo 'Items per page:<br>';
     echo elgg_view('input/dropdown', array(
-        'name' => 'cohortfilter', //need to finish this code so the cohort filter works
+        'name' => 'numItems', 
+        'value' => $numItems,
+        'id'=>'numItemsDropdown',
+        'onchange' => 'onChange(id, value)',
+        'options_values' => $numItemsDrop));
+    
+    
+    echo'<br>Filter by cohort:<br> ';
+    echo elgg_view('input/dropdown', array(
+        'name' => 'cohortfilter', 
         'value' => $cfilter,
         'id'=>'cohortDropDown',
          'onchange' => 'onChange(id, value)',
         'options_values' => $dropdownlist));
-    echo 'Filter by:  ';
-    
+ 
+   
+    echo "<br>Filter by type:<br>"; 
     echo elgg_view('input/dropdown', array(
     'name' => 'filter',
     'id' => 'filterDropDown',
     'onchange' => "onChange(id, value)",
     'value' => $filter,
     'options_values' => $availableplugins));
-} 
 
-echo 'Create a ';
+$sort_dropdown = array ();
+    $sort_dropdown ['likes'] = 'likes';
+    $sort_dropdown ['chrono'] = 'date';
+    echo'<br>Sort by:<br> ';
+    echo elgg_view('input/dropdown', array(
+        'name' => 'sortby', 
+        'value' => $sort_by,
+        'id'=>'sortDropDown',
+        'onchange' => 'onChange(id, value)',
+        'options_values' => $sort_dropdown));
+}
+
+
+$cvcohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
+if (cv_isprof($user) && cv_is_course_owner ($user, $cvcohort))
+{
+echo '<br>Create a:<br> ';
 echo elgg_view('input/dropdown', array(
     'name' => 'create',
     'id' => 'createDropDown',
     'value' => 'choose',
     'onchange' => 'onChange(id, value)',
     'options_values' => $createplugins));
-
+}
 
 //echo elgg_view('input/submit', array(
 //    'value' => elgg_echo('Go!')));
