@@ -7,7 +7,7 @@ elgg_register_event_handler('init', 'system', 'courseviewInit'); //call coursevi
 
 function courseviewInit()
 {
-    ElggSession::offsetSet('cv_hp', false);
+    ElggSession::offsetSet('cv_hp', true);
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');

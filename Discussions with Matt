@@ -1,5 +1,12 @@
 --show Matt the Filtering thingy...can I make this happen whenever a round trip to the server is initiated?
 --when editing a poll and then clicking cancel, takes us to a can't find page
+--blog preview doesn't work
+
+Stuff for Rich:
+--make an introduction/title page for when user isn't logged in
+--build fremium logic
+--upgrade navi to handle html5 movies and jpg slideshows
+
 
             --setting up pagination (maybe the ajax enabled one?)
             --get tiny mce working?

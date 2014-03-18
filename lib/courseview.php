@@ -258,7 +258,7 @@ function cv_is_valid_plugin($arg1)
 //        return true;
 //    }
 
-function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono',$page_size=10)
+function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono', $page_size = 10)
 {
 
     // $options = array(
@@ -278,37 +278,36 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
             'relationship' => $relationship,
             'type' => 'object',
             'subtype' => $filter,
-            'limit' => get_input ('limit',$page_size),
-            'count' => get_input ('count',0),
-            'offset'=>get_input ('offset',0),
+            'limit' => get_input('limit', $page_size),
+            'count' => get_input('count', 0),
+            'offset' => get_input('offset', 0),
             'list_class' => 'studentcontentitem',
             'full_view' => false,
         );
-    } 
-    else if ($sort =='likes')
+    } else if ($sort == 'likes')
     {
         $dbprefix = elgg_get_config('dbprefix');
         $likes_metastring = get_metastring_id('likes');
         $options = array(
             'relationship_guid' => $cvmenuguid,
-             'relationship' => $relationship,
+            'relationship' => $relationship,
             'type' => 'object',
             'list_class' => 'studentcontentitem',
             'subtype' => $filter,
-           // 'container_guid' => $entity->guid,
+            // 'container_guid' => $entity->guid,
             'annotation_names' => array('likes'),
             'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
             'order_by' => 'likes DESC',
             'full_view' => false,
-            'limit' => get_input ('limit',$page_size),
-            'count' => get_input ('count',0),
-            'offset'=>get_input ('offset',0),
+            'limit' => get_input('limit', $page_size),
+            'count' => get_input('count', 0),
+            'offset' => get_input('offset', 0),
         );
 //             if ($filter == 'all')
 //    {
 //        unset($options['subtype']);
 //    }
-         //  $content = elgg_list_entities_from_annotations($options);  
+        //  $content = elgg_list_entities_from_annotations($options);  
         //    return $content;
     }
     if ($filter == 'all')
@@ -357,6 +356,18 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
 //    }
 //    return $courseview_object->guid;
 //}
+
+function cv_is_list_page()
+{
+        $cv_url = current_page_url();
+    if (strpos($cv_url, 'cv_contentpane') !== false)
+        {
+            return true;
+        }
+ else {
+     return false;
+    }
+}
 
 function courseview_create_course()
 {

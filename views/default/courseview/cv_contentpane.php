@@ -5,6 +5,12 @@
 
 //        document.getElementById('elgg-page-header').innerHtml += "<div id='cvcloud1'>div abc</div>";
     });
+    
+    window.onbeforeunload = function(){ 
+    document.getElementById("hiddenmessage").id="notHidden";
+            document.getElementById("notHidden").style.visibility = "visible"; 
+             setInterval(blinker, 500);
+            }
 </script>
 <?php
 
@@ -24,6 +30,8 @@ $menutype = $menuitem->menutype;  //there are three types of menu items:  folder
 
 //if the user is a prof and owns the course, include the ability to edit the course
 //echo 'owner?'.cv_is_course_owner ($user, $cvcohort);
+echo "<div id='hiddenmessage' style ='visibility:hidden; text-align:center; height:0px;' >Loading!</div>";
+
 echo "<div id='cv_head'>";
 if (cv_isprof($user))
 {

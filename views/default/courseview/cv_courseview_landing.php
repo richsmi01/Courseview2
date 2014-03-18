@@ -1,5 +1,5 @@
 <?php
-echo'!!!!!!!!courseview landing';
+
 $user = elgg_get_logged_in_user_entity();
 //check to see if the user is an admin and provide appropriate admin button
 if (elgg_is_admin_logged_in())

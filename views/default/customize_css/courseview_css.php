@@ -44,7 +44,8 @@ content: 'abc';
 
 #notHidden
 {
-    color:white;
+ z-index:102;    
+color:white;
     font-weight:bold;
     text-align:center;
     font-size:300%;
@@ -52,7 +53,7 @@ content: 'abc';
     position:fixed;
     top:50px;
     right:50px;
-    
+    text-shadow: black 2px 2px 2px;
 }
 
 

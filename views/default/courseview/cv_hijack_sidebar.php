@@ -14,11 +14,19 @@ $cv_home_url = elgg_get_site_url ().'courseview/courseview';
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
 
-cv_debug($cohorts, "test");
+
 echo "<h3><a href = '$cv_home_url'>CourseView</a></h3><br>";
 
-echo elgg_view ('courseview/cv_filter_content');
+	
 
+
+//var_dump($cv_url);
+//echo 'is edit?'.cv_is_list_page($cv_url);
+
+if (cv_is_list_page())
+{
+    echo elgg_view ('courseview/cv_filter_content');
+}
 $count = 0;
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)

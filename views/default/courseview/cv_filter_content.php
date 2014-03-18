@@ -9,8 +9,8 @@ $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'cours
 $createString = str_replace('{url}', elgg_get_site_url(), $createString);
 $createString = str_replace('{user_guid}', elgg_get_logged_in_user_guid(), $createString);
 $createString = str_replace('{cohort_guid}', $cv_cohort_guid, $createString);
-$test2 = json_encode($createString);
-//var_dump($test2)
+$json_create_string = json_encode($createString);
+
 ?>
 
 
@@ -27,18 +27,18 @@ $test2 = json_encode($createString);
 
     if (id == 'filterDropDown' || id =='cohortDropDown' || id =='numItemsDropdown' || id=='sortDropDown' )
         {
-            document.getElementById("hiddenmessage").id="notHidden";
+            //document.getElementById("hiddenmessage").id="notHidden";
               //document.getElementById("notHidden").innerHTML = "Hi Rich!"; 
-            document.getElementById("notHidden").style.visibility = "visible"; 
+            //document.getElementById("notHidden").style.visibility = "visible"; 
           
-            setInterval(blinker, 500);
+            //setInterval(blinker, 500);
             document.getElementById("myform").submit();
         }
         else
         {
-            var books = <?php echo $test2 ?>;
+            var create_string = <?php echo $json_create_string ?>;
             //alert (books[value]);
-            window.location.href = books[value];
+            window.location.href = create_string [value];
         }
     }
 
@@ -98,7 +98,7 @@ $cfilter = get_input('cohortfilter', $cv_cohort_guid);
 //$sort_by = get_input ('sortby','likes');
 $numItems= $user->num_items;
 $sort_by=$user->sort_by;
-echo $numItems.'###'.$sort_by;
+//echo $numItems.'###'.$sort_by;
 echo '<form id = "myform" method="get" action="' . current_page_url() . '">';
 if (get_entity($menuguid)->menutype == 'student')
 {
@@ -166,4 +166,4 @@ echo elgg_view('input/dropdown', array(
 //        'href' => $createbutton));
 //}
 echo '</form><br/>';
-echo "<div id='hiddenmessage' style ='visibility:hidden; text-align:center; height:0px;' >Filtering</div>";
+
