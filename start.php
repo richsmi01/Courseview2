@@ -7,7 +7,7 @@ elgg_register_event_handler('init', 'system', 'courseviewInit'); //call coursevi
 
 function courseviewInit()
 {
-    ElggSession::offsetSet('cv_hp', true);
+    ElggSession::offsetSet('cv_hp', false);
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
@@ -21,7 +21,7 @@ function courseviewInit()
     {
         return;
     }
-    
+
     //if the user is not a member of any cohorts, not a prof, and not an admin then don't bother running anything.
     if (!cv_is_courseview_user() && !cv_isprof(elgg_get_logged_in_user_entity()) && !elgg_is_admin_logged_in())
     {
@@ -30,46 +30,31 @@ function courseviewInit()
 
     //set up our link to css rulesets
     elgg_extend_view('css/elgg', 'customize_css/courseview_css', 1000);
- 
+
     if (cv_hp())
     {
         elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
-          
-           //get rid of the menu items
-          elgg_register_plugin_hook_handler('register', 'menu:site', 'myplugin_sitemenu', 1000);
-          
-          //turn on courseview
-          ElggSession::offsetSet('courseview', true);
 
+        //get rid of the menu items
+        elgg_register_plugin_hook_handler('register', 'menu:site', 'myplugin_sitemenu', 1000);
+
+        //turn on courseview
+        ElggSession::offsetSet('courseview', true);
     }
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
-    
-    
-    
-    
-    ///rich test stuff
-    
+
     $regentitytypes = get_registered_entity_types();
-    $plugins =$regentitytypes['object'];
-    //var_dump ($plugins);
-    
+    $plugins = $regentitytypes['object'];
+
+
+
+    //loop through availbable plugins and register a plugin hook to check if content is new since last login
     $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
-   
     foreach ($availableplugins as $plugin)
     {
-        //echo $plugin;
-        elgg_register_plugin_hook_handler ('view',"object/$plugin",'cv_test');
+        elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_test');
     }
-    
-    
-//    elgg_register_plugin_hook_handler('view', 'object/navi', 'cv_test');
-//    elgg_register_plugin_hook_handler('view', 'object/stories', 'cv_test');
-//    elgg_register_plugin_hook_handler('view', 'object/blog', 'cv_test');
-//    elgg_register_plugin_hook_handler('view', 'object/file', 'cv_test');
-    
-    
-    
 
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
     // that we can add our tree menu
@@ -86,21 +71,17 @@ function courseviewInit()
 
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
-    
-  
+
     //  creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
     // relationships between the content and any menuitems deemed neccesary.
     elgg_register_event_handler('create', 'object', 'cv_intercept_update');
     elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
-    
-    
-    
-    
-    // elgg_register_event_handler('create', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.
+
+    //intercept new user creation  
+    elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
     // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
     //or check grouptools plugin...
-
     //when a user joins a cohort, we need to add them to a acl list attached to the container course
     //when they leave a cohort, we need to remove them.
     elgg_register_event_handler('join', 'group', 'cv_join_group');
@@ -123,17 +104,13 @@ function courseviewInit()
     elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
     elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');
 
-    //push breadcrumb to allow user to return to the current courseview cv_contentpane 
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-    // elgg_push_breadcrumb('Return to CourseView', '/courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid);
 }
 
 //the method that gets called when one of the courseview urls is called.  
 function courseviewPageHandler($page, $identifier)
 {
-    
-//TODO:: Matt, do I need to be more worried about gatekeeper functions etc?
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
     gatekeeper();
     $base_path = dirname(__FILE__);
@@ -143,12 +120,7 @@ function courseviewPageHandler($page, $identifier)
     ElggSession::offsetSet('cvcohortguid', $page[1]);
     ElggSession::offsetSet('cvmenuguid', $page[2]);
     set_input('params', $page);  //place the $page into params
-    //if the courseview page is being displayed, then we don't need the return to courseview breadcrumb--pop it off
-    //elgg_pop_breadcrumb();
-    
-    //if 5th page view...push $page into session, jump to page and then call the session save url
-    
-    
+
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {
         case 'cv_contentpane':    //this is the main course content page
@@ -163,7 +135,7 @@ function courseviewPageHandler($page, $identifier)
             break;
         case 'examine':
         case 'inspect':
-             require "$base_path/pages/courseview/examine.php";
+            require "$base_path/pages/courseview/examine.php";
             break;
         default:
             echo "courseview request for " . $page[0];
@@ -186,9 +158,9 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
     if (cv_hp())
     {
-        $returnvalue="";
+        $returnvalue = "";
     }
-    
+
     if (ElggSession::offsetGet('courseview'))
     {
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
@@ -209,20 +181,16 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
  */
 function cv_join_group($event, $type, $params)
 {
-
-   
     $cv_group = $params['group'];
     if (!$cv_group->cvcohort)
     {
         return;
     }
     $ia = elgg_set_ignore_access(true); // grants temporary permission overrides
-        $cv_course = $cv_group->getContainerEntity();
-        $cv_user = $params['user'];
-        $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
+    $cv_course = $cv_group->getContainerEntity();
+    $cv_user = $params['user'];
+    $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
     elgg_set_ignore_access($ia); // restore permissions
-    //echo $result;
-   // exit;
 }
 
 /**
@@ -263,9 +231,6 @@ function cv_leave_group($event, $type, $params)
  */
 function cv_intercept_update($event, $type, $object)
 {
-   // var_dump($event);
-    //var_dump ($type);
-   // var_dump ($object);
     elgg_load_library('elgg:cv_debug');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
@@ -333,31 +298,8 @@ function cv_intercept_update($event, $type, $object)
             }
         }
     }
-   
-//    elgg_unregister_event_handler('update', 'object', 'cv_intercept_update');
-//   
-//    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-//    $cohort = get_entity ($cvcohortguid);
-//    $course = get_entity ($cohort->getContainerGUID());
-//    $cv_course_permission_level ='Course: ' . $course->title;  //course->cv_acl
-//    $cv_cohort_permission_level ='Cohort: '.$cohort->title;//course->group_acl
-//   
-//    if (get_readable_access_level ($object->access_id )==$cv_course_permission_level && $object->container_guid != $course->guid)
-//    {
-//         $object->container_guid  = $course->guid;
-//         $object->save();
-//    }
-//    else if (get_readable_access_level ($object->access_id )==$cv_cohort_permission_level && $object->container_guid != $cohort->guid)
-//    {
-//            $object->container_guid  = $cohort->guid;
-//            $object->save();
-//    } 
-//    else
-//    {
-//            $object->container_guid  = $object->owner_guid;
-//            $object->save();
-//    }
-//   elgg_register_event_handler('update', 'object', 'cv_intercept_update');
+
+
     $rootdomain = elgg_get_site_url();
     $cvredirect = $rootdomain . 'courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
     ElggSession::offsetSet('cvredirect', $cvredirect);
@@ -367,7 +309,6 @@ function cv_intercept_update($event, $type, $object)
 
 /**
  * 
- *
  * @param type 
  * @param type 
  * @param type 
@@ -385,87 +326,14 @@ function cvforwardintercept($hook, $type, $return, $params)
     return $return;
 }
 
-/**
- * 
- *
- * @param type 
- * @param type 
- * @param type 
- *
- * @return void
- */
-//function intercept_ACL_read($hook, $type, $return, $params)
-//{
-//    //If courseview is not active, we just want to continue on as usual
-//    $cv_active = ElggSession::offsetGet('courseview');
-//    if (!$cv_active)
-//    {
-//        return $return;
-//    }
-//    /* We need to unregister the plugin hook handler before getting the courses or we will crash the php interpreter through
-//     * recursion ;->
-//     */
-//    elgg_unregister_plugin_hook_handler('access:collections:read', 'all', 'intercept_ACL_read');
-//
-//
-//    cv_debug("Entering intercept_ACL_read:: ", "", 100);
-//    cv_debug($return, "", 100);
-//
-//    /* I'm thinking that we don't need to do this for all user courses, just the current one??? */
-//
-//    $user = get_user($params["user_id"]);
-//    $courses = cv_get_user_courses($user);
-//
-//    foreach ($courses as $course)
-//    {
-//        if ($course->cv_acl)
-//        {
-//            //cv_debug("***", "", 100);
-//            $return [] = (int) $course->cv_acl; //add the course acl to the acl list being returned
-//            //we also have to add the user to the acl collection. --hmmm..what happens when a user leaves a cohort?
-//            // add_user_to_access_collection($user->guid, $course->cv_acl);
-//        }
-//    }
-//    cv_debug("Exiting intercept_ACL_read: ", "", 100);
-//    cv_debug($return, "", 100);
-//    return $return;
-//}
-
-/**
- * When the professor creates content, we want to add an option to the access dropdown
- * to allow viewing to any users who are members of any of the cohorts attached to the current
- * course.
- * 
- * We do this by intercepting the access:collections:write and adding the ACL of the course
- * object to the ACL array before returning it back to elgg.
- * 
- * The ACL array is an associative array where the key is the accessid and the value is what gets displayed 
- * in the ACCESS dropdown.
- *
- * @param type $hook
- * @param type $type
- * @param type $return
- * @param type $params
- *
- * @return void
- */
 function cv_intercept_ACL_write($hook, $type, $return, $params)
 {
-//    var_dump ($params);
-//     var_dump ($hook);
-//      var_dump ($type);
-//       var_dump ($return);
     $user = get_user($params["user_id"]);
     $cv_active = ElggSession::offsetGet('courseview');
-    if ( !$cv_active)
+    if (!$cv_active)
     {
         return $return;
     }
-    
-    //var_dump($return);
-    
-    //elgg_unregister_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write');
-    //$menu_items = get_input('menuitems');
 
     $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
     if ($cv_cohort)  //::TODO: this is a test to fix an error that I got:Fatal error: Call to a member function getContainerGUID() on a non-object in /home/richsmit/public_html/mod/courseview/start.php on line 374
@@ -476,7 +344,7 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         {
             $return [$course->cv_acl] = 'Course: ' . $course->title;
             //var_dump ($return);
-            
+
             $return [$cv_cohort->group_acl] = 'Cohort: ' . $cv_cohort->title;
             //var_dump ($return);
         }
@@ -509,34 +377,33 @@ function cv_register_courseview_menu()
     elgg_register_menu_item('site', $item);
 }
 
-function myplugin_sitemenu($hook, $type, $return, $params) {
-$item = new ElggMenuItem('courseview', 'Upgrade to Premium Memebership!', elgg_add_action_tokens_to_url('action/upgrade'));
-$returnValue=array();
-$returnValue[0] = $item;
-return $returnValue;
+function myplugin_sitemenu($hook, $type, $return, $params)
+{
+    $item = new ElggMenuItem('courseview', 'Upgrade to Premium Memebership!', elgg_add_action_tokens_to_url('action/upgrade'));
+    $returnValue = array();
+    $returnValue[0] = $item;
+    return $returnValue;
 }
 
-function cv_test ($hook, $type, $return, $params)
+function cv_test($hook, $type, $return, $params)
 {
-    $return.=$type;
-    $vars=$params['vars'];
+    //$return.=$type;
+    $vars = $params['vars'];
     $attributes = $vars->get_attributes;
-    $return .= $vars['full_view'];
+    // $return .= $vars['full_view'];
     $entity = $vars['entity'];
-    $return .= $entity->guid;
-    
+
     $user = elgg_get_logged_in_user_entity();
-    
-    if ($entity->last_action>$user->prev_last_login && $vars['full_view']==false)
+
+    if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)
     {
-        $return = "<div class='newContent'>New!</div>".$return;
-                //$entity->time_updated.'--'.$user->last_login.$user->prev_last_login;
+        $return = "<div class='newContent'>New!</div>" . $return;
     }
-    //var_dump ($user);
-//    var_dump ($entity);
-//    var_dump ($hook);
-//      var_dump ($type);
-//        var_dump ($params);
-//exit;
+
     return $return;
+}
+
+function cv_intercept_newuser($event, $type, $params)
+{
+    
 }

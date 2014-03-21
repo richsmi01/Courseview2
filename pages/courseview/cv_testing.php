@@ -12,7 +12,7 @@ tinymce.init({
 </script>
 
 <form method="post" action="somepage">
-    <textarea name="content" style="width:50%%"></textarea>
+    <textarea name="content" style="width:50%"></textarea>
 </form>
 
 
