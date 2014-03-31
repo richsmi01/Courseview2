@@ -10,7 +10,7 @@ echo "<div class='cvminiview'>";
     echo elgg_view('input/text', array('name' => 'cvcohortname'));
     echo "Please choose course that this cohort will be based on: ";
 
-    echo elgg_view ("courseview/cv_list_courses");
+    echo elgg_view ("courseview/cv_list_courses", array ('all'=>false));  //would prefer this true but add cohort action has bug
     echo elgg_view('input/submit');
 echo "</div>";
 

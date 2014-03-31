@@ -8,14 +8,12 @@ echo elgg_view('input/text', array(
 
 echo 'Plugins to be recoginized by Courseview';
 
-//this doesn't work on the linux elgg:  $plugins = get_registered_entity_types()['object'];  -- Why???
 $regentitytypes = get_registered_entity_types();
 $plugins =$regentitytypes['object'];
 
 $shortname = array();
 $pluginaddurl = array();
 $approvedlist = array();
-
 
 foreach ($plugins as $plugin)
 {
@@ -51,7 +49,6 @@ foreach ($plugins as $plugin)
 }
 var_dump($approved_subtype);
 
-//var_dump($pluginaddurl);
 elgg_set_plugin_setting('availableplugins', serialize($approvedlist), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('plugincreatestring', serialize($pluginaddurl), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('approved_subtype', serialize($approved_subtype), 'courseview');  //need to serialize arrays before putting in settings

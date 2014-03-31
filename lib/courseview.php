@@ -147,15 +147,22 @@ function cv_isprof($user)
 
 function cv_is_course_owner($user, $cohort)
 {
-    //echo 'in cv_is_course_owner..userguid: '.$user->guid.' courseguid: ' .$cohort->getOwnerGUID();
-    //return true;
     if (!$user || !$cohort)
     {
         return 0;
     }
-
-    $cv_course_owner = $cohort->getOwnerEntity();
+    $cv_course_owner = get_entity ($cohort->container_guid)->getOwnerEntity();
     return ($user->guid == $cv_course_owner->guid);
+}
+
+function cv_is_cohort_owner($user, $cohort)
+{
+    if (!$user || !$cohort)
+    {
+        return 0;
+    }
+    $cv_cohort_owner = $cohort->getOwnerEntity();
+    return ($user->guid == $cv_cohort_owner->guid);
 }
 
 function cv_get_user_courses($user)
@@ -405,9 +412,79 @@ function courseview_create_course()
 
 function courseview_listplugins()
 {
-    echo 'Got here!!!';
+   // echo 'Got here!!!';
     $cvobject = ElggSession::offsetGet('courseviewobject');
     $returnvalue = 'Currently Registered Plugins:  ' . $cvobject->plugins[0];
 //echo $returnvalue;
     return $returnvalue;
+}
+
+
+function cv_get_owned_courses ($user)
+{
+    $userguid=$user->guid;
+    $cvcourses = elgg_get_entities_from_relationship(array
+    ('type' => 'object',
+    'metadata_names' => array('cvcourse'),
+    'metadata_values' => array(true),
+    'limit' => false,
+    'owner_guids' => $userguid,    
+        )
+);
+    
+    return $cvcourses;
+}
+
+function cv_get_all_courses ()
+{
+ 
+    $cvcourses = elgg_get_entities_from_relationship(array
+    ('type' => 'object',
+    'metadata_names' => array('cvcourse'),
+    'metadata_values' => array(true),
+    'limit' => false,
+        )
+);
+    return $cvcourses;
+}
+
+function cv_prof_num_courses_owned ($user)
+{
+    $userguid=$user->guid;
+    $cvcourses = elgg_get_entities_from_relationship(array
+    ('type' => 'object',
+    'metadata_names' => array('cvcourse'),
+    'metadata_values' => array(true),
+    'limit' => false,
+    'owner_guids' => $userguid,    
+        )
+);
+    return sizeof($cvcourses);
+}
+
+function cv_get_owned_cohorts ($user)
+{
+    $userguid=$user->guid;
+    $cvcohorts = elgg_get_entities_from_metadata(array
+        ('type' => 'group',
+        'metadata_names' => array('cvcohort'),
+        'metadata_values' => array(true),
+        'limit' => false,
+        'owner_guids' => $userguid,
+            )
+    );
+    return $cvcohorts;
+}
+
+function cv_get_all_cohorts ()
+{
+    $userguid=$user->guid;
+    $cvcohorts = elgg_get_entities_from_metadata(array
+        ('type' => 'group',
+        'metadata_names' => array('cvcohort'),
+        'metadata_values' => array(true),
+        'limit' => false,
+            )
+    );
+    return $cvcohorts;
 }

@@ -1,7 +1,11 @@
+-- Problem (crash) when trying to add a cohort to a course that is owned by somebody else.
+-- Build a button that will choose and open a random posting in the current module
+--add ability for new content to get cancelled after user visits content...use an array
    
---when editing a poll and then clicking cancel, takes us to a can't find page
---blog preview doesn't work
---can multiple domains map to different directories and different elggs?
+        --when editing a poll and then clicking cancel, takes us to a can't find page
+    --blog preview doesn't work
+    --blog cancel doesn't work
+--can multiple domains map to different directories and/or different elggs?
     --function to run on new user
 --walk through settings page
 --security/gatekeeper etc

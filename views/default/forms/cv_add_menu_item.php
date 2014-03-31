@@ -22,6 +22,7 @@ echo elgg_view('input/submit', array(
 echo elgg_view('input/submit', array(
     'value' => elgg_echo('Same Level'),
      'name' =>'buttonchoice'));
+echo elgg_view('input/hidden', array ('name'=>'preview', 'value'=>1));  //this to prevent forward intercept from triggering 
 echo elgg_view('input/submit', array(
     'value' => elgg_echo('Indent'),
      'name' =>'buttonchoice'));

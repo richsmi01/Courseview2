@@ -74,8 +74,10 @@ $cvmenu->indent = $indent;
 add_entity_relationship($cvcourseguid, 'menu', $cvmenu->guid);
 
 //error_log ("CV# -  Added a menuitem");
+//just pass the url
 
-forward(REFERER);
+forward($cvmenu->getURL());
+
 
 //echo 'cvcourse = ' . get_entity($cvcourseguid)->title;
 //echo 'cvmenu = ' . $cvmenu->name;

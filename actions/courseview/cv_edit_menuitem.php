@@ -102,6 +102,8 @@ switch (get_input('buttonchoice'))
         
         //echo "menu items: ".sizeof($menuitems)."<br>";
         //var_dump($menuitems);
+        $prevmenuorder=$cvmenuitems[$cvmenuitem]->menuorder-1;
+        
         for ($a=$cvmenuitem->menuorder; $a<sizeof($menuitems); $a++)
         {
             $menuitems[$a]->menuorder = $menuitems[$a]->menuorder -1;
@@ -113,8 +115,9 @@ switch (get_input('buttonchoice'))
 //echo $cvmenuitemname;
 
 //exit;
-
-
+echo 'hey';
+exit;
+forward($cvmenu->getURL());
 
 
 //when indenting we go from - to . to +  or back again.

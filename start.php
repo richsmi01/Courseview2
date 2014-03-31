@@ -53,7 +53,7 @@ function courseviewInit()
     $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
     foreach ($availableplugins as $plugin)
     {
-        elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_test');
+        elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_new_content_intercept');
     }
 
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
@@ -68,6 +68,10 @@ function courseviewInit()
      * without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
      * an approved object such as a blog, bookmark etc as chosen in the settings page. */
     elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
+
+
+    elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
+
 
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
@@ -286,8 +290,6 @@ function cv_intercept_update($event, $type, $object)
         {
             cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cv_intercept_update", 5);
             $z = add_entity_relationship($guid_one, $relationship, $guid_two);
-            cv_debug("Added relationship", "", 5);
-            cv_debug($z, "cv_intercept_update", 5);
         } else
         {
             $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
@@ -301,7 +303,14 @@ function cv_intercept_update($event, $type, $object)
 
 
     $rootdomain = elgg_get_site_url();
+//    var_dump(get_input('action'));
+//    exit;
+    if (get_input('preview') || get_input('cancel'))
+    {
+        return true;
+    }
     $cvredirect = $rootdomain . 'courseview/cv_contentpane/' . $cvcohortguid . '/' . $cvmenuguid;
+
     ElggSession::offsetSet('cvredirect', $cvredirect);
 }
 
@@ -385,14 +394,14 @@ function myplugin_sitemenu($hook, $type, $return, $params)
     return $returnValue;
 }
 
-function cv_test($hook, $type, $return, $params)
+function cv_new_content_intercept($hook, $type, $return, $params)
 {
     //$return.=$type;
     $vars = $params['vars'];
     $attributes = $vars->get_attributes;
     // $return .= $vars['full_view'];
     $entity = $vars['entity'];
-
+    
     $user = elgg_get_logged_in_user_entity();
 
     if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)
@@ -406,4 +415,21 @@ function cv_test($hook, $type, $return, $params)
 function cv_intercept_newuser($event, $type, $params)
 {
     
+}
+
+function cv_menu_url_handler($menu_entity)
+{
+
+    // http://localhost/elgg/courseview/cv_contentpane/234/217
+    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
+    $cvmenuguid = $menu_entity->guid;
+
+    //check to see if the entity for this guid exists...if it doesn't, do a lookup for the previous menu item
+    var_dump($menu_entity);
+    exit;
+    
+          return (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuguid");
+//var_dump ($menu_entity);
+//exit;
+//construct the url for the menu item and return....
 }

@@ -5,22 +5,39 @@
  * courses has an associated radio button 
  */
 
-$userguid = elgg_get_logged_in_user_guid();
+$cv_userguid = elgg_get_logged_in_user_guid();
+$cv_user = get_entity($cv_userguid);
+//echo "!!!".get_entity($userguid)->name;
+if ($vars['all']==true)
+{
+    $cvcourses = cv_get_all_courses();
+}
+else
+{
+    $cvcourses = cv_get_owned_courses($cv_user);
+}
 
-$cvcourses = elgg_get_entities_from_relationship(array
-    ('type' => 'object',
-    'metadata_names' => array('cvcourse'),
-    'metadata_values' => array(true),
-    'limit' => false,
-    'owner' => $userguid,
-        )
-);
+//$cvcourses = elgg_get_entities_from_relationship(array
+//    ('type' => 'object',
+//    'metadata_names' => array('cvcourse'),
+//    'metadata_values' => array(true),
+//    'limit' => false,
+//    'owner_guids' => $userguid,    
+//        )
+//);
+
+//if (sizeof($cvcourses)==0)
+//{
+//    echo "<br> You have no courses to delete <br>";
+//    return;
+//}
 
 foreach ($cvcourses as $cvcourse)
 {
-    $radioname = $cvcourse->title . ' <p> ' . $cvcourse->description.'</p>';
+    //echo "###".$cvcourse->getOwnerEntity()->guid."@@@".$userguid;
+        $radioname = $cvcourse->title . ' <p> ' . $cvcourse->description.'</p>';
     echo "<div id='contentitem'>";
     echo elgg_view('input/radio', array('internalid' => $cvcourse->guid, 'name' => 'cvcourse', 'options' => array($radioname => $cvcourse->guid)));
     echo"</div>";
 }
-?>
+
