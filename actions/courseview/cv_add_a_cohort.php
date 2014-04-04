@@ -17,7 +17,7 @@ $cvcourse = get_entity($cvcourseguid);
     $cvcohort->access_id = ACCESS_PUBLIC;
     $cvcohort->owner_guid = elgg_get_logged_in_user_guid();
     $cvcohort->container_guid = $cvcourseguid;
-
+   
     $cvcohort->save();
   
     $cvcohort->cvcohort = true;

@@ -818,10 +818,16 @@ box-shadow: black 2px 2px 2px;
 position:relative;
 }
 
-/*#contentitem p {
+#contentitem  {
     padding:5px 5px 5px 15px;
-}*/
+    border:solid black 1px;
+    margin: 2px;
+}
 
+#contentitem p 
+{
+padding-left:15px;
+}
 
 
 @-webkit-keyframes zoom{

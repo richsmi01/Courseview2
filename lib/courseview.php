@@ -438,10 +438,9 @@ function cv_get_owned_courses ($user)
 function cv_get_all_courses ()
 {
  
-    $cvcourses = elgg_get_entities_from_relationship(array
+    $cvcourses = elgg_get_entities(array
     ('type' => 'object',
-    'metadata_names' => array('cvcourse'),
-    'metadata_values' => array(true),
+    'subtype' => array('cvcourse'),
     'limit' => false,
         )
 );

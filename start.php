@@ -64,6 +64,8 @@ function courseviewInit()
      * tool after adding a relationship to added content */
     elgg_register_plugin_hook_handler('forward', 'all', 'cvforwardintercept');
 
+    elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'cv_can_write_to_container');
+
     /* The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
      * without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
      * an approved object such as a blog, bookmark etc as chosen in the settings page. */
@@ -258,45 +260,48 @@ function cv_intercept_update($event, $type, $object)
     // element contains three pieces of information in the format Xmenuitemguid|cohortguid where
     //  X is a + if a new relationship should be created and a - if it should be removed.
     $menu_items = get_input('menuitems');
-    foreach ($menu_items as $menu_item)
+    if (is_array($menu_items))
     {
-        // menu_item_guid is stripped out and cohortguid is stripped out into $cohort_guid
-        $cohort_guid = substr(strstr($menu_item, '|'), 1);
-        $stop = stripos($menu_item, '|') - 1;
-
-        $menu_item_guid = substr($menu_item, 1, $stop);
-        $guid_one = $menu_item_guid;
-        $guid_two = $object->guid;
-
-        //need to check if this is a non-professor type content and change relationship accordingly...
-        //If it is of type professor, the relationship String should be simply 'content'.  However, if 
-        //the relationship is of type student, then the relationship String should have the current
-        //$cohort_guid appended to it in the form contentXXX where XXX is the $cohort_guid
-
-        $relationship = 'content';
-        //however, if the $menuitem is not of type 'professor' (ie, of type 'student'), then we need to append the particulart  cohort to 'content'
-        if (get_entity($menu_item_guid)->menutype != 'professor')
+        foreach ($menu_items as $menu_item)
         {
-            $relationship.= $cohort_guid;
-        } else if (!$object->sort_order)
-        {
-            //if it is an object that will belong to professor content, we want to create a meta tag that we can use to move
-            //the content up and down within the sort order
-            $object->sort_order = $object->time_created;
-            $object->save();
-        }
+            // menu_item_guid is stripped out and cohortguid is stripped out into $cohort_guid
+            $cohort_guid = substr(strstr($menu_item, '|'), 1);
+            $stop = stripos($menu_item, '|') - 1;
 
-        if (strrchr('+', $menu_item) && $valid_plugin)  //if the module was checked in the cv_content_tree view, then add relationship
-        {
-            cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cv_intercept_update", 5);
-            $z = add_entity_relationship($guid_one, $relationship, $guid_two);
-        } else
-        {
-            $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
-            if ($rel_to_delete)  //if the module was unchecked and there was a relationship, we need to remove the relationship
+            $menu_item_guid = substr($menu_item, 1, $stop);
+            $guid_one = $menu_item_guid;
+            $guid_two = $object->guid;
+
+            //need to check if this is a non-professor type content and change relationship accordingly...
+            //If it is of type professor, the relationship String should be simply 'content'.  However, if 
+            //the relationship is of type student, then the relationship String should have the current
+            //$cohort_guid appended to it in the form contentXXX where XXX is the $cohort_guid
+
+            $relationship = 'content';
+            //however, if the $menuitem is not of type 'professor' (ie, of type 'student'), then we need to append the particulart  cohort to 'content'
+            if (get_entity($menu_item_guid)->menutype != 'professor')
             {
-                cv_debug('deleting relationship', '', 5);
-                delete_relationship($rel_to_delete->id);
+                $relationship.= $cohort_guid;
+            } else if (!$object->sort_order)
+            {
+                //if it is an object that will belong to professor content, we want to create a meta tag that we can use to move
+                //the content up and down within the sort order
+                $object->sort_order = $object->time_created;
+                $object->save();
+            }
+
+            if (strrchr('+', $menu_item) && $valid_plugin)  //if the module was checked in the cv_content_tree view, then add relationship
+            {
+                cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cv_intercept_update", 5);
+                $z = add_entity_relationship($guid_one, $relationship, $guid_two);
+            } else
+            {
+                $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
+                if ($rel_to_delete)  //if the module was unchecked and there was a relationship, we need to remove the relationship
+                {
+                    cv_debug('deleting relationship', '', 5);
+                    delete_relationship($rel_to_delete->id);
+                }
             }
         }
     }
@@ -397,16 +402,30 @@ function myplugin_sitemenu($hook, $type, $return, $params)
 function cv_new_content_intercept($hook, $type, $return, $params)
 {
     //$return.=$type;
+   
     $vars = $params['vars'];
+    $user = elgg_get_logged_in_user_entity();
+    //echo 'user:'.$user->name;
     $attributes = $vars->get_attributes;
     // $return .= $vars['full_view'];
     $entity = $vars['entity'];
-    
-    $user = elgg_get_logged_in_user_entity();
+   // $visited = get_input ('visited');
+    ///echo "visited".$visited[0];
+//    if (!isset(get_input('visited')))
+//    {
+//        $visited = array();
+//        set_input ('visited', $visited);
+//    }
+// else
+//    {
+        //$visited = get_input ('visited');
+//    }
 
-    if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)
+
+    if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)//   && !in_array($entity->guid, $visited))
     {
         $return = "<div class='newContent'>New!</div>" . $return;
+       
     }
 
     return $return;
@@ -425,11 +444,38 @@ function cv_menu_url_handler($menu_entity)
     $cvmenuguid = $menu_entity->guid;
 
     //check to see if the entity for this guid exists...if it doesn't, do a lookup for the previous menu item
-    var_dump($menu_entity);
-    exit;
-    
-          return (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuguid");
+    //var_dump($menu_entity);
+    // exit;
+
+    return (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuguid");
 //var_dump ($menu_entity);
 //exit;
 //construct the url for the menu item and return....
+}
+
+/**
+ * This plugin hook intercepts when elgg checks to see if it can write to a container.
+ * In the case when we are trying to allow professorA to create a cohort from a course
+ * created and owned by professorB, we need to allow the course to be the container
+ * for the cohort.  We first check to make sure that the container has a cvcourse subtype
+ * and then we check to make sure that the user is a professor.  If both of these things
+ * are true, we can go ahead and override.
+ *
+ * @param $hook 
+ * @param $type 
+ * @param $params - contains our container and user info
+ *
+ * @return  returns true if conditions are met and the default $return if they are not
+ */
+function cv_can_write_to_container($hook, $type, $return, $params)
+{
+   
+    if (elgg_instanceof($params['container'], 'object','cvcourse'))
+    {
+        if (cv_isprof($params['user']))
+        {
+            return true;
+        }
+    }
+    return $return;
 }
