@@ -1,3 +1,6 @@
+--i can't figure out how to set a input/submit to disabled
+
+
 -- Problem (crash) when trying to add a cohort to a course that is owned by somebody else.
 -- Build a button that will choose and open a random posting in the current module
 --add ability for new content to get cancelled after user visits content...use an array

@@ -7,6 +7,12 @@
 //    return $cvcourseview[0]->profsgroup;
 //}
 
+function cv_debug_edit ($guid, $subtype)
+{
+    $cv_entity = get_entity($guid);
+    $cv_entity->subtype=$subtype;
+}
+
 function cv_hp()
 {
 

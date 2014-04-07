@@ -30,8 +30,11 @@ switch (get_input('buttonchoice'))
         break;
     case 'Outdent':
        // echo 'outdent has been selected';
-         $cvmenuitem->indent=$cvmenuitem->indent-1;
-        $cvmenuitem->save();
+         if ($cvmenuitem->indent >1)
+         {
+            $cvmenuitem->indent=$cvmenuitem->indent-1;
+         }
+        //$cvmenuitem->save();
 //        if ($cvmenuitem->indent == '+')
 //        {
 //            $cvmenuitem->indent = '.';
@@ -115,10 +118,10 @@ switch (get_input('buttonchoice'))
 //echo $cvmenuitemname;
 
 //exit;
-echo 'hey';
-exit;
-forward($cvmenu->getURL());
+//echo 'hey';
+//exit;
+forward($cvmenuitem->getURL());
 
 
 //when indenting we go from - to . to +  or back again.
-?>
+

@@ -46,11 +46,16 @@ switch ($menutype)
         
         if ($menuitem->indent==0)  //if this is the first menu item in a course, display welcome
         {
-            echo "<br><p id = 'cvwelcome'>Welcome to " . $menuitem->name."</p>";
             $cvcourse = get_entity ($cvcohort->getContainerGUID());
-            echo "<br><div id='contentitem'> $cvcourse->description</div>";
-            $cv_course_owner = get_entity($cvcohort->container_guid)->getOwnerEntity();
+             $cv_course_owner = get_entity($cvcohort->container_guid)->getOwnerEntity();
             $cv_cohort_owner = $cvcohort->getOwnerEntity();
+            echo "<br><p id = 'cvwelcome'>Welcome to " . $cvcohort->name."<p>";//$menuitem->name."</p>";
+            
+            
+           
+            echo "<br><div id='contentitem'> Course Name:  $cvcourse->title</div>";
+            echo "<br><div id='contentitem'> Course Description: $cvcourse->description</div>";
+             echo "<br><div id='contentitem'> Cohort Name:  $cvcohort->name</div>";
            echo "<br><div id='contentitem'> Course Owner:  $cv_course_owner->name</div>";
            echo "<br><div id='contentitem'> Cohort Professor:  $cv_cohort_owner->name</div>";
         }

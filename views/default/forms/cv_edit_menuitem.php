@@ -30,7 +30,7 @@ echo elgg_view('input/submit', array(
      'name' =>'buttonchoice'));
 echo elgg_view('input/submit', array(
     'value' => 'Outdent',
-     'name' =>'buttonchoice'));
+     'name' =>'buttonchoice',));
 echo elgg_view('input/submit', array(
     'value' => 'Move Up',
      'name' =>'buttonchoice'));

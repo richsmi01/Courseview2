@@ -15,6 +15,7 @@ $cvcoursedescription = get_input('cvcoursedescription');
 
 $cvcourse = new ElggObject();
 $cvcourse->title = $cvcoursename;
+$cvcourse->name = $cvcoursename;
 $cvcourse->access_id = ACCESS_PUBLIC;
 $cvcourse->owner_guid = elgg_get_logged_in_user_guid();
 $cvcourse->container_guid = elgg_get_logged_in_user_guid();

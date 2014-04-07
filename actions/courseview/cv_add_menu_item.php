@@ -1,18 +1,26 @@
 <?php
+
 //echo 'entering cv_add_menu_item.php';
 $currentcvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$currentcvmenu= get_entity($currentcvmenuguid);
-$indent=0;
+$currentcvmenu = get_entity($currentcvmenuguid);
+$indent = 0;
 switch (get_input('buttonchoice'))
 {
     case 'Indent':
-        $indent = $currentcvmenu->indent +1;
+        $indent = $currentcvmenu->indent + 1;
         break;
     case "Outdent":
-        $indent = $currentcvmenu->indent - 1;
+        if ($currentcvmenu->indent > 1)
+        {
+            $indent = $currentcvmenu->indent - 1;
+        }
+        else
+        {
+            $indent = $currentcvmenu->indent;
+        }
         break;
     case "Same Level":
-        $indent =$currentcvmenu->indent ;
+        $indent = $currentcvmenu->indent;
         break;
 }
 //echo 'indent:  '.$indent;

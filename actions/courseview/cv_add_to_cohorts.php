@@ -4,7 +4,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+exit; //!!!!I don't think this is used anymore
 elgg_load_library('elgg:courseview');
 
  $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');

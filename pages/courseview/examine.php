@@ -9,15 +9,22 @@
 $params =get_input('params'); 
 
 
+
 $object_guid = $params[1];
 $object = get_entity ($object_guid);
+
+
+echo "Working on...".$object->title;
+//$object->subtype="cvcourse";
+//$object->save();
+
 $containerobject = get_entity($object->container_guid);
 $ownerobject = get_entity($object->owner_guid);
 
 echo 'Object Name: '.$object->name.'<br>';
 echo 'Object Title: '.$object->title.'<br>';
 echo 'Object Type: '. $object->getType() .'<br>';
-echo 'Container Subtype: '.$object->getSubtype().'<br>';
+echo 'Object Subtype: '.$object->getSubtype().'<br>';
 echo 'Object Guid: '.$object->guid.'<br>';
 echo 'Object cv_acl: '.$object->cv_acl.'<br>';
 echo '<br>';

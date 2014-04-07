@@ -10,16 +10,20 @@
                 elgg_load_library('elgg:courseview');
                 $user = elgg_get_logged_in_user_entity();
                 $cvcohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
+                $cvmenu = get_entity(ElggSession::offsetGet('cvmenuguid'));  
                 if (cv_is_course_owner($user, $cvcohort))
                 {
+                    if ($cvmenu->indent>0)
+                    {                      
                     echo "<li class ='sub'>
                     <input type='checkbox' id='cv_check2' class='cv_collapsible'/>
                     <label for='cv_check2' >Edit the current menu item</label>
                     <div>";
                     echo elgg_view_form('cv_edit_menuitem');
-                    echo"</div>
-                </li>
-                <li class ='sub'>
+                    echo"</div>";
+                echo "</li>";
+                }
+                echo "<li class ='sub'>
                     <input type='checkbox' id='cv_check3' class = 'cv_collapsible'/>
                     <label for='cv_check3' >Add new menu item below the current menu item</label>
                     <div > ";
@@ -49,7 +53,7 @@
                         echo elgg_view_form('cv_edit_a_course'); 
                         echo "</div>";
                         }   
-                        //echo "~~~".cv_prof_num_courses_owned($user);
+                
                      if (cv_prof_num_courses_owned($user)>0)
                      {
                         echo "<input type='checkbox' id='cv_check7' class = 'cv_collapsible'/>";
@@ -58,7 +62,7 @@
                         echo elgg_view_form ('cv_delete_course'); 
                         echo "</div>";
                     }
-                   if (cv_prof_num_courses_owned($user)>0)
+                   if (cv_prof_num_courses_owned($user)>0 || cv_isprof($user))
                    {
                         echo "<input type='checkbox' id='cv_check8' class = 'cv_collapsible'/>";
                         echo "<label for='cv_check8' >Add a Cohort</label>";

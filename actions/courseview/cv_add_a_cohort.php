@@ -7,7 +7,8 @@
 $user= elgg_get_logged_in_user_entity();
 $cvcohortname = get_input('cvcohortname');
 $cvcourseguid = get_input('cvcourse');  
-
+//echo "cvcohortname".$cvcohortname;
+//exit;
 $cvcourse = get_entity($cvcourseguid);
 
 
