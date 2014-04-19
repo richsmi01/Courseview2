@@ -6,6 +6,102 @@
 //    $cvcourseview = elgg_get_entities(array('type' => 'object', 'subtype' => 'courseview'));
 //    return $cvcourseview[0]->profsgroup;
 //}
+function cv_is_valid_plugin_by_keys ($user, $object)
+{
+     $validplugins = cv_get_valid_plugins($user);//fetch the list of approved plugins for courseview
+    $validkeys = array_keys($validplugins);
+    $valid_plugin = false;
+    //looping through all approved plugins to ensure that this content can be added to courseview
+    //if the content subtype hasn't been approved in the settings page, then just return without doing anything
+    foreach ($validkeys as $plugin)
+    {
+        if ($object->getSubtype() == $plugin)
+        {
+            $valid_plugin = true;
+        }
+    }
+    return $valid_plugin;
+}
+
+function cv_register_hooks_events_actions ($base_path)
+{
+    //loop through availbable plugins and register a plugin hook for each to check if content is new since last login
+    $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
+    foreach ($availableplugins as $plugin)
+    {
+        elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_new_content_intercept');
+    }
+    
+    // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
+    // that we can add our tree menu
+    elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cv_sidebar_intercept');
+
+    /* allows us to intercept each time elgg calls a forward.  We will use this to be able to return to the coursview 
+     * tool after adding a relationship to added content */
+    elgg_register_plugin_hook_handler('forward', 'all', 'cvforwardintercept');
+    
+    //Need to occasionally intercep permissions check to ensure that people in different cohorts can see ecah others content
+    elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'cv_can_write_to_container');
+
+    /* The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
+     * without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
+     * an approved object such as a blog, bookmark etc as chosen in the settings page. */
+    elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
+
+
+    elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
+
+
+    //register page event handler
+    elgg_register_page_handler('courseview', 'courseviewPageHandler');
+
+    //  creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
+    // relationships between the content and any menuitems deemed neccesary.
+    elgg_register_event_handler('create', 'object', 'cv_intercept_update');
+    elgg_register_event_handler('update', 'object', 'cv_intercept_update');
+    elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
+
+    //intercept new user creation  
+    elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
+    // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
+    //or check grouptools plugin...
+    //when a user joins a cohort, we need to add them to a acl list attached to the container course
+    //when they leave a cohort, we need to remove them.
+    elgg_register_event_handler('join', 'group', 'cv_join_group');
+    elgg_register_event_handler('leave', 'group', 'cv_leave_group');
+
+    //Need to intercept ACL writes to allow us to add the course ACL when needed
+    elgg_register_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write', 999);
+
+    //set up our paths and various actions 
+     //gives a relative path to the directory where this file exists
+    elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
+    elgg_register_action("cv_content_tree", $base_path . '/actions/courseview/cv_content_tree.php');
+    elgg_register_action("cv_edit_a_course", $base_path . '/actions/courseview/cv_edit_a_course.php');
+    elgg_register_action("cv_edit_menuitem", $base_path . '/actions/courseview/cv_edit_menuitem.php');
+    elgg_register_action("cv_delete_a_cohort", $base_path . '/actions/courseview/cv_delete_a_cohort.php');
+    elgg_register_action("cv_add_a_cohort", $base_path . '/actions/courseview/cv_add_a_cohort.php');
+    elgg_register_action("cv_delete_course", $base_path . '/actions/courseview/cv_delete_course.php');
+    elgg_register_action('toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
+    elgg_register_action('cv_add_menu_item', $base_path . '/actions/courseview/cv_add_menu_item.php'); 
+    elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
+    elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');
+
+}
+
+function cv_get_valid_plugins($user)
+{
+    if (cv_isprof($user))
+    {
+    $validplugins = unserialize(elgg_get_plugin_setting('profavailableplugins', 'courseview'));
+    }
+    else
+    {
+        $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
+    }
+    return$validplugins;
+}
+
 
 function cv_debug_edit ($guid, $subtype)
 {

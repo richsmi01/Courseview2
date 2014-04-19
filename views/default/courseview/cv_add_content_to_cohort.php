@@ -34,7 +34,9 @@ if (strpos($action, 'reply'))
 
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
  * valid plugins for courseview is set in the settings view under the administration section of Elgg. */
-$validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
+
+$user = elgg_get_logged_in_user_entity();
+$validplugins = cv_get_valid_plugins($user);
 $validkeys = array_keys($validplugins);
 $validkeys[] = "discussion";
 $donotdisplay = true;
@@ -44,10 +46,12 @@ foreach ($validkeys as $plugin)
     if (strpos($action, $plugin) !== false)
     {
         $donotdisplay = false;
-        cv_debug("Match! :" . $plugin . '<br>', "", 9);
+      //  cv_debug("Match! :" . $plugin . '<br>', "", 9);
         break;
     }
 }
+
+
 
 if ($donotdisplay)
 {

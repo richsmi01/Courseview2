@@ -12,11 +12,14 @@ function courseviewInit()
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
     elgg_register_simplecache_view('js/courseview/js');
+
+    //::TODO:Matt This is no longer important, correct?
     $jsurl = elgg_get_simplecache_url('js', 'courseview/js');
     elgg_register_js('cv_sidebar_js', $jsurl);
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
+    // Ensure that there is a logged in user before allowing access to page
     if (!elgg_get_logged_in_user_entity())
     {
         return;
@@ -31,101 +34,42 @@ function courseviewInit()
     //set up our link to css rulesets
     elgg_extend_view('css/elgg', 'customize_css/courseview_css', 1000);
 
+    //just a little sneaky thing that I'll remove later on -- allows me to test hp functionality
     if (cv_hp())
     {
         elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
-
         //get rid of the menu items
         elgg_register_plugin_hook_handler('register', 'menu:site', 'myplugin_sitemenu', 1000);
-
         //turn on courseview
         ElggSession::offsetSet('courseview', true);
     }
+
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
 
-    $regentitytypes = get_registered_entity_types();
-    $plugins = $regentitytypes['object'];
+    //::TODO:Matt - verify ok to remove
+    //$regentitytypes = get_registered_entity_types();
+    // $plugins = $regentitytypes['object'];
+    //::TODO:Matt - Would you move this to a function?
+    cv_register_hooks_events_actions(dirname(__FILE__));  //register all hooks and stuff, passing the current directory of this file
 
-
-
-    //loop through availbable plugins and register a plugin hook to check if content is new since last login
-    $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
-    foreach ($availableplugins as $plugin)
-    {
-        elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_new_content_intercept');
-    }
-
-    // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
-    // that we can add our tree menu
-    elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cv_sidebar_intercept');
-
-    /* allows us to intercept each time elgg calls a forward.  We will use this to be able to return to the coursview 
-     * tool after adding a relationship to added content */
-    elgg_register_plugin_hook_handler('forward', 'all', 'cvforwardintercept');
-
-    elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'cv_can_write_to_container');
-
-    /* The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
-     * without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
-     * an approved object such as a blog, bookmark etc as chosen in the settings page. */
-    elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
-
-
-    elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
-
-
-    //register page event handler
-    elgg_register_page_handler('courseview', 'courseviewPageHandler');
-
-    //  creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
-    // relationships between the content and any menuitems deemed neccesary.
-    elgg_register_event_handler('create', 'object', 'cv_intercept_update');
-    elgg_register_event_handler('update', 'object', 'cv_intercept_update');
-    elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
-
-    //intercept new user creation  
-    elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
-    // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
-    //or check grouptools plugin...
-    //when a user joins a cohort, we need to add them to a acl list attached to the container course
-    //when they leave a cohort, we need to remove them.
-    elgg_register_event_handler('join', 'group', 'cv_join_group');
-    elgg_register_event_handler('leave', 'group', 'cv_leave_group');
-
-    //Need to intercept ACL writes to allow us to add the course ACL when needed
-    elgg_register_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write', 999);
-
-    //set up our paths and various actions 
-    $base_path = dirname(__FILE__); //gives a relative path to the directory where this file exists
-    elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
-    elgg_register_action("cv_content_tree", $base_path . '/actions/courseview/cv_content_tree.php');
-    elgg_register_action("cv_edit_a_course", $base_path . '/actions/courseview/cv_edit_a_course.php');
-    elgg_register_action("cv_edit_menuitem", $base_path . '/actions/courseview/cv_edit_menuitem.php');
-    elgg_register_action("cv_delete_a_cohort", $base_path . '/actions/courseview/cv_delete_a_cohort.php');
-    elgg_register_action("cv_add_a_cohort", $base_path . '/actions/courseview/cv_add_a_cohort.php');
-    elgg_register_action("cv_delete_course", $base_path . '/actions/courseview/cv_delete_course.php');
-    elgg_register_action('toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
-    elgg_register_action('cv_add_menu_item', $base_path . '/actions/courseview/cv_add_menu_item.php'); //::TODO: what is this again???
-    elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
-    elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');
-
+    // push the  cohort guid and menu guid into the session
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 }
 
-//the method that gets called when one of the courseview urls is called.  
+//this method gets called when one of the courseview urls is called.  
 function courseviewPageHandler($page, $identifier)
 {
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
-    gatekeeper();
+    gatekeeper();  //gatekeeper ensures that user is authorized to view page
     $base_path = dirname(__FILE__);
 
     /* Since it is possible to require the current cohort and menuitem while on a non-courseview page, we push
      * this information into the session */
     ElggSession::offsetSet('cvcohortguid', $page[1]);
     ElggSession::offsetSet('cvmenuguid', $page[2]);
-    set_input('params', $page);  //place the $page into params
+    set_input('params', $page);  //place the $page array into params
 
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {
@@ -136,9 +80,9 @@ function courseviewPageHandler($page, $identifier)
             set_input("object_type", 'all');
             require "$base_path/pages/courseview/cv_contentpane.php";
             break;
-        case 'cv_testing':
-            require "$base_path/pages/courseview/cv_testing.php";
-            break;
+//        case 'cv_testing':
+//            require "$base_path/pages/courseview/cv_testing.php";
+//            break;
         case 'examine':
         case 'inspect':
             require "$base_path/pages/courseview/examine.php";
@@ -150,7 +94,8 @@ function courseviewPageHandler($page, $identifier)
 }
 
 /**
- * When the sidebar plugin hook fires, cv_sidebar_intercept takes over and adds the course menu tree as needed
+ * When the sidebar plugin hook fires, cv_sidebar_intercept takes over and adds dropdowns and 
+ * the course menu tree as needed
  *
  * @param string $hook  not actually needed or used
  * @param string $entity_type  not actually needed or used
@@ -161,12 +106,12 @@ function courseviewPageHandler($page, $identifier)
  */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
-    //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
     if (cv_hp())
     {
         $returnvalue = "";
     }
 
+    //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
     if (ElggSession::offsetGet('courseview'))
     {
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
@@ -188,15 +133,17 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 function cv_join_group($event, $type, $params)
 {
     $cv_group = $params['group'];
+    //if the group isn't a cvcohort, then just return without doing anything
     if (!$cv_group->cvcohort)
     {
         return;
     }
-    $ia = elgg_set_ignore_access(true); // grants temporary permission overrides
+    $ignore_acess = elgg_set_ignore_access(true); // grants temporary permission overrides
     $cv_course = $cv_group->getContainerEntity();
     $cv_user = $params['user'];
+    //here we add the user to the course acl
     $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-    elgg_set_ignore_access($ia); // restore permissions
+    elgg_set_ignore_access($ignore_acess); // restore permissions
 }
 
 /**
@@ -225,7 +172,7 @@ function cv_leave_group($event, $type, $params)
 
 /**
  * Intercepts any new content creation, content updates, or content deletions.  If the content type is one of our valid 
- * plugins (as specified in the setup page, we will loop through the treeview generated by cv_content_tree
+ * plugins (as specified in the setup page), we will loop through the treeview generated by cv_content_tree
  * view that is appended to appropriate pages and use  the checkboxes in this to determine any 
  * relationships between the current menu item and the content to be created or removed. 
  *
@@ -240,20 +187,15 @@ function cv_intercept_update($event, $type, $object)
     elgg_load_library('elgg:cv_debug');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-
-    //fetch the list of approved plugins for courseview
-    $validplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));
-    $validkeys = array_keys($validplugins);
-    $valid_plugin = false;
-    //looping through all approved plugins to ensure that this content can be added to courseview
-    foreach ($validkeys as $plugin)
-    {
-        if ($object->getSubtype() == $plugin)
-        {
-            $valid_plugin = true;
-        }
-    }
-
+    $user = elgg_get_logged_in_user_entity();
+    
+    //::TODO:Matt - I'd like to turn this into a function in the library...what do you think of this?
+    /////////////////////////////Turn this thing into a function in the library
+    $valid_plugin = cv_is_valid_plugin_by_keys ($user, $object);
+   
+    
+    
+    /////////////////////////////////////////
     // pull array of checkboxes (associated with menu items) from the cv_content_tree 
     // so that we can loop through them in order to determine what realtionships need to be added or deleted
     // Note that $menu_items is an array of Strings passed from cv_add_to_cohort_tree where each 
@@ -308,8 +250,6 @@ function cv_intercept_update($event, $type, $object)
 
 
     $rootdomain = elgg_get_site_url();
-//    var_dump(get_input('action'));
-//    exit;
     if (get_input('preview') || get_input('cancel'))
     {
         return true;
@@ -318,8 +258,6 @@ function cv_intercept_update($event, $type, $object)
 
     ElggSession::offsetSet('cvredirect', $cvredirect);
 }
-
-//::TODO:  Matt, I want to better understand why I had to do this
 
 /**
  * 
@@ -350,7 +288,7 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
     }
 
     $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-    if ($cv_cohort)  //::TODO: this is a test to fix an error that I got:Fatal error: Call to a member function getContainerGUID() on a non-object in /home/richsmit/public_html/mod/courseview/start.php on line 374
+    if ($cv_cohort)
     {
         $course = get_entity($cv_cohort->getContainerGUID());
         //if the course has been assigned a custom acl (stored in cv_acl) then add it to the list
@@ -402,14 +340,14 @@ function myplugin_sitemenu($hook, $type, $return, $params)
 function cv_new_content_intercept($hook, $type, $return, $params)
 {
     //$return.=$type;
-   
+
     $vars = $params['vars'];
     $user = elgg_get_logged_in_user_entity();
     //echo 'user:'.$user->name;
     $attributes = $vars->get_attributes;
     // $return .= $vars['full_view'];
     $entity = $vars['entity'];
-   // $visited = get_input ('visited');
+    // $visited = get_input ('visited');
     ///echo "visited".$visited[0];
 //    if (!isset(get_input('visited')))
 //    {
@@ -418,14 +356,13 @@ function cv_new_content_intercept($hook, $type, $return, $params)
 //    }
 // else
 //    {
-        //$visited = get_input ('visited');
+    //$visited = get_input ('visited');
 //    }
 
 
     if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)//   && !in_array($entity->guid, $visited))
     {
         $return = "<div class='newContent'>New!</div>" . $return;
-       
     }
 
     return $return;
@@ -436,21 +373,27 @@ function cv_intercept_newuser($event, $type, $params)
     
 }
 
+/**
+ * This elgg_register_entity_url_handler builds the url for when an action occurs on an object with a cvmenu subtype
+ * Had to do this because we may wish to delete a menu item.  If we do this, we want the previous menu item to become
+ * the 'active' item.
+ *
+ * @param $menu_entity - a menu object 
+ * 
+ * @return  returns the url for the action to load the next page
+ */
 function cv_menu_url_handler($menu_entity)
 {
 
-    // http://localhost/elgg/courseview/cv_contentpane/234/217
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-    $cvmenuguid = $menu_entity->guid;
+    echo $menu_entity->name;
+    echo $menu_entity->guid;
 
-    //check to see if the entity for this guid exists...if it doesn't, do a lookup for the previous menu item
-    //var_dump($menu_entity);
-    // exit;
+    $cvmenuguid = $menu_entity->guid;
+    echo $cvmenuguid;
+    //exit;
 
     return (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuguid");
-//var_dump ($menu_entity);
-//exit;
-//construct the url for the menu item and return....
 }
 
 /**
@@ -469,8 +412,8 @@ function cv_menu_url_handler($menu_entity)
  */
 function cv_can_write_to_container($hook, $type, $return, $params)
 {
-   
-    if (elgg_instanceof($params['container'], 'object','cvcourse'))
+
+    if (elgg_instanceof($params['container'], 'object', 'cvcourse'))
     {
         if (cv_isprof($params['user']))
         {

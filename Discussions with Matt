@@ -1,4 +1,11 @@
---i can't figure out how to set a input/submit to disabled
+--i can't figure out how to set an input/submit to disabled
+--add an extra set of checkboxes in settings page to allow profs to have separate list of available plugins from students...think 
+--setting up my other account
+--problem loading a jpg in navi
+--build panel around filtering and another around creating
+-- remove elgg type stuff in sidebar - make it setting adjustable
+--set up alternate courseview entry/exits and make them setting adjustable
+
 
 
 -- Problem (crash) when trying to add a cohort to a course that is owned by somebody else.

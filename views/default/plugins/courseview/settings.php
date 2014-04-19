@@ -13,18 +13,30 @@ $plugins =$regentitytypes['object'];
 
 $shortname = array();
 $pluginaddurl = array();
-$approvedlist = array();
-
+$studentapprovedlist = array();
+$profapprovedlist = array();
+/*Loop through each plugin and to see which plugins are approved for students and which for profs*/
 foreach ($plugins as $plugin)
 {
-    $menuitem = 'check' . $plugin;
-    echo '<div class=cvsettingsplugins>';
-    $checkoptions = array('name' => "params[$menuitem]", 'value' => 1);  //sends a 0 if the checkbox isn't checked
-    if ($vars['entity']->$menuitem == 1)
+    $studentitem = 'check' . $plugin;
+    $profitem ="prof".$plugin;
+    echo '<div class=cvsettingsplugins> Student';
+    $studentoptions = array('name' => "params[$studentitem]", 'value' => 1);  //sends a 0 if the checkbox isn't checked
+    if ($vars['entity']->$studentitem == 1)
     {
-        $checkoptions['checked'] = true;
+        $studentoptions['checked'] = true;
     }
-    echo elgg_view('input/checkbox', $checkoptions);
+    $profoptions = array('name' => "params[$profitem]", 'value' => 1);  //sends a 0 if the checkbox isn't checked
+    if ($vars['entity']->$profitem == 1)
+    {
+        $profoptions['checked'] = true;
+    }
+
+    echo elgg_view('input/checkbox', $studentoptions);
+       
+    echo '<br>Professor';
+    echo elgg_view ("input/checkbox", $profoptions);
+    
     echo $plugin;
     $pluginname = "createstring" . $plugin;
     $friendly = "friendly" . $plugin;
@@ -40,16 +52,25 @@ foreach ($plugins as $plugin)
         'name' => 'params[' . $pluginname . ']',
         'value' => $vars['entity']->$pluginname));
     echo'</div>';
-    if ($vars['entity']->$menuitem == 1)
+    if ($vars['entity']->$studentitem == 1)  //if the studentitem is checked
     {
         $pluginaddurl[$plugin] = $vars['entity']->$pluginname;
-        $approvedlist [$plugin] = $vars['entity']->$friendly;
+        $studentapprovedlist [$plugin] = $vars['entity']->$friendly;
+        $approved_subtype [$plugin]= $plugin;
+    }
+    if ($vars['entity']->$profitem==1)  //if the profitem is checked
+    {
+        $pluginaddurl[$plugin] = $vars['entity']->$pluginname;
+        $profapprovedlist [$plugin] = $vars['entity']->$friendly;
         $approved_subtype [$plugin]= $plugin;
     }
 }
-var_dump($approved_subtype);
+//var_dump ($studentapprovedlist);
+//var_dump($profapprovedlist);
+//var_dump($approved_subtype);
 
-elgg_set_plugin_setting('availableplugins', serialize($approvedlist), 'courseview');  //need to serialize arrays before putting in settings
+elgg_set_plugin_setting('availableplugins', serialize($studentapprovedlist), 'courseview');  //need to serialize arrays before putting in settings
+elgg_set_plugin_setting('profavailableplugins', serialize($profapprovedlist), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('plugincreatestring', serialize($pluginaddurl), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('approved_subtype', serialize($approved_subtype), 'courseview');  //need to serialize arrays before putting in settings
 

@@ -43,7 +43,7 @@ foreach ($content_items as $content_item)
 //        }
         //*Guessing that we don't really need a form here...
 //        echo '<form method="get" action=""' . current_page_url() . '">';
-        //echo'xxx';
+
         
         echo elgg_view('output/url', array(
             'text' => 'move up ',

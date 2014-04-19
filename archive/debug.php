@@ -4,7 +4,6 @@
  * A setup page...won't be part of the main program
  */
 
-//::TODO: Instead of having cvcourse = true and cvcohort = true...change it to cvObject = 'course' or 'cohort' or 'content' etc
  elgg_load_library('elgg:courseview');
 
 echo elgg_echo("<br>Rich's Testing Page<br>");

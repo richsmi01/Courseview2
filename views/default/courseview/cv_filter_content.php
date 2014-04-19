@@ -8,6 +8,9 @@ $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'cours
 $createString = str_replace('{url}', elgg_get_site_url(), $createString);
 $createString = str_replace('{user_guid}', elgg_get_logged_in_user_guid(), $createString);
 $createString = str_replace('{cohort_guid}', $cv_cohort_guid, $createString);
+$user = elgg_get_logged_in_user_entity();
+$create = get_input('create');
+$cvcohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
 //use json to allow the create string to be passed into the javascript below
 $json_create_string = json_encode($createString);
 ?>
@@ -37,11 +40,8 @@ $json_create_string = json_encode($createString);
 
 <?php
 
-$user = elgg_get_logged_in_user_entity();
-$create = get_input('create');
+$availableplugins = cv_get_valid_plugins($user);
 
-//create and populate a pulldown menu using the list of authorized plugins from the setup screen   
-$availableplugins = unserialize(elgg_get_plugin_setting('availableplugins', 'courseview'));  //pull down list of authorized plugin types
 while (array_search("", $availableplugins))
 {
     unset($availableplugins[array_search("", $availableplugins)]);
@@ -63,7 +63,6 @@ foreach ($availablecohorts as $availablecohort)
 }
 
 $cfilter = get_input('cohortfilter', $cv_cohort_guid);
-
 $numItems = $user->num_items;
 $sort_by = $user->sort_by;
 
@@ -82,7 +81,6 @@ if (get_entity($menuguid)->menutype == 'student')
         'onchange' => 'onChange(id, value)',
         'options_values' => $numItemsDrop));
 
-
     echo'<br>Filter by cohort:<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'cohortfilter',
@@ -90,7 +88,6 @@ if (get_entity($menuguid)->menutype == 'student')
         'id' => 'cohortDropDown',
         'onchange' => 'onChange(id, value)',
         'options_values' => $dropdownlist));
-
 
     echo "<br>Filter by type:<br>";
     echo elgg_view('input/dropdown', array(
@@ -113,7 +110,6 @@ if (get_entity($menuguid)->menutype == 'student')
 }
 
 
-$cvcohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
 if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menuguid)->menutype == 'student')
 {
     echo '<br>Create a:<br> ';
