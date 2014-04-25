@@ -106,9 +106,12 @@ function courseviewPageHandler($page, $identifier)
  */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
-    if (cv_hp())
+    echo ("cvcohort?".cv_is_cvcohort(page_owner_entity()));
+    $show_elgg_stuff = elgg_get_plugin_setting('show_elgg_stuff', 'courseview');
+    if ($show_elgg_stuff==0 && cv_is_cvcohort(page_owner_entity()))
     {
         $returnvalue = "";
+    
     }
 
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
@@ -164,7 +167,6 @@ function cv_leave_group($event, $type, $params)
     {
         return;
     }
-
     $cv_course = $cv_group->getContainerEntity();
     $cv_user = $params['user'];
     remove_user_from_access_collection($cv_user->guid, $cv_course->cv_acl);
@@ -193,9 +195,6 @@ function cv_intercept_update($event, $type, $object)
     /////////////////////////////Turn this thing into a function in the library
     $valid_plugin = cv_is_valid_plugin_by_keys ($user, $object);
    
-    
-    
-    /////////////////////////////////////////
     // pull array of checkboxes (associated with menu items) from the cv_content_tree 
     // so that we can loop through them in order to determine what realtionships need to be added or deleted
     // Note that $menu_items is an array of Strings passed from cv_add_to_cohort_tree where each 
@@ -247,7 +246,6 @@ function cv_intercept_update($event, $type, $object)
             }
         }
     }
-
 
     $rootdomain = elgg_get_site_url();
     if (get_input('preview') || get_input('cancel'))
@@ -318,6 +316,12 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
 function cv_register_courseview_menu()
 {
     $status = ElggSession::offsetGet('courseview');
+    $show_menu = elgg_get_plugin_setting('show_courseview_site_menu', 'courseview');
+    //echo "show_menu".$show_menu;
+    if($show_menu==0)
+    {
+        return;
+    }
     if ($status)
     {
         $menutext = "Exit CourseView";
@@ -337,34 +341,18 @@ function myplugin_sitemenu($hook, $type, $return, $params)
     return $returnValue;
 }
 
+//adds green NEW icon to new content
 function cv_new_content_intercept($hook, $type, $return, $params)
 {
-    //$return.=$type;
-
     $vars = $params['vars'];
     $user = elgg_get_logged_in_user_entity();
-    //echo 'user:'.$user->name;
     $attributes = $vars->get_attributes;
-    // $return .= $vars['full_view'];
     $entity = $vars['entity'];
-    // $visited = get_input ('visited');
-    ///echo "visited".$visited[0];
-//    if (!isset(get_input('visited')))
-//    {
-//        $visited = array();
-//        set_input ('visited', $visited);
-//    }
-// else
-//    {
-    //$visited = get_input ('visited');
-//    }
-
-
+ 
     if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)//   && !in_array($entity->guid, $visited))
     {
         $return = "<div class='newContent'>New!</div>" . $return;
     }
-
     return $return;
 }
 

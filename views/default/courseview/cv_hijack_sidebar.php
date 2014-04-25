@@ -12,6 +12,23 @@ $cv_home_url = elgg_get_site_url ().'courseview/courseview';
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
 
+
+$cv_mode = elgg_get_plugin_setting('display_cohorts_mode', 'courseview');
+
+if ($cv_mode=='current')
+{
+    if (cv_is_cvcohort(elgg_get_page_owner_entity()))
+    {
+        $cohorts = array (elgg_get_page_owner_entity());
+    }
+    else
+    {
+        $cohorts=null;
+    }
+    
+}
+
+
 //Begin building view
 echo "<h3><a href = '$cv_home_url'>CourseView</a></h3><br>";
 
@@ -25,6 +42,7 @@ $count = 0;
 foreach ($cohorts as $cohort)
 {
     $cv_cohort_guid = $cohort->guid;
+    
     $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
 
     //Here we are building the html of the treeview control and adding the correct css classes so that my css

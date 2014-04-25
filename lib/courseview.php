@@ -1,5 +1,18 @@
 <?php
 
+function cv_is_cvcohort ($group)
+{
+    //echo $group->name.$group->title;
+    if ($group->cvcohort)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 //this method grabs the courseview object and returns the profsgroup attribute which contains the guid of the profsgroup
 //function cv_get_profsgroup()
 //{
@@ -101,7 +114,6 @@ function cv_get_valid_plugins($user)
     }
     return$validplugins;
 }
-
 
 function cv_debug_edit ($guid, $subtype)
 {
@@ -328,44 +340,7 @@ function cv_is_valid_plugin($arg1)
     return (array_key_exists($arg1, $validplugins));
 }
 
-//function cv_debug_to_console($data)
-//{
-//
-//    if (is_array($data))
-//        $output = "<script>console.log( 'Debug Objects: " . implode(',', $data) . "' );</script>";
-//    else
-//        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
-//
-//    echo $output;
-//}
-//function cv_calc_relationship_string($menuitem)
-//{
-//
-//    //if the $menuitem is of type 'professor', the relationship string is simple 'content'
-//    $relationship = 'content';
-//    //however, if the $menuitem is not of type 'professor' (ie, of type 'student'), then we need to append the particulart  cohort to 'content'
-//    if (get_entity($menu_item_guid)->menutype != 'professor')
-//    {
-//        $relationship.= $cohort_guid;
-//    }
-//    return $relationship;
-//}
-//    echo elgg_entity_exists(elgg_get_plugin_setting('profsgroup','courseview'));
-//    //echo get_entity($profsgroup)->isMember($user);
-//    if(get_entity($profsgroup)->isMember($user))
-//    {
-//        return true;
-//    }
-//    else 
-//        {
-//        return false;
-//        }
-//   $profs =cv_get_profsgroup();
-//    
-//   if   (get_entity(cv_get_profsgroup())->isMember ($user))
-//    {
-//        return true;
-//    }
+
 
 function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono', $page_size = 10)
 {
@@ -434,37 +409,6 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
     return $content;
 }
 
-//function courseview_initialize()
-//{
-//just some learning stuff
-//  $courseview_object = elgg_get_entities(array('type' => 'object', 'subtype' => 'courseview'))[0];
-//echo elgg_echo ('coursetreexxx'.var_dump($courseview_object->coursetree));
-//   ElggSession::offsetSet('currentcourse', $courseview_object->coursetree);
-//echo 'courseview_object guid:  ' . $courseview_object->guid;
-//   $courseview_object->plugins = array('Hi Rich...It works!', 'blog', 'bookmark');
-//   $courseview_object->save;
-// echo '######'.$courseview_object->plugins[0];
-//if a CourseView Object doesn't exist, this must be the first time the plugin has run.  In that case,
-//we build a CourseView Object to track various things that our plugin needs.
-//    if (!$courseview_object)
-//    {
-//Since this is the first time that CourseView has run, we need to create a professor group
-//        $courseview_profsgroup = new ElggGroup();
-//        $courseview_profsgroup->subtype = 'group';
-//        $courseview_profsgroup->title = 'profsgroup';
-//        $courseview_profsgroup->name = 'profsgroup'; //just added this...should it be name or title?
-//        $courseview_profsgroup->save();
-//
-//        $courseview_object = new ElggObject();
-//        $courseview_object->subtype = "courseview";
-//        $courseview_object->access_id = 2;
-//        $courseview_object->save();
-//        $courseview_object->plugins = array('blog', 'bookmark');
-//        $courseview_object->profsgroup = $courseview_profsgroup->guid; //add the profsgroup guid to our courseview object.
-//        $courseview_object->save();
-//    }
-//    return $courseview_object->guid;
-//}
 
 function cv_is_list_page()
 {

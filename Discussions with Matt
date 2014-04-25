@@ -1,17 +1,26 @@
---i can't figure out how to set an input/submit to disabled
---add an extra set of checkboxes in settings page to allow profs to have separate list of available plugins from students...think 
+M- Why are elgg cohorts (groups) defaulting to closed?
+M-add icon to group view that uses ajax to add a create cohort view...
+            M-- How can I add a menuitem to the sidebar like the standard elgg stuff
+M-- How can I put a nag page for x number of seconds and lock the user from doing anything
+        X--add an extra set of checkboxes in settings page to allow profs to have separate list of available plugins from students... 
 --setting up my other account
---problem loading a jpg in navi
+M--problem loading a jpg in navi
+--transition navi to a plugin called signpost
 --build panel around filtering and another around creating
--- remove elgg type stuff in sidebar - make it setting adjustable
+        X-- remove elgg type stuff in sidebar - make it setting adjustable
 --set up alternate courseview entry/exits and make them setting adjustable
+M--can enter from menu item, can enter from group, can enter from sidebar if this group is in courseview
 
+        X--setting to allow only the current cohort menu items to appear instead of all of them
 
-
--- Problem (crash) when trying to add a cohort to a course that is owned by somebody else.
+        X-- Problem (crash) when trying to add a cohort to a course that is owned by somebody else.
 -- Build a button that will choose and open a random posting in the current module
 --add ability for new content to get cancelled after user visits content...use an array
    
+
+
+
+
         --when editing a poll and then clicking cancel, takes us to a can't find page
     --blog preview doesn't work
     --blog cancel doesn't work
