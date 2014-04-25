@@ -28,12 +28,12 @@ if ($cv_mode=='current')
     
 }
 
-
+echo "<div id = courseview_sidebar>";
 //Begin building view
-echo "<h3><a href = '$cv_home_url'>CourseView</a></h3><br>";
+echo "<h3><a href = '$cv_home_url'>CourseView</a></h3>";
 
 if (cv_is_list_page())
-{
+{ 
     echo elgg_view ('courseview/cv_filter_content');
 }
 $count = 0;
@@ -108,3 +108,4 @@ foreach ($cohorts as $cohort)
     echo elgg_echo('</div>');
 }
 echo '<br>';
+echo "</div>";

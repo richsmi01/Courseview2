@@ -20,7 +20,7 @@ foreach ($plugins as $plugin)
 {
     $studentitem = 'check' . $plugin;
     $profitem = "prof" . $plugin;
-    echo "<div class=cvsettingsplugins> $plugin <br> ";
+    echo "<div class=cvsettingsplugins><br><h3>$plugin </h3>";
     $studentoptions = array('name' => "params[$studentitem]", 'value' => 1);  //sends a 0 if the checkbox isn't checked
     if ($vars['entity']->$studentitem == 1)
     {
@@ -42,12 +42,9 @@ foreach ($plugins as $plugin)
     $friendly = "friendly" . $plugin;
     $object_subtype = "object" . $plugin;
 
-
     echo elgg_view('input/text', array(
         'name' => 'params[' . $friendly . ']',
         'value' => $vars['entity']->$friendly));
-
-
     echo elgg_view('input/text', array(
         'name' => 'params[' . $pluginname . ']',
         'value' => $vars['entity']->$pluginname));
@@ -65,25 +62,31 @@ foreach ($plugins as $plugin)
         $approved_subtype [$plugin] = $plugin;
     }
 }
-//var_dump ($studentapprovedlist);
-//var_dump($profapprovedlist);
-//var_dump($approved_subtype);
+
 
 elgg_set_plugin_setting('availableplugins', serialize($studentapprovedlist), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('profavailableplugins', serialize($profapprovedlist), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('plugincreatestring', serialize($pluginaddurl), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('approved_subtype', serialize($approved_subtype), 'courseview');  //need to serialize arrays before putting in settings
 
-echo "<br>Sidebar Options<br>";
+echo "<br><h3>Sidebar Options</h3><br>";
 echo "Displaying Cohorts within CourseView";
 echo elgg_view('input/radio', array(
     'name' => 'params[display_cohorts_mode]',
     'id' => 'display_cohorts_mode',
-    'options' => array('Display all cohorts' => 'all', 'Display only current Cohort' => 'current'),
+    'options' => array('Display all cohorts in CourseView cohort menu' => 'all', 'Display only current Cohort in CourseView cohort menu' => 'current'),
      'value' => $vars['entity']->display_cohorts_mode,
 ));
 elgg_set_plugin_setting('display_cohorts_mode', $vars['entity']->display_cohorts_mode, 'courseview'); 
-
+echo '<br>';
+echo elgg_view('input/radio', array(
+    'name' => 'params[menu_visibility]',
+    'id' => 'menu_visibility',
+    'options' => array('Display CourseView cohort menu always' => 'all', 'Display CourseView cohort menu only when in CourseView cohorts' => 'current'),
+     'value' => $vars['entity']->menu_visibility,
+));
+elgg_set_plugin_setting('display_cohorts_mode', $vars['entity']->menu_visibility, 'courseview'); 
+echo '<br>';
 $options=array(
     'name' => 'params[show_elgg_stuff]',
     'id' => 'show_elgg_stuff',

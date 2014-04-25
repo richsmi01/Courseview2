@@ -22,7 +22,12 @@ $cvcourse = get_entity($cvcourseguid);
     $cvcohort->save();
   
     $cvcohort->cvcohort = true;
-  
+    
+    
+    $cvcohort->membership=ACCESS_PUBLIC;
+    
+    
+    
     add_user_to_access_collection($user, $cvcohort->group_acl);
       
       //make the professor a member of the group (cohort)

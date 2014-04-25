@@ -65,7 +65,7 @@ foreach ($availablecohorts as $availablecohort)
 $cfilter = get_input('cohortfilter', $cv_cohort_guid);
 $numItems = $user->num_items;
 $sort_by = $user->sort_by;
-
+echo "<div id = courseview_sidebar_filter>";
 echo '<form id = "myform" method="get" action="' . current_page_url() . '">';
 if (get_entity($menuguid)->menutype == 'student')
 {
@@ -107,18 +107,21 @@ if (get_entity($menuguid)->menutype == 'student')
         'id' => 'sortDropDown',
         'onchange' => 'onChange(id, value)',
         'options_values' => $sort_dropdown));
+    echo "</div>";
 }
 
 
 if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menuguid)->menutype == 'student')
 {
-    echo '<br>Create a:<br> ';
+    echo "<div id = courseview_sidebar_create>";
+    echo 'Create a:<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'create',
         'id' => 'createDropDown',
         'value' => 'choose',
         'onchange' => 'onChange(id, value)',
         'options_values' => $createplugins));
+    echo "</div>";
 }
 
 echo '</form><br/>';

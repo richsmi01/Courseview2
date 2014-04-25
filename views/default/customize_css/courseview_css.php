@@ -8,6 +8,22 @@
  *
  */
 ?>
+
+#courseview_sidebar, #courseview_sidebar_filter, #courseview_sidebar_create
+{
+border:black 2px ridge;
+padding: 5px;
+/*background-color:lightgray;*/
+}
+
+#courseview_sidebar_filter, #courseview_sidebar_create
+{
+    padding-top: 5px;
+    margin: 4px 0px;
+    
+}
+
+
 .elgg-page-body{
 margin-top: 115px;
 }
@@ -54,7 +70,7 @@ background:white;
     transform: rotate(-30deg);
     -ms-transform: rotate(-30deg);
     font-weight: bold;
-    position:absolute;
+    position:relative;
     top:0px;
     left:-6px;
 

@@ -11,11 +11,17 @@ function courseviewInit()
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
+    elgg_load_js('lightbox');
+    elgg_load_css('lightbox');
     elgg_register_simplecache_view('js/courseview/js');
 
     //::TODO:Matt This is no longer important, correct?
     $jsurl = elgg_get_simplecache_url('js', 'courseview/js');
     elgg_register_js('cv_sidebar_js', $jsurl);
+    elgg_register_ajax_view ('courseview/make_group_a_cohort');
+    elgg_register_ajax_view ('courseview/remove_group_from_cohort');
+    elgg_extend_view ('js/elgg','courseview/group_js');
+    
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
@@ -43,6 +49,9 @@ function courseviewInit()
         //turn on courseview
         ElggSession::offsetSet('courseview', true);
     }
+    
+    
+    elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
 
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
@@ -91,6 +100,31 @@ function courseviewPageHandler($page, $identifier)
             echo "courseview request for " . $page[0];
     }
     return true;
+}
+
+
+function cv_group_buttons ($hook, $type, $return, $params)
+{
+    if (! elgg_instanceof($params['entity'],'group'))
+    {
+        return $return;
+    }
+    
+    if (cv_is_cvcohort($params['entity']))
+    {
+        $link = new ElggMenuItem('cv_group_button', 'remove link to CourseView', "ajax/view/courseview/remove_group_from_cohort?guid={$params['entity']->guid}");
+        $link->addLinkClass ("cv_remove_group_from_cohort");
+        $link->addLinkClass ('elgg-lightbox');
+        $return[]= $link;     
+    }
+    else
+    {
+        $link = new ElggMenuItem('cv_group_button', 'link to CourseView',"ajax/view/courseview/make_group_a_cohort?guid={$params['entity']->guid}");
+        $link->addLinkClass ("cv_add_to_cohort");
+        $link->addLinkClass ('elgg-lightbox');
+        $return[]= $link;     
+    }
+    return $return;
 }
 
 /**
