@@ -2,6 +2,8 @@
 
 <?php
 
+
+
 elgg_load_js ('cv_sidebar_js');
 $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
@@ -28,16 +30,33 @@ if ($cv_mode=='current')
     
 }
 
+//echo "<h3><a href = '$cv_home_url'>CourseView</a></h3>";
+
+echo elgg_view_form('cv_menu_toggle');
+
+$status = ElggSession::offsetGet('courseview');
+if ($status==false)
+{
+    return;
+}
 echo "<div id = courseview_sidebar>";
 //Begin building view
-echo "<h3><a href = '$cv_home_url'>CourseView</a></h3>";
+
+if ($cohorts==null)
+{
+    echo "<p id = 'cv_center'>No cohort selected</p>";
+    echo "</div>";
+    return;
+}
 
 if (cv_is_list_page())
 { 
     echo elgg_view ('courseview/cv_filter_content');
 }
-$count = 0;
 
+
+$count = 0;
+echo "<div id = courseview_sidebar_menu>";
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)
 {
@@ -105,7 +124,8 @@ foreach ($cohorts as $cohort)
                 . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
         }
     }
-    echo elgg_echo('</div>');
+    echo '</div>';
 }
-echo '<br>';
+echo'</div>';
+//echo '<br>';
 echo "</div>";

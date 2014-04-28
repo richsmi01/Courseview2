@@ -67,7 +67,7 @@ if (cv_isprof($cvuser))
             $name = $menuitem->name;
             $relationship = cv_build_relationship($menuitem, $cv_cohort_guid);
             $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cv_cohort_guid);
-            echo buildindentstring($menuitem, $indentlevel);
+            echo cv_buildindent_string($menuitem, $indentlevel);
             $indentlevel = $menuitem->indent;
             $value = $menuitem->guid . "|" . $cv_cohort_guid;
             if ($menuitem->menutype == "folder")
@@ -138,7 +138,7 @@ foreach ($cohorts as $cohort)
         $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cv_cohort_guid);
 
         //figure out whether this item should be indented, outdented or stay the same.
-        echo buildindentstring($menuitem, $indentlevel);
+        echo cv_buildindent_string($menuitem, $indentlevel);
         //now we set indent level to the current menu item indent level so that we can check against it on the next iteration
         $indentlevel = $menuitem->indent;
 
@@ -159,7 +159,7 @@ foreach ($cohorts as $cohort)
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         elseif ($menuitem->menutype == 'professor')// && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
         {
-            echo "<p class ='indent  disabled'>$name.</p>";
+            echo "<div>$name</div>";
         } else
         {
             /* Note that the value that we are passing to the checkboxes is a String -- each String  contains three pieces 

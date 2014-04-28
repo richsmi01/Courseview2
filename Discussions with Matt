@@ -1,4 +1,9 @@
-        M- Why are elgg cohorts (groups) defaulting to closed?
+M - When exiting CourseView, I want to go to the activity page or the landing page or whatever 
+
+M- Can't seem to apply css to the settings page?     
+M - What happens when two different computers try to log into the same account at the same time?
+
+  M- Why are elgg cohorts (groups) defaulting to closed?
 M-add icon to group view that uses ajax to add a create cohort view...
             M-- How can I add a menuitem to the sidebar like the standard elgg stuff
 M-- How can I put a nag page for x number of seconds and lock the user from doing anything

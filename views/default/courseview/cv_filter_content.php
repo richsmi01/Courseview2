@@ -48,7 +48,7 @@ while (array_search("", $availableplugins))
 }
 
 $createplugins = $availableplugins;
-$createplugins ['choose'] = 'Choose a content type';
+$createplugins ['choose'] = 'Choose a posting type';
 
 $availableplugins['all'] = 'All Content Types';  //add the ability for the student to select all content
 //this will remove any 'empty' choices such as is caused by the Page vs PageTop of the wiki plugin
@@ -65,10 +65,11 @@ foreach ($availablecohorts as $availablecohort)
 $cfilter = get_input('cohortfilter', $cv_cohort_guid);
 $numItems = $user->num_items;
 $sort_by = $user->sort_by;
-echo "<div id = courseview_sidebar_filter>";
+
 echo '<form id = "myform" method="get" action="' . current_page_url() . '">';
 if (get_entity($menuguid)->menutype == 'student')
 {
+    echo "<div id = courseview_sidebar_filter>";
     $numItemsDrop = array();
     $numItemsDrop ['4'] = '4';
     $numItemsDrop ['10'] = '10';
@@ -114,7 +115,7 @@ if (get_entity($menuguid)->menutype == 'student')
 if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menuguid)->menutype == 'student')
 {
     echo "<div id = courseview_sidebar_create>";
-    echo 'Create a:<br> ';
+    echo 'Create a posting:<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'create',
         'id' => 'createDropDown',
@@ -124,5 +125,5 @@ if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menu
     echo "</div>";
 }
 
-echo '</form><br/>';
+echo '</form>';
 

@@ -56,7 +56,7 @@ function setCheckStatus($menuitem, $rel, $current_content_entity, $cvmenuguid, $
     return $checkoptions;
 }
 
-function buildindentstring($menuitem, $indentlevel)
+function cv_buildindent_string($menuitem, $indentlevel)
 {
     $returnhtml = "";
     if ($menuitem->indent > $indentlevel)

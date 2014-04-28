@@ -18,10 +18,10 @@ function courseviewInit()
     //::TODO:Matt This is no longer important, correct?
     $jsurl = elgg_get_simplecache_url('js', 'courseview/js');
     elgg_register_js('cv_sidebar_js', $jsurl);
-    elgg_register_ajax_view ('courseview/make_group_a_cohort');
-    elgg_register_ajax_view ('courseview/remove_group_from_cohort');
-    elgg_extend_view ('js/elgg','courseview/group_js');
-    
+    elgg_register_ajax_view('courseview/make_group_a_cohort');
+    elgg_register_ajax_view('courseview/remove_group_from_cohort');
+    elgg_extend_view('js/elgg', 'courseview/group_js');
+
     elgg_load_library('elgg:courseview');
     elgg_load_library('elgg:cv_debug');
 
@@ -39,7 +39,19 @@ function courseviewInit()
 
     //set up our link to css rulesets
     elgg_extend_view('css/elgg', 'customize_css/courseview_css', 1000);
-
+    
+    
+    if (elgg_get_plugin_setting('cv_animated_header', 'courseview'))
+    {
+        elgg_extend_view('css/elgg', 'customize_css/cv_header_animation', 1001);
+    }
+    
+    
+    if (elgg_get_plugin_setting('cv_animated_menuitem', 'courseview'))
+    {
+        elgg_extend_view('css/elgg', 'customize_css/cv_menuitems_animation', 1001);
+    }
+   // 
     //just a little sneaky thing that I'll remove later on -- allows me to test hp functionality
     if (cv_hp())
     {
@@ -49,8 +61,8 @@ function courseviewInit()
         //turn on courseview
         ElggSession::offsetSet('courseview', true);
     }
-    
-    
+
+
     elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
 
     //register menu item to switch to CourseView
@@ -61,7 +73,6 @@ function courseviewInit()
     // $plugins = $regentitytypes['object'];
     //::TODO:Matt - Would you move this to a function?
     cv_register_hooks_events_actions(dirname(__FILE__));  //register all hooks and stuff, passing the current directory of this file
-
     // push the  cohort guid and menu guid into the session
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
@@ -70,6 +81,8 @@ function courseviewInit()
 //this method gets called when one of the courseview urls is called.  
 function courseviewPageHandler($page, $identifier)
 {
+    // define("CV_GUID",   true);
+    // echo CV_GUID;
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
     gatekeeper();  //gatekeeper ensures that user is authorized to view page
     $base_path = dirname(__FILE__);
@@ -102,27 +115,34 @@ function courseviewPageHandler($page, $identifier)
     return true;
 }
 
-
-function cv_group_buttons ($hook, $type, $return, $params)
+function cv_group_buttons($hook, $type, $return, $params)
 {
-    if (! elgg_instanceof($params['entity'],'group'))
+    if (!elgg_instanceof($params['entity'], 'group'))
     {
         return $return;
     }
-    
+
     if (cv_is_cvcohort($params['entity']))
     {
-        $link = new ElggMenuItem('cv_group_button', 'remove link to CourseView', "ajax/view/courseview/remove_group_from_cohort?guid={$params['entity']->guid}");
-        $link->addLinkClass ("cv_remove_group_from_cohort");
-        $link->addLinkClass ('elgg-lightbox');
-        $return[]= $link;     
-    }
-    else
+        if (cv_is_admin(cv_get_current_user(CV_ENTITY)))
+        {
+            $link = new ElggMenuItem('cv_group_button', 'remove link to CourseView', "ajax/view/courseview/remove_group_from_cohort?guid={$params['entity']->guid}");
+            $link->addLinkClass("cv_remove_group_from_cohort");
+            $link->addLinkClass('elgg-lightbox');
+            $return[] = $link;
+        } 
+        else
+        {
+            $link = new ElggMenuItem('cv_button', 'CV Enabled!', "");
+            $link->addLinkClass("cv_enabled");
+            $return[] = $link;
+        }
+    } else if (cv_is_admin(cv_get_current_user(CV_ENTITY)))
     {
-        $link = new ElggMenuItem('cv_group_button', 'link to CourseView',"ajax/view/courseview/make_group_a_cohort?guid={$params['entity']->guid}");
-        $link->addLinkClass ("cv_add_to_cohort");
-        $link->addLinkClass ('elgg-lightbox');
-        $return[]= $link;     
+        $link = new ElggMenuItem('cv_group_button', 'link to CourseView', "ajax/view/courseview/make_group_a_cohort?guid={$params['entity']->guid}");
+        $link->addLinkClass("cv_add_to_cohort");
+        $link->addLinkClass('elgg-lightbox');
+        $return[] = $link;
     }
     return $return;
 }
@@ -140,17 +160,21 @@ function cv_group_buttons ($hook, $type, $return, $params)
  */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
-    echo ("cvcohort?".cv_is_cvcohort(page_owner_entity()));
+    //echo ("cvcohort?".cv_is_cvcohort(page_owner_entity()));
+    
     $show_elgg_stuff = elgg_get_plugin_setting('show_elgg_stuff', 'courseview');
-    if ($show_elgg_stuff==0 && cv_is_cvcohort(page_owner_entity()))
+   
+    if ($show_elgg_stuff == 0 && cv_is_cvcohort(page_owner_entity()))
     {
         $returnvalue = "";
-    
     }
 
+    $menu_visibility = elgg_get_plugin_setting('menu_visibility', 'courseview');
+    //echo $menu_visibility;
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
-    if (ElggSession::offsetGet('courseview'))
+    if ((ElggSession::offsetGet('courseview') && $menu_visibility == 'always') || cv_is_cvcohort(page_owner_entity()))
     {
+        //echo ' here!';
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
     }
     return $returnvalue;
@@ -224,11 +248,11 @@ function cv_intercept_update($event, $type, $object)
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $user = elgg_get_logged_in_user_entity();
-    
+
     //::TODO:Matt - I'd like to turn this into a function in the library...what do you think of this?
     /////////////////////////////Turn this thing into a function in the library
-    $valid_plugin = cv_is_valid_plugin_by_keys ($user, $object);
-   
+    $valid_plugin = cv_is_valid_plugin_by_keys($user, $object);
+
     // pull array of checkboxes (associated with menu items) from the cv_content_tree 
     // so that we can loop through them in order to determine what realtionships need to be added or deleted
     // Note that $menu_items is an array of Strings passed from cv_add_to_cohort_tree where each 
@@ -350,9 +374,9 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
 function cv_register_courseview_menu()
 {
     $status = ElggSession::offsetGet('courseview');
-    $show_menu = elgg_get_plugin_setting('show_courseview_site_menu', 'courseview');
+    $show_menu = elgg_get_plugin_setting('show_courseview_site_activation', 'courseview');
     //echo "show_menu".$show_menu;
-    if($show_menu==0)
+    if ($show_menu == 0)
     {
         return;
     }
@@ -382,7 +406,7 @@ function cv_new_content_intercept($hook, $type, $return, $params)
     $user = elgg_get_logged_in_user_entity();
     $attributes = $vars->get_attributes;
     $entity = $vars['entity'];
- 
+
     if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)//   && !in_array($entity->guid, $visited))
     {
         $return = "<div class='newContent'>New!</div>" . $return;

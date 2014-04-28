@@ -1,5 +1,26 @@
 <?php
 
+define ("CV_GUID",  true);
+define ("CV_ENTITY", false);
+
+function cv_is_admin ($user)
+{
+    return $user->isAdmin();
+}
+
+function cv_get_current_user ($return_type = CV_GUID)
+{
+    if ($return_type)
+    {
+        return elgg_get_logged_in_user_guid();
+    }
+    else
+    {
+        return elgg_get_logged_in_user_entity();
+    }
+}
+
+
 function cv_is_cvcohort ($group)
 {
     //echo $group->name.$group->title;
@@ -99,7 +120,8 @@ function cv_register_hooks_events_actions ($base_path)
     elgg_register_action('cv_add_menu_item', $base_path . '/actions/courseview/cv_add_menu_item.php'); 
     elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
     elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');
-
+    elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_menu_toggle.php');  
+    elgg_register_action('cv_remove_cohort', $base_path . '/actions/courseview/cv_remove_cohort.php');
 }
 
 function cv_get_valid_plugins($user)
@@ -340,8 +362,6 @@ function cv_is_valid_plugin($arg1)
     return (array_key_exists($arg1, $validplugins));
 }
 
-
-
 function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono', $page_size = 10)
 {
 
@@ -408,7 +428,6 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
     }
     return $content;
 }
-
 
 function cv_is_list_page()
 {

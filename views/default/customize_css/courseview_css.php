@@ -9,9 +9,44 @@
  */
 ?>
 
-#courseview_sidebar, #courseview_sidebar_filter, #courseview_sidebar_create
+#cv_title
 {
-border:black 2px ridge;
+font-weight:bold;
+text-align: center;
+color:blue;
+text-shadow:grey 1px 1px 1px;
+font-size=150%;
+}
+
+.cv_enabled
+{
+color:darkgreen  !important;
+font-weight: bold !important;
+}
+
+#cv_center
+{
+    text-align: center;
+    padding:0px;
+    display:block;
+    margin:auto;
+}
+
+#menutogglebutton{
+margin:auto;
+display:block;
+}
+
+
+cv_settings
+{
+color:blue;
+}
+
+
+#courseview_sidebar, #courseview_sidebar_filter, #courseview_sidebar_create, #courseview_sidebar_menu
+{
+border:grey 2px ridge;
 padding: 5px;
 /*background-color:lightgray;*/
 }
@@ -23,24 +58,6 @@ padding: 5px;
     
 }
 
-
-.elgg-page-body{
-margin-top: 115px;
-}
-.elgg-page-header {
-    position:fixed;
-    z-index:100;
-    top:25px;
-    width:100%;
-    border-bottom: 1px  black solid;
-    border-top:1px black solid;
-}
- .elgg-page-topbar{
-    position:fixed;
-    z-index:101;
-    top:0px;
-    width:100%;
-}
 
 
 
@@ -108,225 +125,6 @@ body {
 padding-left:15px;
 margin-top: 8px;
 display:block;
-}
-
-.sky {
-    height:480px;
-    background:#007fd5;
-    position:relative;
-    overflow:hidden;
-    -webkit-animation:sky_background 70s ease-out infinite;
-    -moz-animation:sky_background 70s ease-out infinite;
-    -o-animation:sky_background 70s ease-out infinite;
-    -webkit-transform:translate3d(0,0,0);
-    -moz-transform:translate3d(0,0,0);
-    -o-transform:translate3d(0,0,0)
-}
-
-
-.moon {
-    background:url("http://montanaflynn.me/lab/css-clouds/images/moon.png");
-    position:absolute;
-    left:0;
-    height:100%;
-    width:300%;
-    -webkit-animation:moon 70s linear infinite;
-    -moz-animation:moon 70s linear infinite;
-    -o-animation:moon 70s linear infinite;
-    -webkit-transform:translate3d(0,0,0);
-    -moz-transform:translate3d(0,0,0);
-    -o-transform:translate3d(0,0,0)
-}
-
-
-#cvcloud1 {
-    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_onea.png) ;
-    position:absolute;
-    left:0;
-    top:0;
-    height:100%;
-   // overflow:hidden;
-    width:300%;
-    -webkit-animation:cloud_one 70s linear infinite;
-    -moz-animation:cloud_one 70s linear infinite;
-    -o-animation:cloud_one 70s linear infinite;
-    -webkit-transform:translate3d(0,0,0);
-    -moz-transform:translate3d(0,0,0);
-    -o-transform:translate3d(0,0,0)
-}
-
-#cvcloud2 {
-    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_twoa.png) ;
-    position:absolute;
-    left:0;
-    top:0;
-    height:100%;
-    width:300%;
-   // overflow:hidden;
-    -webkit-animation:cloud_two 95s linear infinite;
-    -moz-animation:cloud_two 95s linear infinite;
-    -o-animation:cloud_two 95s linear infinite;
-    -webkit-transform:translate3d(0,0,0);
-    -moz-transform:translate3d(0,0,0);
-    -o-transform:translate3d(0,0,0)
-}
-
-#cvcloud3 {
-    background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/cloud_threea.png) ;
-    position:absolute;
-    left:0;
-    top:0;
-    height:100%;
-   // overflow:hidden;
-    width:300%;
-    -webkit-animation:cloud_three 120s linear infinite;
-    -moz-animation:cloud_three 120s linear infinite;
-    -o-animation:cloud_three 120s linear infinite;
-    -webkit-transform:translate3d(0,0,0);
-    -moz-transform:translate3d(0,0,0);
-    -o-transform:translate3d(0,0,0)
-}
-
-@-webkit-keyframes sky_background {
-    0% {
-        background:#007fd5;
-        color:#007fd5
-    }
-
-    50% {
-        background:#000;
-        color:#a3d9ff
-    }
-
-    100% {
-        background:#007fd5;
-        color:#007fd5
-    }
-}
-
-@-webkit-keyframes moon {
-    0% {
-        opacity: 0;
-        left:-200%;
-            -moz-transform: scale(0.5);
-        -webkit-transform: scale(0.5);
-    }
-
-    50% {
-        opacity: 1;
-        -moz-transform: scale(1);
-        left:0%;
-            bottom: 250px;
-        -webkit-transform: scale(1);
-    }
-
-    100% {
-        opacity: 0;
-        bottom:500px;
-        -moz-transform: scale(0.5);
-        -webkit-transform: scale(0.5);
-    }
-}
-
-@-webkit-keyframes cloud_one {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
-}
-
-@-webkit-keyframes cloud_two {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
-}
-
-@-webkit-keyframes cloud_three {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
-}
-
-@-moz-keyframes sky_background {
-    0% {
-        background:#007fd5;
-        color:#007fd5
-    }
-
-    50% {
-        background:#000;
-        color:#a3d9ff
-    }
-
-    100% {
-        background:#007fd5;
-        color:#007fd5
-    }
-}
-
-@-moz-keyframes moon {
-    0% {
-        opacity: 0;
-        left:-200%
-            -moz-transform: scale(0.5);
-        -webkit-transform: scale(0.5);
-    }
-
-    50% {
-        opacity: 1;
-        -moz-transform: scale(1);
-        left:0%
-            bottom:250px;
-        -webkit-transform: scale(1);
-    }
-
-    100% {
-        opacity: 0;
-        bottom:500px;
-        -moz-transform: scale(0.5);
-        -webkit-transform: scale(0.5);
-    }
-}
-
-@-moz-keyframes cloud_one {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
-}
-
-@-moz-keyframes cloud_two {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
-}
-
-@-moz-keyframes cloud_three {
-    0% {
-        left:0
-    }
-
-    100% {
-        left:-200%
-    }
 }
 
 
@@ -397,7 +195,7 @@ text-decoration: none;
 }
 /*I added this to make branch nodes push in a little bit--Rich.*/
 .css-treeview  .indent {
-margin-left: 10px;
+margin-left: 15px;
 }
 
 .css-treeview a:hover
@@ -538,9 +336,8 @@ color:grey;
 font-style:italic;
 }
 
-.uparrowcontainer, downarrowcontainer {
-}
 
+/* can probably be deleted*/
 .uparrow {
     height:15px;
     width: 15px;
@@ -559,7 +356,7 @@ font-style:italic;
     background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/downarrow.png);
     background-height:15px;
 }
-
+*/
 #cvfolderdescription {
 font-size: 400%;
 text-align:center;
@@ -567,24 +364,6 @@ text-align:center;
 position:relative;
 }
 
-#menuitem {
-
--webkit-animation: flyin 1s ease-in;
-position:relative;
-
-text-shadow: 0 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-}
 
 .cvminiview 
 {
@@ -830,7 +609,7 @@ background-color:rgba(192,192,192,0.1);
 border: solid 1px;
 margin:4px;
 box-shadow: black 2px 2px 2px;
--webkit-animation: zoom .5s  ease-in ;
+
 position:relative;
 }
 
@@ -924,3 +703,4 @@ padding:0px 3px 0px 16px;
 
 padding-bottom: 5px;
 }
+

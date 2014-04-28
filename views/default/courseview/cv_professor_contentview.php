@@ -27,6 +27,7 @@ $content_items = elgg_get_entities_from_relationship(array(
 
 foreach ($content_items as $content_item)
 {
+    //echo ('got here!'.$content_item->name);
     $sort_order = $content_item->sort_order;
     $my_guid = $content_item->guid;
   //  echo "guid: ".$my_guid;

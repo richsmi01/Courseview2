@@ -28,7 +28,8 @@ $num_items =get_input('numItems',$user->num_items);
 $sort_by=get_input ('sortby',$user->sort_by);
 $user->num_items = $num_items;
 $user->sort_by = $sort_by;
-
+//echo '###';
+//var_dump($user);
 //echo $num_items.'---'.$sort_by;
 $content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship,true,$sort_by,$num_items);  
 echo $content_items;
