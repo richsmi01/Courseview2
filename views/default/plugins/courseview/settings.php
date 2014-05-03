@@ -33,18 +33,19 @@ foreach ($plugins as $plugin)
     }
 
     echo elgg_view('input/checkbox', $studentoptions);
-    echo ' Student<br>';
+    echo ' Allow students access to this plugin<br>';
     
     echo elgg_view("input/checkbox", $profoptions);
-    echo ' Professor<br>';
-   
+    echo ' Allow professors access to this plugin<br>';
+   echo 'Friendly Name:';
     $pluginname = "createstring" . $plugin;
     $friendly = "friendly" . $plugin;
     $object_subtype = "object" . $plugin;
-
+ 
     echo elgg_view('input/text', array(
         'name' => 'params[' . $friendly . ']',
         'value' => $vars['entity']->$friendly));
+       echo 'Create String for object:';
     echo elgg_view('input/text', array(
         'name' => 'params[' . $pluginname . ']',
         'value' => $vars['entity']->$pluginname));
@@ -98,7 +99,7 @@ echo elgg_view('input/checkbox', $options);
 echo "Show CourseView activation menu item on sidebar. ";
 elgg_set_plugin_setting('show_courseview_sidebar_activation', $vars['entity']->show_courseview_sidebar_activation, 'courseview'); 
 
-echo "<br><br><h3>Sidebar Options</h3><br>";
+echo "<br><br><h3>Sidebar Options:</h3>";
 echo "Displaying Cohorts within CourseView";
 echo elgg_view('input/radio', array(
     'name' => 'params[display_cohorts_mode]',
@@ -133,7 +134,7 @@ elgg_set_plugin_setting('show_elgg_stuff', $vars['entity']->show_elgg_stuff, 'co
 
 
 
-echo "<br><br><h3>Default Cohort (Group)</h3>";
+echo "<br><br><h3>Default Cohort (Group):</h3>";
 echo "CourseView can automatically sign new users up to a particular cohort...Please enter the GUID of this cohort<br>";
 echo "Cohort GUID:";
 echo elgg_view('input/text', array(
@@ -141,10 +142,10 @@ echo elgg_view('input/text', array(
     'value' => $vars['entity']->defaultCohort,
     'disabled' => false));
 
-echo "<br><br><h3> Page Layout</h3>";
-echo "Maximize screen area?<br>Sidebar to left?<br>";
-echo "<br><br><h3>Asthetics</h3>";
+//echo "<br><br><h3> Page Layout</h3>";
+//echo "Maximize screen area?<br>Sidebar to left?<br>";
 
+echo "<br><br><h3>Asthetics</h3>";
 $options=array(
     'name' => 'params[cv_animated_header]',
     'id' => 'cv_animated_header',
@@ -175,8 +176,21 @@ echo elgg_view('input/checkbox', $options);
 elgg_set_plugin_setting('cv_animated_menuitem', $vars['entity']->cv_animated_menuitem, 'courseview'); 
 echo "Animated listview?<br>";
 
-echo "<br>Sidebar to left?<br>";
+
 
 echo "<br><h3>Content</h3><br>";
+$options=array(
+    'name' => 'params[flag_new_content]',
+    'id' => 'flag_new_content',
+    'options' => array('flag_new_content' => 1),
+     'value' => 1,
+);
+ if ($vars['entity']->flag_new_content == 1)
+    {
+        $options['checked'] = true;
+    }
+echo elgg_view('input/checkbox', $options);
+
+elgg_set_plugin_setting('flag_new_content', $vars['entity']->flag_new_content, 'courseview'); 
 echo "Show new content tags on content created since last login";
 echo "</div>";

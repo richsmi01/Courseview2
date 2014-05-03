@@ -406,8 +406,8 @@ function cv_new_content_intercept($hook, $type, $return, $params)
     $user = elgg_get_logged_in_user_entity();
     $attributes = $vars->get_attributes;
     $entity = $vars['entity'];
-
-    if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false)//   && !in_array($entity->guid, $visited))
+    $show_new_content = elgg_get_plugin_setting('flag_new_content', 'courseview');
+    if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false && $show_new_content)//   && !in_array($entity->guid, $visited))
     {
         $return = "<div class='newContent'>New!</div>" . $return;
     }
