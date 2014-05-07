@@ -20,18 +20,30 @@ function cv_get_current_user ($return_type = CV_GUID)
     }
 }
 
-
-function cv_is_cvcohort ($group)
+function cv_user_is_member_of_cohort ($cohort)
 {
-    //echo $group->name.$group->title;
-    if ($group->cvcohort)
-    {
-        return true;
-    }
-    else
+    if (!isset($cohort->cvcohort)) //if the entity passed was not a cohort
     {
         return false;
     }
+    $user = cv_get_current_user(CV_ENTITY);
+    
+    if (cv_is_cvcohort($cohort))
+    {
+    return $cohort->isMember ($user);
+    }
+    else 
+    {
+        return false;
+    }
+}
+
+
+
+function cv_is_cvcohort ($group)
+{
+    return $group->cvcohort;
+//    
 }
 
 //this method grabs the courseview object and returns the profsgroup attribute which contains the guid of the profsgroup
@@ -69,6 +81,10 @@ function cv_register_hooks_events_actions ($base_path)
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
     // that we can add our tree menu
     elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cv_sidebar_intercept');
+    
+    
+    elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
+    
 
     /* allows us to intercept each time elgg calls a forward.  We will use this to be able to return to the coursview 
      * tool after adding a relationship to added content */
