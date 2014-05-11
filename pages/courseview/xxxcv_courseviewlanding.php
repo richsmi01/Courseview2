@@ -1,5 +1,5 @@
 <?php
-elgg_load_library('elgg:cv_debug');
+
 
 $user = elgg_get_logged_in_user_entity();
 $params = array('name' => $user->name);

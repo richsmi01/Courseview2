@@ -1,9 +1,8 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* *
+ * Toggles the courseview session variable to true (CourseView activated)
+ * or false (CourseView not active)
  */
 $status = ElggSession::offsetGet('courseview');
 if ($status)

@@ -1,7 +1,20 @@
-M - When exiting CourseView, I want to go to the activity page or the landing page or whatever 
+M - How does the whole language stuff work?
 
-M- Can't seem to apply css to the settings page?     
-M - What happens when two different computers try to log into the same account at the same time?
+
+
+
+        M - When exiting CourseView, I want to go to the activity page or the landing page or whatever 
+        M - Passing associative array to function
+        M - What happens when two different computers try to log into the same account at the same time?
+        M-- How can I put a nag page for x number of seconds and lock the user from doing anything? - maybe lightbox?
+        M - Need a query for all content in a group that doesn't have a relationship to a menu item.
+        M - The view cohort menu should only show up if the group is a cohort AND the user is a memeber!
+M - Rework navi and add jpg flashcards
+M - Set up ZenOfProgramming.com
+        M - AutoAdd user to group
+
+R - Test all aspects of CourseView
+    M- Can't seem to apply css to the settings page?     
 
         M- Why are elgg cohorts (groups) defaulting to closed?
         M-add icon to group view that uses ajax to add a create cohort view...

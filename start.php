@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Write something profound here...
  */
@@ -10,7 +9,7 @@ function courseviewInit()
     ElggSession::offsetSet('cv_hp', false);
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
-    elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
+   // elgg_register_library('elgg:cv_debug', elgg_get_plugins_path() . 'courseview/lib/cv_debug.php');
     elgg_load_js('lightbox');
     elgg_load_css('lightbox');
     elgg_register_simplecache_view('js/courseview/js');
@@ -23,7 +22,7 @@ function courseviewInit()
     elgg_extend_view('js/elgg', 'courseview/group_js');
 
     elgg_load_library('elgg:courseview');
-    elgg_load_library('elgg:cv_debug');
+    //elgg_load_library('elgg:cv_debug');
 
     // Ensure that there is a logged in user before allowing access to page
     if (!elgg_get_logged_in_user_entity())
@@ -61,9 +60,6 @@ function courseviewInit()
         //turn on courseview
         ElggSession::offsetSet('courseview', true);
     }
-
-
-    elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
 
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
@@ -160,21 +156,18 @@ function cv_group_buttons($hook, $type, $return, $params)
  */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
-    //echo ("cvcohort?".cv_is_cvcohort(page_owner_entity()));
-    
     $show_elgg_stuff = elgg_get_plugin_setting('show_elgg_stuff', 'courseview');
    
-    if ($show_elgg_stuff == 0 && cv_is_cvcohort(page_owner_entity()))
+    if ($show_elgg_stuff == 0 && cv_is_cvcohort(page_owner_entity()))  //if don't show elgg stuff is selected in settings
     {
         $returnvalue = "";
     }
-
     $menu_visibility = elgg_get_plugin_setting('menu_visibility', 'courseview');
-    //echo $menu_visibility;
+    $user_is_member_of_cohort = cv_user_is_member_of_cohort (page_owner_entity());
     //here we check to see if we are currently in courseview mode.  If we are, we hijack the sidebar for our course menu
-    if ((ElggSession::offsetGet('courseview') && $menu_visibility == 'always') || cv_is_cvcohort(page_owner_entity()))
+    //if ((ElggSession::offsetGet('courseview') && $menu_visibility == 'always') || cv_is_cvcohort(page_owner_entity()))
+        if ((ElggSession::offsetGet('courseview') && $menu_visibility == 'always') || $user_is_member_of_cohort)
     {
-        //echo ' here!';
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
     }
     return $returnvalue;
@@ -244,7 +237,7 @@ function cv_leave_group($event, $type, $params)
  */
 function cv_intercept_update($event, $type, $object)
 {
-    elgg_load_library('elgg:cv_debug');
+    //elgg_load_library('elgg:cv_debug');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $user = elgg_get_logged_in_user_entity();
@@ -291,14 +284,14 @@ function cv_intercept_update($event, $type, $object)
 
             if (strrchr('+', $menu_item) && $valid_plugin)  //if the module was checked in the cv_content_tree view, then add relationship
             {
-                cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cv_intercept_update", 5);
+               // cv_debug("Adding Relationship: $guid_one, $relationship, $guid_two", "cv_intercept_update", 5);
                 $z = add_entity_relationship($guid_one, $relationship, $guid_two);
             } else
             {
                 $rel_to_delete = check_entity_relationship($guid_one, $relationship, $guid_two);
                 if ($rel_to_delete)  //if the module was unchecked and there was a relationship, we need to remove the relationship
                 {
-                    cv_debug('deleting relationship', '', 5);
+                  //  cv_debug('deleting relationship', '', 5);
                     delete_relationship($rel_to_delete->id);
                 }
             }

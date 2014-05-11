@@ -3,6 +3,7 @@ $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $courseguid = get_entity($cv_cohort_guid)->container_guid;
 $menuguid = ElggSession::offsetGet('cvmenuguid');
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
+//$filter ['myPostings']='My Postings Only';
 //pull down the create strings for the various plugins from the settings page:
 $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'courseview'));
 $createString = str_replace('{url}', elgg_get_site_url(), $createString);
@@ -51,6 +52,7 @@ $createplugins = $availableplugins;
 $createplugins ['choose'] = 'Choose a posting type';
 
 $availableplugins['all'] = 'All Content Types';  //add the ability for the student to select all content
+$availableplugins['myPostings'] = 'Only My Postings';
 //this will remove any 'empty' choices such as is caused by the Page vs PageTop of the wiki plugin
 
 $availablecohorts = cv_get_cohorts_by_courseguid($courseguid);

@@ -1,51 +1,27 @@
 <?php
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Edit a menu item.  This can include changing the name, changing the 
+ * ident level, deleting the menu item, or moving the menu item up or down
  */
 elgg_load_library('elgg:courseview');
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
-
 $cvmenuitem = get_entity(ElggSession::offsetGet('cvmenuguid'));
-//echo "menu item indent ".$cvmenuitem->indent;
-//echo "TEST:" . get_input('buttonchoice');
-//echo "menu item indent ".$cvmenuitem->indent;
 $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
 switch (get_input('buttonchoice'))
 {
     case 'Indent':
-        //echo 'indent has been selected';
-
-
         $cvmenuitem->indent = $cvmenuitem->indent + 1;
         $cvmenuitem->save();
-//        if ($cvmenuitem->indent == '-')
-//        {
-//            $cvmenuitem->indent = '.';
-//        } elseif ($cvmenuitem->indent == '.')
-//        {
-//            $cvmenuitem->indent = '+';
-//        }
         break;
     case 'Outdent':
-        // echo 'outdent has been selected';
         if ($cvmenuitem->indent > 1)
         {
             $cvmenuitem->indent = $cvmenuitem->indent - 1;
         }
-        //$cvmenuitem->save();
-//        if ($cvmenuitem->indent == '+')
-//        {
-//            $cvmenuitem->indent = '.';
-//        } elseif ($cvmenuitem->indent == '.')
-//        {
-//            $cvmenuitem->indent = '-';
-//        }
         break;
 
     case 'Move Up':
-        //echo 'move up selected';
         $trailer;
         foreach ($menuitems as $menuitem)
         {
@@ -55,7 +31,6 @@ switch (get_input('buttonchoice'))
             }
             $trailer = $menuitem;
         }
-        //echo $trailer->name;
         $trailer->menuorder = $cvmenuitem->menuorder;
         $cvmenuitem->menuorder = $cvmenuitem->menuorder - 1;
         $cvmenuitem->save();
@@ -76,26 +51,17 @@ switch (get_input('buttonchoice'))
                 $done = true;
             }
         }
-        //echo $leader->name;
-
         $leader->menuorder = $cvmenuitem->menuorder;
         $cvmenuitem->menuorder = $cvmenuitem->menuorder + 1;
         $cvmenuitem->save();
         $leader->save();
         break;
-    // echo 'move down selected';
-
 
     case 'Change Name':
-        // echo 'Change Name has been selected';
         $cvmenuitemname = get_input('cvmodulename');
         $cvmenuitem->name = $cvmenuitemname;
-
-        //remove later - just for debugging
         $cvmenutype = get_input('cvmenutype');
         $cvmenuitem->menutype = $cvmenutype;
-
-
         $cvmenuitem->save();
         break;
 

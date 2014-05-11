@@ -1,6 +1,12 @@
 <?php
+/**
+ * Add a menu item to the CourseView course 
+ * We need to determine the level of indent to set the menu item,
+ * the order of the menu item, create a new Elgg object with a subtype of
+ * cvmenu and set the menuorder correctly for this object and increment the
+ * menuorder of any cvmenu items that follow it.
+ */
 
-//echo 'entering cv_add_menu_item.php';
 $currentcvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $currentcvmenu = get_entity($currentcvmenuguid);
 $indent = 0;
@@ -23,23 +29,15 @@ switch (get_input('buttonchoice'))
         $indent = $currentcvmenu->indent;
         break;
 }
-//echo 'indent:  '.$indent;
+
 $user = elgg_get_logged_in_user_entity();
 $modulename = get_input('newmodulename');
 $moduletype = get_input('newmoduletype');
 $moduleindent = get_input('newmoduleindent');
-
-//echo '<br>$$$:  '.get_input('newmoduleindent').'<br>';
-
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $cvcourseguid = get_entity($cv_cohort_guid)->container_guid;
-//echo 'courseguid:  '.$cvcourseguid;
-//echo'name of module: '.$modulename;
-//echo 'module type: '.$moduletype;
-//echo 'module indent: '.$moduleindent;
-//echo '<br>got to here';
+$cvcourse = get_entity($cvcourseguid);
 $moduleorder = $currentcvmenu->menuorder + 1;
-//echo "order num:  " . $moduleorder . '<br>';
 
 $menu = elgg_get_entities_from_relationship(array
     ('relationship_guid' => $cvcourseguid,
@@ -50,19 +48,14 @@ $menu = elgg_get_entities_from_relationship(array
     'limit' => 1000,
         )
 );
-//echo '<br>got to here';
-//var_dump($menu);
-//echo 'Number to change' . sizeof($menu) . '###';
+
 for ($a = $moduleorder; $a < sizeof($menu); $a++)
 {
-    //echo'!!!!<br>';
     $currentsort = $menu[$a]->menuorder;
     $newsort = $currentsort + 1;
-    //echo'<br/>changing ' . $menu[$a]->name . ' from ' . $currentsort . ' to ' . $newsort;
     $menu[$a]->menuorder = $newsort;
     $menu[$a]->save();
 }
-///echo '<br>got to here3';
 $cvmenu = new ElggObject();
 $cvmenu->subtype = 'cvmenu';
 $cvmenu->name = $modulename;
@@ -71,23 +64,11 @@ $cvmenu->container_guid = $cvcourseguid;
 $cvmenu->access_id = ACCESS_PUBLIC;
 $cvmenu->save();
 $cvmenu->menutype = $moduletype;
-$cvmenu->meta1 = "closed";
+//$cvmenu->meta1 = "closed";
 $cvmenu->menuorder = $moduleorder;
 $cvmenu->indent = $indent;
 
-//echo 'new menu item guid: '.$cvmenu->guid;
-//echo '<br>got to here4';
-//now, connect it to the course
-//echo 'got to here';
 add_entity_relationship($cvcourseguid, 'menu', $cvmenu->guid);
 
-//error_log ("CV# -  Added a menuitem");
-//just pass the url
-
+system_message("Added the menu item: $cvmenu->name to $cvcourse->title");
 forward($cvmenu->getURL());
-
-
-//echo 'cvcourse = ' . get_entity($cvcourseguid)->title;
-//echo 'cvmenu = ' . $cvmenu->name;
-//echo 'indent: '.$indent;
-//exit;

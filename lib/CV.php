@@ -11,9 +11,9 @@
  *
  * @author ITSC
  */
-class CV
-{
-    const  CV_GUID = true;
-
-//put your code here
-}
+//class CV
+//{
+//    const  CV_GUID = true;
+//
+////put your code here
+//}

@@ -70,6 +70,10 @@ elgg_set_plugin_setting('profavailableplugins', serialize($profapprovedlist), 'c
 elgg_set_plugin_setting('plugincreatestring', serialize($pluginaddurl), 'courseview');  //need to serialize arrays before putting in settings
 elgg_set_plugin_setting('approved_subtype', serialize($approved_subtype), 'courseview');  //need to serialize arrays before putting in settings
 
+echo "<br><h3>Manual Overrides</h3><br>Some plugins are not well written and need manual overrides<br>Type in any keywords needed to prevent the
+CourseView add to cohort menu from appearing at the bottom of the posting:";
+echo elgg_view('input/text', array('name' => 'params[dont_show_add_content_to_cohort_menu]', 'value'=>$vars['entity']->dont_show_add_content_to_cohort_menu));
+elgg_set_plugin_setting('dont_show_add_content_to_cohort_menu', $vars['entity']->dont_show_add_content_to_cohort_menu, 'courseview'); 
 echo "<br><br><h3>CourseView Activation/Deactivation:</h3>";
 $options=array(
     'name' => 'params[show_courseview_site_activation]',

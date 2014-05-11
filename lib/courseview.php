@@ -3,6 +3,14 @@
 define ("CV_GUID",  true);
 define ("CV_ENTITY", false);
 
+
+
+/**
+ * Determines if the user passed is an Elgg admin
+ *
+ * @param ElggUser $user The user object being inspected
+ * @return boolean returns true if the user is an admin and false if not
+ */
 function cv_is_admin ($user)
 {
     return $user->isAdmin();
@@ -153,11 +161,11 @@ function cv_get_valid_plugins($user)
     return$validplugins;
 }
 
-function cv_debug_edit ($guid, $subtype)
-{
-    $cv_entity = get_entity($guid);
-    $cv_entity->subtype=$subtype;
-}
+//function cv_debug_edit ($guid, $subtype)
+//{
+//    $cv_entity = get_entity($guid);
+//    $cv_entity->subtype=$subtype;
+//}
 
 function cv_hp()
 {
@@ -331,24 +339,12 @@ function cv_get_user_courses($user)
     foreach ($cohorts as $cohort)
     {
         $cvcourse = get_entity($cohort->getContainerGUID());
-        //cv_debug( 'cohortname: '.$cohort->title.'<br>',"",100);
-        //cv_debug('coursename:: '.$cvcourse->title.'<br>',"",100);
-
         if (!$cvcourse->cv_acl)
         {
-            // echo "nope<br>";
             $id = create_access_collection("cv_id", $cvcourse->guid);
             $cvcourse->cv_acl = $id;
             $cvcourse->save();
-            // echo'generating...'. $cvcourse->cv_acl;
         }
-//        else
-//        {
-//            echo 'yep!<br>';
-//        }
-//       $id = create_access_collection ("cv_id",$cvcourse->guid);
-//$cvcourse->cv_acl = $id;
-
         $courses[$cohort->getContainerGUID()] = $cvcourse;  //placeholder value
     }
     return $courses;
@@ -378,19 +374,100 @@ function cv_is_valid_plugin($arg1)
     return (array_key_exists($arg1, $validplugins));
 }
 
+//start changing long args functions to this!!!
+function abc (array $args)
+{
+    $defaults = array ('arg1'=>'hello', 'arg2'=>'world');
+    $options = array_merge ($defaults, $args);
+}
+
+function learning ()
+{
+    
+    $db_prefix = elgg_get_config ('db_prefix');
+    $relationship = 'cvmenu';
+     $options = array
+            ('relationship_guid' => $cvmenuguid,
+            'relationship' => $relationship,
+            'type' => 'object',
+            'subtype' => $filter,
+            'limit' => get_input('limit', $page_size),
+            'count' => get_input('count', 0),
+            'offset' => get_input('offset', 0),
+            'list_class' => 'studentcontentitem',
+            'full_view' => false,
+            'wheres' => array ("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '$relationship')"),
+           // 'owner_guid' => elgg_get_logged_in_user_guid ()
+  
+        );
+}
+
+function cv_get_content_by_menu_item1 (array $args)
+{
+    $defaults = array ('filter'=>'hello', 'cvmenuguid'=>' ', 'relationship'=>'', 
+        'list'=>false, 'sort'=>'chrono', 'page_size'=>10,
+        'only_current_user'=>true);
+    echo 'here';
+    if ($args['sort'] == 'chrono')
+    {
+        $options = array
+            ('relationship_guid' => $args['cvmenuguid'],
+            
+            'relationship' => $args['relationship'],
+            'type' => 'object',
+            'subtype' => $args['filter'],
+            'limit' => get_input('limit', $args['page_size']),
+            'count' => get_input('count', 0),
+            'offset' => get_input('offset', 0),
+            'list_class' => 'studentcontentitem',
+            'full_view' => false,
+           
+  
+        );
+    } 
+    else if ($args['sort' ]== 'likes')
+    {
+        $dbprefix = elgg_get_config('dbprefix');
+        $likes_metastring = get_metastring_id('likes');
+        $options = array(
+           'relationship_guid' => $args['cvmenuguid'],
+            
+            'relationship' => $args['relationship'],
+            'type' => 'object',
+            'list_class' => 'studentcontentitem',
+            'subtype' => $args['filter'],
+            // 'container_guid' => $entity->guid,
+            'annotation_names' => array('likes'),
+            'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
+            'order_by' => 'likes DESC',
+            'full_view' => false,
+            'limit' => get_input('limit', $args['page_size']),
+            'count' => get_input('count', 0),
+            'offset' => get_input('offset', 0),
+        );         
+    }
+    if ($args[filter] == 'all')
+    {
+        unset($options['subtype']);
+    }
+    
+    if($args['only_current_user'])
+    {
+    $options['owner_guid'] = elgg_get_logged_in_user_guid ();
+    }
+    if ($args['list'])
+    {
+        $content = elgg_list_entities_from_relationship($options);
+    } else
+    {
+        $content = elgg_get_entities_from_relationship($options);
+    }
+    return $content;
+}
+
+
 function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list = false, $sort = 'chrono', $page_size = 10)
 {
-
-    // $options = array(
-//		'container_guid' => $entity->guid,
-//		'annotation_names' => array('likes'),
-//		'selects' => array("(SELECT count(distinct l.id) FROM {$dbprefix}annotations l WHERE l.name_id = $likes_metastring AND l.entity_guid = e.guid) AS likes"),
-//		'order_by' => 'likes DESC',
-//		'full_view' => false
-//	  );
-
-
-
     if ($sort == 'chrono')
     {
         $options = array
@@ -403,6 +480,8 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
             'offset' => get_input('offset', 0),
             'list_class' => 'studentcontentitem',
             'full_view' => false,
+           // 'owner_guid' => elgg_get_logged_in_user_guid ()
+  
         );
     } else if ($sort == 'likes')
     {
@@ -422,13 +501,7 @@ function cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship, $list 
             'limit' => get_input('limit', $page_size),
             'count' => get_input('count', 0),
             'offset' => get_input('offset', 0),
-        );
-//             if ($filter == 'all')
-//    {
-//        unset($options['subtype']);
-//    }
-        //  $content = elgg_list_entities_from_annotations($options);  
-        //    return $content;
+        );         
     }
     if ($filter == 'all')
     {

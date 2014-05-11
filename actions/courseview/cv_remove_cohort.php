@@ -2,9 +2,9 @@
 
 
 /**
- * Description of cv_remove_cohort
+ * Action to remove a cohort from the lightbox projected from the groups list page
  *
- * @author ITSC
+ * @author Rich Smith
  */
 
 if (get_input ('remove_cohort')==='remove')

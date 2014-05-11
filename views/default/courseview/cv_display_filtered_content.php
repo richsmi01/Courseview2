@@ -1,7 +1,15 @@
 <?php
-
-
+/**
+ * Get input from all of the filter pulldowns and build the content page to display
+ * 
+ * @author Rich Smith
+ */
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
+if ($filter =='myPostings') //if the user ha selected to only display their postings
+{
+    $filter = 'all';
+    $myPostings =true;
+}
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $defaultcohortguid = ElggSession::offsetGet('cvcohortguid');
 $cv_cohort_guid=get_input ('cohortfilter',$defaultcohortguid);
@@ -31,7 +39,12 @@ $user->sort_by = $sort_by;
 //echo '###';
 //var_dump($user);
 //echo $num_items.'---'.$sort_by;
-$content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship,true,$sort_by,$num_items);  
+//$content_items = cv_get_content_by_menu_item($filter, $cvmenuguid, $relationship,true,$sort_by,$num_items);  
+
+$options = array ('filter'=>$filter, 'cvmenuguid'=>$cvmenuguid, 'relationship'=>$relationship, 
+        'list'=>true, 'sort'=>$sort_by, 'page_size'=>$num_items,
+        'only_current_user'=>$myPostings);
+$content_items = cv_get_content_by_menu_item1($options);  
 echo $content_items;
 
 

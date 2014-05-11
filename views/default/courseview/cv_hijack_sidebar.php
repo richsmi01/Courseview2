@@ -2,8 +2,6 @@
 
 <?php
 
-
-
 elgg_load_js ('cv_sidebar_js');
 $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
@@ -13,11 +11,11 @@ $cv_home_url = elgg_get_site_url ().'courseview/courseview';
 
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
-
+//echo 'params'.$params['entity']->guid;
 
 $cv_mode = elgg_get_plugin_setting('display_cohorts_mode', 'courseview');
 
-if ($cv_mode=='current')
+if ($cv_mode=='current' )
 {
     if (cv_is_cvcohort(elgg_get_page_owner_entity()))
     {

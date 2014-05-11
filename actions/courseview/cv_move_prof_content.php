@@ -1,15 +1,18 @@
 <?php
-
-elgg_load_library('elgg:cv_debug');
-
-$guid_to_move = get_input('guidtomove'); //$params[4];
+/* *
+ * Allows content placed inside of 'professor' type menu items (ie relationship
+ * between content and cvmenu item set to professor) to be move up or down
+ */
+$guid_to_move = get_input('guidtomove');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$updown = get_input('updown'); //$params[3];
+$updown = get_input('updown'); 
 
+//get all content with a relationship to the cvmenu item
 $content_items = elgg_get_entities_from_relationship(array(
     'order_by_metadata' => array('name' => 'sort_order', 'direction' => 'ASC', 'as' => 'integer'),
     'relationship_guid' => $cvmenuguid,
     'relationship' => 'content'));
+//loop through all content, find the matching content, and move it up or down
 $previous_content_item = $content_items[0];
 $movedown = false;
 foreach ($content_items as $content_item)
@@ -41,6 +44,6 @@ foreach ($content_items as $content_item)
 
     $previous_content_item = $content_item;
 }
-//exit;
+
 
 
