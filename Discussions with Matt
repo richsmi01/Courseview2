@@ -1,7 +1,14 @@
+        R - Correctly wrap text in menutree...or cut and use tooltip
+R - Hide default cohort group in settings page
+R - Understand Group discussions
+M - How can I Add "Make group into CourseView cohort" from create group page?
+M - What is the better way to get cohort in the cv_get_content_not_assigned method?
+        M - I'm still stuck on getting content that hasn't been CourseViewafied
 M - How does the whole language stuff work?
 
 
 
+M - Bug where edit, public etc is cut off on full view of content...for example blogs when using tooltip
 
         M - When exiting CourseView, I want to go to the activity page or the landing page or whatever 
         M - Passing associative array to function

@@ -3,8 +3,6 @@ $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $courseguid = get_entity($cv_cohort_guid)->container_guid;
 $menuguid = ElggSession::offsetGet('cvmenuguid');
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
-//$filter ['myPostings']='My Postings Only';
-//pull down the create strings for the various plugins from the settings page:
 $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'courseview'));
 $createString = str_replace('{url}', elgg_get_site_url(), $createString);
 $createString = str_replace('{user_guid}', elgg_get_logged_in_user_guid(), $createString);
@@ -17,15 +15,13 @@ $json_create_string = json_encode($createString);
 ?>
 
 <script>
-
+    //flashing Working sign in the header
     function blinker() {
         $('#notHidden').fadeOut(500);
         $('#notHidden').fadeIn(500);
     }
-
     function onChange(id, value)
     {
-
         if (id == 'filterDropDown' || id == 'cohortDropDown' || id == 'numItemsDropdown' || id == 'sortDropDown')
         {
             document.getElementById("myform").submit();
@@ -40,21 +36,17 @@ $json_create_string = json_encode($createString);
 
 
 <?php
-
 $availableplugins = cv_get_valid_plugins($user);
-
+//if an available plugin is nothing more than an empty String then remove it from the array
+//this will remove any 'empty' choices such as is caused by the Page vs PageTop of the wiki plugin
 while (array_search("", $availableplugins))
 {
     unset($availableplugins[array_search("", $availableplugins)]);
 }
-
 $createplugins = $availableplugins;
-$createplugins ['choose'] = 'Choose a posting type';
-
+$createplugins ['choose'] = 'Choose a posting type';  //Add the choose menu item to the array...we will default to that
 $availableplugins['all'] = 'All Content Types';  //add the ability for the student to select all content
-$availableplugins['myPostings'] = 'Only My Postings';
-//this will remove any 'empty' choices such as is caused by the Page vs PageTop of the wiki plugin
-
+$availableplugins['myPostings'] = 'Only My Postings';  //add the ablility for the students to select only their own postings
 $availablecohorts = cv_get_cohorts_by_courseguid($courseguid);
 
 $dropdownlist = array();
@@ -112,7 +104,6 @@ if (get_entity($menuguid)->menutype == 'student')
         'options_values' => $sort_dropdown));
     echo "</div>";
 }
-
 
 if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menuguid)->menutype == 'student')
 {

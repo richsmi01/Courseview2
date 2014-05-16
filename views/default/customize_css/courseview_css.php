@@ -113,6 +113,11 @@ body {
     opacity: 0;  
 }
 
+
+#courseview_sidebar_menu li{
+overflow:hidden;
+}
+
 .css-treeview input.cvinsert{
     opacity: 1;
 }
@@ -122,8 +127,9 @@ body {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-    overflow-y:hidden;
-    overflow-x:hidden;
+    overflow-y:clip;
+    overflow-x:clip;
+    text-overflow: "...";
 }
 
 .css-treeview a

@@ -64,10 +64,10 @@ function courseviewInit()
     //register menu item to switch to CourseView
     cv_register_courseview_menu();
 
-    //::TODO:Matt - verify ok to remove
+
     //$regentitytypes = get_registered_entity_types();
     // $plugins = $regentitytypes['object'];
-    //::TODO:Matt - Would you move this to a function?
+
     cv_register_hooks_events_actions(dirname(__FILE__));  //register all hooks and stuff, passing the current directory of this file
     // push the  cohort guid and menu guid into the session
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
@@ -242,8 +242,6 @@ function cv_intercept_update($event, $type, $object)
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $user = elgg_get_logged_in_user_entity();
 
-    //::TODO:Matt - I'd like to turn this into a function in the library...what do you think of this?
-    /////////////////////////////Turn this thing into a function in the library
     $valid_plugin = cv_is_valid_plugin_by_keys($user, $object);
 
     // pull array of checkboxes (associated with menu items) from the cv_content_tree 
@@ -390,6 +388,14 @@ function myplugin_sitemenu($hook, $type, $return, $params)
     $returnValue = array();
     $returnValue[0] = $item;
     return $returnValue;
+}
+
+function cv_create_group ($hook, $type, $return, $params)
+{
+    var_dump($params)            ;
+    exit;
+            $return .="###########";
+    return $return;
 }
 
 //adds green NEW icon to new content

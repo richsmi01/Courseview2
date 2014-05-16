@@ -3,8 +3,6 @@
 define ("CV_GUID",  true);
 define ("CV_ENTITY", false);
 
-
-
 /**
  * Determines if the user passed is an Elgg admin
  *
@@ -16,6 +14,13 @@ function cv_is_admin ($user)
     return $user->isAdmin();
 }
 
+/**
+ * Returns the current user entity or guid
+ *
+ * @param $return_type  if set to CV_GUID then functin returns GUID
+ * Else, function returns entity
+ */
+//::TODO:Matt - Should I turn this into two separate methods?
 function cv_get_current_user ($return_type = CV_GUID)
 {
     if ($return_type)
@@ -30,7 +35,7 @@ function cv_get_current_user ($return_type = CV_GUID)
 
 function cv_user_is_member_of_cohort ($cohort)
 {
-    if (!isset($cohort->cvcohort)) //if the entity passed was not a cohort
+    if (!isset($cohort->cvcohort)) //check to make sure that the entity passed is a cohort
     {
         return false;
     }
@@ -89,10 +94,8 @@ function cv_register_hooks_events_actions ($base_path)
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
     // that we can add our tree menu
     elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cv_sidebar_intercept');
-    
-    
+      
     elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
-    
 
     /* allows us to intercept each time elgg calls a forward.  We will use this to be able to return to the coursview 
      * tool after adding a relationship to added content */
@@ -106,9 +109,7 @@ function cv_register_hooks_events_actions ($base_path)
      * an approved object such as a blog, bookmark etc as chosen in the settings page. */
     elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
 
-
     elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
-
 
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
@@ -118,7 +119,7 @@ function cv_register_hooks_events_actions ($base_path)
     elgg_register_event_handler('create', 'object', 'cv_intercept_update');
     elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
-
+    
     //intercept new user creation  
     elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
     // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
@@ -127,10 +128,15 @@ function cv_register_hooks_events_actions ($base_path)
     //when they leave a cohort, we need to remove them.
     elgg_register_event_handler('join', 'group', 'cv_join_group');
     elgg_register_event_handler('leave', 'group', 'cv_leave_group');
-
+  
     //Need to intercept ACL writes to allow us to add the course ACL when needed
     elgg_register_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write', 999);
-
+    
+    elgg_extend_view('groups/add', 'courseview/test', 600);
+    //elgg_register_plugin_hook_handler('view', "groups/all", 'cv_create_group');
+    //elgg_register_plugin_hook("view","groups/edit","cv_create_group"); 
+      //elgg_register_plugin_hook_handler("create","group","cv_create_group");
+    
     //set up our paths and various actions 
      //gives a relative path to the directory where this file exists
     elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
@@ -375,31 +381,42 @@ function cv_is_valid_plugin($arg1)
 }
 
 //start changing long args functions to this!!!
-function abc (array $args)
-{
-    $defaults = array ('arg1'=>'hello', 'arg2'=>'world');
-    $options = array_merge ($defaults, $args);
-}
+//function abc (array $args)
+//{
+//    $defaults = array ('arg1'=>'hello', 'arg2'=>'world');
+//    $options = array_merge ($defaults, $args);
+//}
 
-function learning ()
+function cv_get_content_not_assigned()
 {
-    
+    //echo '<-0->';
+    $cohort_guid = ElggSession::offsetGet('cvcohortguid');
     $db_prefix = elgg_get_config ('db_prefix');
-    $relationship = 'cvmenu';
+    $relationship = 'menu';
      $options = array
-            ('relationship_guid' => $cvmenuguid,
-            'relationship' => $relationship,
+            (//'relationship_guid' => $cvmenuguid,
+            //'relationship' => $relationship,
             'type' => 'object',
-            'subtype' => $filter,
+            'container_guid'=>$cohort_guid,
+           // 'subtype' => ELGG_ENTITIES_NO_VALUE ,
             'limit' => get_input('limit', $page_size),
             'count' => get_input('count', 0),
             'offset' => get_input('offset', 0),
             'list_class' => 'studentcontentitem',
             'full_view' => false,
-            'wheres' => array ("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '$relationship')"),
+            'wheres' => array ("NOT EXISTS ( SELECT 1 FROM {$db_prefix}elgg_entity_relationships WHERE guid_one = e.guid AND relationship = '$relationship')"),
            // 'owner_guid' => elgg_get_logged_in_user_guid ()
   
         );
+           $content_objects = elgg_list_entities($options); 
+         //  echo 'number of unassigned content objects'.sizeof($content_objects).'<br>';
+//        foreach ($content_objects as $content_object)    
+//        {
+//            $owner = get_entity($content_object->getOwner());
+//           
+//            echo $content_object->getSubtype().':  '.$content_object->name. $content_object->title.' - owned by: '.$owner->name.'<br>';
+//        }
+           return $content_objects;
 }
 
 function cv_get_content_by_menu_item1 (array $args)
@@ -407,7 +424,7 @@ function cv_get_content_by_menu_item1 (array $args)
     $defaults = array ('filter'=>'hello', 'cvmenuguid'=>' ', 'relationship'=>'', 
         'list'=>false, 'sort'=>'chrono', 'page_size'=>10,
         'only_current_user'=>true);
-    echo 'here';
+  
     if ($args['sort'] == 'chrono')
     {
         $options = array

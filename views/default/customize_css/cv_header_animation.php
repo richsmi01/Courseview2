@@ -1,6 +1,21 @@
 <?php
 ?>
 
+.elgg-page-header {
+    position:fixed;
+    z-index:100;
+    top:25px;
+    width:100%;
+    border-bottom: 1px  black solid;
+    border-top:1px black solid;
+}
+ .elgg-page-topbar{
+    position:fixed;
+    z-index:101;
+    top:0px;
+    width:100%;
+}
+
 .sky {
     height:480px;
     background:#007fd5;

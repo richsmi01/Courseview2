@@ -1,42 +1,46 @@
 <?php
 
-//Check to see if the action string contains any of our approved plugins...If it does, and the user is in a cohort, display the page.
-
-elgg_load_library('elgg:courseview');
-$attributes = $vars['attibutes'];
-$action = $vars['action'];
-
-
-/* first, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
+/* Next, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
  * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
  * pop up when desiging a poll.  However, we don't want it to pop up when taking the poll.  The only way to do this is to look for
  * a particular word in the $action string that is created by the plugin.  Again, for the poll plugin, this $action String looks something
  * like this: http://localhost/elgg/action/polls/vote  -- In this case we are able to pull out the word vote as being unique to this page and check 
- * for it.  If we find it, we don't want to add cv_content_tree to the page.
- * 
+ * for it.  If we find it, we don't want to add cv_content_tree to the page.  This vote word gets entered in the settings page
  */
-//::TODO:Matt Note - For now, I've just hard-coded the 'vote' but what I really should do is eventually add 
-//a text input to the settings form that will allow
- // the user to type in a set of keywords, separated by spaces, 
- // and use them instead of a hardcoded 'vote'.  
+elgg_load_library('elgg:courseview');
+//$attributes = $vars['attibutes'];
+$action = $vars['action'];
 
+//::TODO:Matt - would this be better off to use a elgg_register_plugin_hook_handler?
+//::TODO:Matt - How do I get the button to invoke the shadow box?  I'm not sure the group has even been created yet?
+//If we're in the groups creation page, add a button to the page to allow the prof to make the group a cvcohort
+if (strpos($action, "groups") && strpos($action, "groups"))
+{
+    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
+    if (get_entity($cvcohortguid)->cvcourse)
+    {
+        echo elgg_view('input/button', array ('value'=>'Make this group a CourseView cohort?'));
+    }
+ else
+    {
+     echo elgg_view('input/button', array ('value'=>'Remove this group from CourseView cohort?'));
+    }
+}
+
+//::TODO:Matt - Would you move this into a function in the library?
+//there are certain exceptions in Elgg plugins that shouldn't show the add_content_to_cohort_menu 
+//like poll choices etc.  We list these in the Settings page
 $exceptions_to_the_rule = elgg_get_plugin_setting('dont_show_add_content_to_cohort_menu', 'courseview');
-$exceptions_array = explode ( ' ' ,  $exceptions_to_the_rule);
-
+$exceptions_array = explode(' ', $exceptions_to_the_rule);
 foreach ($exceptions_array as $exception_item)
 {
-
     if (!cv_is_courseview_user() || strpos($action, $exception_item) !== false)
-{
-    return;
-}
+    {
+        return;
+    }
 }
 
-//if (!cv_is_courseview_user() || strpos($action, 'vote') !== false)
-//{
-//    return;
-//}
-
+//If the content being generated is a reply, then don't show the cv_add_content_to_cohort menu
 if (strpos($action, 'reply'))
 {
     return;
@@ -45,12 +49,13 @@ if (strpos($action, 'reply'))
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
  * valid plugins for courseview is set in the settings view under the administration section of Elgg. */
 
+
 $user = elgg_get_logged_in_user_entity();
 $validplugins = cv_get_valid_plugins($user);
 $validkeys = array_keys($validplugins);
 $validkeys[] = "discussion";
 $donotdisplay = true;
-
+//Check to see if the action string contains any of our approved plugins...If it does, and the user is in a cohort, display the page.
 foreach ($validkeys as $plugin)
 {
     if (strpos($action, $plugin) !== false)
@@ -59,8 +64,6 @@ foreach ($validkeys as $plugin)
         break;
     }
 }
-
-
 
 if ($donotdisplay)
 {

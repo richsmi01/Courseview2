@@ -1,17 +1,15 @@
-
-
 <?php
-
+//Builds the CourseView sidebar
 elgg_load_js ('cv_sidebar_js');
-$cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-$cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$userguid = elgg_get_logged_in_user_guid();
 elgg_load_library('elgg:courseview');
+
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
+$cvmenuguid = ElggSession::offsetGet('cvmenuguid');
+//$userguid = elgg_get_logged_in_user_guid();
 $cv_home_url = elgg_get_site_url ().'courseview/courseview';
 
 //get  a list of the cohorts that the logged in user belongs to
 $cohorts = cv_get_users_cohorts();
-//echo 'params'.$params['entity']->guid;
 
 $cv_mode = elgg_get_plugin_setting('display_cohorts_mode', 'courseview');
 
@@ -58,9 +56,9 @@ echo "<div id = courseview_sidebar_menu>";
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)
 {
-    $cv_cohort_guid = $cohort->guid;
+    $cv_current_examined_cohort_guid = $cohort->guid;
     
-    $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
+    $menuitems = cv_get_menu_items_for_cohort($cv_current_examined_cohort_guid);
 
     //Here we are building the html of the treeview control and adding the correct css classes so that my css
     //can turn it into a tree that can be manipulated by the user 
@@ -87,13 +85,13 @@ foreach ($cohorts as $cohort)
         $name = $menuitem->name;
         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
         {
-            $name = $cohort->title.'<br>' ;
+            $name = $cohort->title ;
         }
         $id1 = $count; //$menuitem->menuorder;
         $count++;
         $class2 = "";
         $indent = $menuitem->indent;
-        if ($menuitem->guid == $cvmenuguid && $cv_cohort_guid == $cvcohortguid)
+        if ($menuitem->guid == $cvmenuguid && $cv_current_examined_cohort_guid == $cv_cohort_guid)
         {
             $class2 = " cvcurrent";  //setting the current menu item
         }
@@ -111,7 +109,7 @@ foreach ($cohorts as $cohort)
             echo "<li>";
             echo "<input type ='checkbox' abc ='m' name='$indent' class ='cvmenuitem $class2' id ='$id1' />";
             echo "<label>";
-            echo "<a href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "'> " . $name . "</a>";
+            echo "<a title = '$name' href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_current_examined_cohort_guid . "/" . $menuitem->guid . "'> " . $name . "</a>";
             echo "</label>";
         }
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
@@ -119,7 +117,7 @@ foreach ($cohorts as $cohort)
         {
     
             echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 $class3 indent' id ='$id1' "
-                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
+                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_current_examined_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
         }
     }
     echo '</div>';
