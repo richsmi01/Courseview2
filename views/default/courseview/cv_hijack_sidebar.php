@@ -1,3 +1,28 @@
+<!--<script>  //quick and dirty script to persist the tree menu between page refreshes...should probably think about a better way to do this...maybe through ajax
+    window.onload=function(){
+        var treemenu = document.getElementsByClassName("cvmenuitem");
+        var current=document.getElementsByClassName("cvcurrent")[0];
+        
+        var currentposition = current.id;
+        var currentindent = current.name;
+        for (i = currentposition; i >=0; i--) 
+        {
+            if (treemenu[i].checked===false&& treemenu[i].name<currentindent) 
+            {
+                treemenu[i].checked=true;
+                currentindent--;
+            }
+           
+            if (currentindent===0) 
+            {
+                break;
+            }
+        }
+        current.checked=true;
+    }
+</script>-->
+
+
 <?php
 //Builds the CourseView sidebar
 elgg_load_js ('cv_sidebar_js');
@@ -68,7 +93,8 @@ foreach ($cohorts as $cohort)
     //now, loop through each menu item (by menusort order)
     foreach ($menuitems as $menuitem)
     {
-        //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
+        //echo '@@@'.$menuitem->name;
+    //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
         if ($menuitem->indent > $indentlevel)
         {
             echo elgg_echo('<ul>');

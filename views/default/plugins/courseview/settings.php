@@ -138,13 +138,13 @@ elgg_set_plugin_setting('show_elgg_stuff', $vars['entity']->show_elgg_stuff, 'co
 
 
 
-echo "<br><br><h3>Default Cohort (Group):</h3>";
-echo "CourseView can automatically sign new users up to a particular cohort...Please enter the GUID of this cohort<br>";
-echo "Cohort GUID:";
-echo elgg_view('input/text', array(
-    'name' => 'params[defaultCohort]',
-    'value' => $vars['entity']->defaultCohort,
-    'disabled' => false));
+//echo "<br><br><h3>Default Cohort (Group):</h3>";
+//echo "CourseView can automatically sign new users up to a particular cohort...Please enter the GUID of this cohort<br>";
+//echo "Cohort GUID:";
+//echo elgg_view('input/text', array(
+//    'name' => 'params[defaultCohort]',
+//    'value' => $vars['entity']->defaultCohort,
+//    'disabled' => false));
 
 //echo "<br><br><h3> Page Layout</h3>";
 //echo "Maximize screen area?<br>Sidebar to left?<br>";

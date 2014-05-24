@@ -8,24 +8,23 @@
  * for it.  If we find it, we don't want to add cv_content_tree to the page.  This vote word gets entered in the settings page
  */
 elgg_load_library('elgg:courseview');
-//$attributes = $vars['attibutes'];
 $action = $vars['action'];
 
 //::TODO:Matt - would this be better off to use a elgg_register_plugin_hook_handler?
 //::TODO:Matt - How do I get the button to invoke the shadow box?  I'm not sure the group has even been created yet?
 //If we're in the groups creation page, add a button to the page to allow the prof to make the group a cvcohort
-if (strpos($action, "groups") && strpos($action, "groups"))
-{
-    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-    if (get_entity($cvcohortguid)->cvcourse)
-    {
-        echo elgg_view('input/button', array ('value'=>'Make this group a CourseView cohort?'));
-    }
- else
-    {
-     echo elgg_view('input/button', array ('value'=>'Remove this group from CourseView cohort?'));
-    }
-}
+//if (strpos($action, "groups"))
+//{
+//    $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
+//    if (get_entity($cvcohortguid)->cvcourse)
+//    {
+//        echo elgg_view('input/button', array ('value'=>'Make this group a CourseView cohort?'));
+//    }
+// else
+//    {
+//     echo elgg_view('input/button', array ('value'=>'Remove this group from CourseView cohort?'));
+//    }
+//}
 
 //::TODO:Matt - Would you move this into a function in the library?
 //there are certain exceptions in Elgg plugins that shouldn't show the add_content_to_cohort_menu 

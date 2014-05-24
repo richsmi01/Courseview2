@@ -9,45 +9,22 @@
 </script>
 
 
-
-<!--A bit of javascript to collapse the cohorttree unless the user clicks on the topline-->
-<script>
-    function showCVAdd(selected_menu) {
-        // alert (selected_menu);
-       // myDiv = document.querySelector("#" + selected_menu);
-       // alert (myDiv.id);
-      //  if (myDiv.style.visibility == "visible") {
-     //       myDiv.style.visibility = 'hidden';
-     //       myDiv.style.height = '0px';
-       //     myDiv.style.padding = '0px';
-
-        //}
-        //else
-        //{
-       //     myDiv.style.visibility = 'visible';
-      //      myDiv.style.height = 'auto';
-    //        myDiv.style.padding = '10px';
-   //     }
-    }
-</script>
-
 <?php
-
 elgg_load_library('elgg:cv_content_tree_helper_functions');
+elgg_load_library('elgg:courseview');
+
 $cv_cohortguid = ElggSession::offsetGet('cvcohortguid');
 $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-$entity = ($vars['entity']);
-$current_content_entity = $entity;
+$cv_entity = ($vars['entity']);
+$current_content_entity = $cv_entity;
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$cvmenuitem = get_entity ($cvmenuguid);
+$cvmenuitem = get_entity($cvmenuguid);
 $userguid = elgg_get_logged_in_user_guid();
 $cvuser = get_entity($userguid);
 
 
-elgg_load_library('elgg:courseview');
-
 $prof_menu_item_already_used = array();
-$cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged in user belongs to
+$cv_users_cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged in user belongs to
 
 echo "<div id='add_entity_to_cohort_menus'>";
 if (cv_isprof($cvuser))
@@ -65,6 +42,7 @@ if (cv_isprof($cvuser))
         foreach ($menuitems as $menuitem)
         {
             $name = $menuitem->name;
+            
             $relationship = cv_build_relationship($menuitem, $cv_cohort_guid);
             $checkoptions = setCheckStatus($menuitem, $relationship, $current_content_entity, $cvmenuguid, $cv_cohortguid, $cv_cohort_guid);
             echo cv_buildindent_string($menuitem, $indentlevel);
@@ -77,12 +55,10 @@ if (cv_isprof($cvuser))
                 echo "<label>";
                 echo $name;
                 echo "</label>";
-            } 
-            elseif ($menuitem->menutype == 'student')     // && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
+            } elseif ($menuitem->menutype == 'student')     // && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
             {
                 echo "<p class ='indent'>$name.</p>";
-            } 
-            else
+            } else
             {
                 echo "<li>";
                 echo elgg_view('input/checkbox', array('name' => 'menuitems[]', 'id' => $value, 'value' => '+' . $value, 'class' => 'cvinsert', 'checked' => $checkoptions, 'default' => '-' . $value));
@@ -99,7 +75,7 @@ echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' cla
 echo "<label  for ='cv_check2'  > in the $cv_cohort->title  cohort.  Click here to change destination</label>";
 echo "<div>";
 echo"<label class ='bluesub'> Check any of the CourseView menu items below that you wish this content to be posted to:</label>";
-foreach ($cohorts as $cohort)
+foreach ($cv_users_cohorts as $cohort)
 {
     $cv_cohort_guid = $cohort->guid;
 
@@ -110,24 +86,24 @@ foreach ($cohorts as $cohort)
     $indentlevel = 0;
     //now, loop through each menu item (by menusort order)
     $menuitems = cv_get_menu_items_for_cohort($cv_cohort_guid);
-     
+
     /* We will check each $menuitem to see whether or not we should add a check in the checkbox associated with this
-         * tree item.  If a relationship exists between the $menuitem and the current_content_entity, then the tree item needs to 
-         * have a check in the checkbox.
-         * 
-         * Note that:
-         * 
-         * A $menuitem of type professor will have a relationship in the following format:  
-         *              $menuitem->guid, 'content', $current_content_entity -> guid.
-         * This is because any content inside of a $menuitem of type professor will belong to the entire course
-         * 
-         * A $menuitem of any other type (ie student) will have a relationship in the following format:
-         *              $menuitem->guid, 'content'.<cohortguid>, $current_content_entity->guid
-         * This is becase content inside of a $menuitem of type student will belong only to the current cohort
-         * 
-         * By separting relationships in this fashion, we can access student content in any particular cohort where as the
-         * professor content will remain constant in all cohorts (ie, belongs to the entire course)
-         */
+     * tree item.  If a relationship exists between the $menuitem and the current_content_entity, then the tree item needs to 
+     * have a check in the checkbox.
+     * 
+     * Note that:
+     * 
+     * A $menuitem of type professor will have a relationship in the following format:  
+     *              $menuitem->guid, 'content', $current_content_entity -> guid.
+     * This is because any content inside of a $menuitem of type professor will belong to the entire course
+     * 
+     * A $menuitem of any other type (ie student) will have a relationship in the following format:
+     *              $menuitem->guid, 'content'.<cohortguid>, $current_content_entity->guid
+     * This is becase content inside of a $menuitem of type student will belong only to the current cohort
+     * 
+     * By separting relationships in this fashion, we can access student content in any particular cohort where as the
+     * professor content will remain constant in all cohorts (ie, belongs to the entire course)
+     */
 
     //figure out the correct $relationship string  (professor content is "content", studen content is "content<GUID> where guid is the cohort guid.
     foreach ($menuitems as $menuitem)
@@ -144,6 +120,10 @@ foreach ($cohorts as $cohort)
 
         //set up attributes to insert into the html tags
         $name = $menuitem->name;
+         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
+            {
+                $name = get_entity($cv_cohort_guid)->title;
+            }
         $indent = $menuitem->indent;
         $value = $menuitem->guid . "|" . $cv_cohort_guid;
         //build html depending on menu type: student, professor, or folder

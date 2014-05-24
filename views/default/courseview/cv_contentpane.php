@@ -29,8 +29,9 @@ if (!$status)
 
 elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();
-$cv_menu_guid = ElggSession::offsetGet('cvmenuguid');  
-$cv_cohort = get_entity (ElggSession::offsetGet('cvcohortguid'));
+//::TODO:Rich - change to this....
+$cv_menu_guid = get_input ('cv_menu_guid'); //ElggSession::offsetGet('cvmenuguid');  
+$cv_cohort =    elgg_get_page_owner_entity ();  //get_entity (ElggSession::offsetGet('cvcohortguid'));
 $menu_item = get_entity($cv_menu_guid);  
 $menu_type = $menu_item->menutype;  //there are three types of menu items:  folder, professor, and student
 
@@ -61,8 +62,8 @@ switch ($menu_type)
            echo "<br><div id='contentitem'> Course Owner:  $cv_course_owner->name</div>";
            echo "<br><div id='contentitem'> Cohort Professor:  $cv_cohort_owner->name</div>";
            echo '<br><label>The following are postings created in this group <br>but not assigned to CourseView:</label><br>';
-           $unassigned_content = cv_get_content_not_assigned ();
-           echo $unassigned_content;
+           $unassigned_content = cv_get_content_not_assigned();
+            echo $unassigned_content;
         }
         else
         {

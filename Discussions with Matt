@@ -1,3 +1,8 @@
+- When exiting CourseView, it should go to the group/page that it was in first and activity if it can't do that
+- Finish code to allow a group to become a CourseView course in course create/edit page
+-
+
+
         R - Correctly wrap text in menutree...or cut and use tooltip
 R - Hide default cohort group in settings page
 R - Understand Group discussions

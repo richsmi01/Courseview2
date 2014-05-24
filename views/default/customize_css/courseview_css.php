@@ -9,6 +9,45 @@
  */
 ?>
 
+#cv_hidden_course_list 
+{
+    display:none;
+}
+
+#make_a_cohort {
+
+display:none;
+
+}
+
+#make_a_cohort + label
+{
+    background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
+    padding-left:20px;
+    background-position:0 -50px;
+}
+
+#make_a_cohort:checked ~ div
+{ 
+    display:block;
+}
+
+#make_a_cohort:checked + label
+{
+    background-position:0 -70px;
+}
+
+
+#menutogglebutton
+{
+    margin: 5px auto;
+    display:block;
+}
+.cv-menu-toggle
+{
+margin 10px;
+}
+
 /*The CourseView title that is presented if no cohorts are active */
 #cv_title
 {
@@ -34,10 +73,7 @@
     margin:auto;
 }
 
-#menutogglebutton{
-    margin:auto;
-    display:block;
-}
+
 
 cv_settings
 {
@@ -49,7 +85,10 @@ cv_settings
     border:grey 2px ridge;
     padding: 5px;
 }
-
+#courseview_sidebar
+{
+    margin:7px;
+}
 #courseview_sidebar_filter, #courseview_sidebar_create
 {
     padding-top: 5px;

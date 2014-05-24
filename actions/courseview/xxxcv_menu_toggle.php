@@ -8,7 +8,7 @@ $status = ElggSession::offsetGet('courseview');
 if ($status)
 {
     ElggSession::offsetSet('courseview', false);
-    forward("activity"); 
+    forward (REFERER);
 }
 else
 {
