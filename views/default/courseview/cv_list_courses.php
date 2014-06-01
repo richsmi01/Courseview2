@@ -15,7 +15,6 @@ else
 {
     $cvcourses = cv_get_owned_courses($cv_user);
 }
-
 foreach ($cvcourses as $cvcourse)
 {
     $radioname = "Course: $cvcourse->title  <p>Owner: ".$cvcourse->getOwnerEntity()->name." <p>Description: $cvcourse->description</p>";

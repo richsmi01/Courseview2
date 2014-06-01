@@ -24,6 +24,7 @@
 
 
 <?php
+
 //Builds the CourseView sidebar
 elgg_load_js ('cv_sidebar_js');
 elgg_load_library('elgg:courseview');
