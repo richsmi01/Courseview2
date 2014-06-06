@@ -38,7 +38,7 @@ if (!$status )
 
 elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();
-//::TODO:Rich - change to this....
+//::TODO:Rich - Change ElggSession::oggsetGet's to get_input('cv_menu_guid') throughout code
 $cv_menu_guid = get_input('cv_menu_guid'); //ElggSession::offsetGet('cvmenuguid');  
 $cv_cohort = elgg_get_page_owner_entity();  //get_entity (ElggSession::offsetGet('cvcohortguid'));
 $menu_item = get_entity($cv_menu_guid);

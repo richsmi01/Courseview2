@@ -83,7 +83,6 @@ function cv_is_valid_plugin_by_keys($user, $object)
     return $valid_plugin;
 }
 
-
 function cv_update_group($event, $type, $params)
 {
     if (get_input('remove_from_courseview') == 'remove')
@@ -108,7 +107,6 @@ function cv_update_group($event, $type, $params)
         elgg_set_config('cv_group_container_guid', $cv_group_container_guid);
     }
 }
-
 
 /**
  * This function had to be written due to the problems encountered when trying to change the container_guid in a group.
@@ -143,25 +141,29 @@ function cv_shutdown_event()
  */
 function cv_register_hooks_events_actions($base_path)
 {
-    //loop through availbable plugins and register a plugin hook for each to check if content is new since last login
+//loop through availbable plugins and register a plugin hook for each to check if content is new since last login
     $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
     foreach ($availableplugins as $plugin)
     {
         elgg_register_plugin_hook_handler('view', "object/$plugin", 'cv_new_content_intercept');
     }
-
-    elgg_register_event_handler('shutdown', 'system', 'cv_shutdown_event');  //page is about finish processing...want to update any group with correct course if changed
+    
+    //page is about finish processing...want to update any group with correct course if changed
+    elgg_register_event_handler('shutdown', 'system', 'cv_shutdown_event');  
+    
     // allows us to hijack the sidebar.  Each time the sidebar is about to be rendered, this hook fires so 
     // that we can add our tree menu
     elgg_register_plugin_hook_handler('view', 'page/elements/sidebar', 'cv_sidebar_intercept');
-
+    
+    //::TODO:Matt - intercepts every menu item that is displayed -- cv_group_buttons uses this to add CourseView info
+    //in the groups listing page
     elgg_register_plugin_hook_handler('register', 'menu:entity', 'cv_group_buttons', 1000);
 
-    /* allows us to intercept each time elgg calls a forward.  We will use this to be able to return to the coursview 
+    /*::TODO:Matt -  Why did we do this again???  intercepts each time elgg calls a forward.  We will use this to be able to return to the coursview 
      * tool after adding a relationship to added content */
     elgg_register_plugin_hook_handler('forward', 'all', 'cvforwardintercept');
 
-    //Need to occasionally intercep permissions check to ensure that people in different cohorts can see ecah others content
+    //::TODO:Matt - Why??  Need to occasionally intercept permissions check to ensure that people in different cohorts can see each others content
     elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'cv_can_write_to_container');
 
     /* The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
@@ -169,41 +171,38 @@ function cv_register_hooks_events_actions($base_path)
      * an approved object such as a blog, bookmark etc as chosen in the settings page. */
     elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
 
+    /*The cv_make_group_a_cohort_from_group_page adds the ability to make a group a cohort when in the group edit/new group page*/
     elgg_extend_view('groups/edit', 'courseview/cv_make_group_a_cohort_from_group_page', 600);
-
+    
+    //::TODO:Matt - How do I word this?
     elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
 
-    //register page event handler
+    //::TODO:Matt - register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
 
-    //  creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
+    // creating, updating or deleting content results in us calling the cv_intercept_update to make or remove any
     // relationships between the content and any menuitems deemed neccesary.
     elgg_register_event_handler('create', 'object', 'cv_intercept_update');
     elgg_register_event_handler('update', 'object', 'cv_intercept_update');
     elgg_register_event_handler('delete', 'object', 'cv_intercept_update');
 
-    //intercept new user creation  
-    elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
-    // elgg_register_event_handler('register', 'user', 'cv_intercept_update');  //use this to intercept users when they are created.---or this....
-    //or check grouptools plugin...
+    // intercept new user creation  
+    //elgg_register_event_handler('create', 'user', 'cv_intercept_newuser');  //use this to intercept users when they are created.
+ 
     //when a user joins a cohort, we need to add them to a acl list attached to the container course
     //when they leave a cohort, we need to remove them.
-    elgg_register_event_handler('join', 'group', 'cv_join_group');
-    elgg_register_event_handler('leave', 'group', 'cv_leave_group');
+    elgg_register_event_handler('join', 'group', 'cv_join_group',0);
+    elgg_register_event_handler('leave', 'group', 'cv_leave_group',0);
 
     elgg_register_event_handler('create', 'group', 'cv_update_group', 9999);
     elgg_register_event_handler('update', 'group', 'cv_update_group', 9999);
-
 
     //Need to intercept ACL writes to allow us to add the course ACL when needed
     elgg_register_plugin_hook_handler('access:collections:write', 'all', 'cv_intercept_ACL_write', 999);
 
     elgg_extend_view('groups/add', 'courseview/test', 600);
-    //elgg_register_plugin_hook_handler('view', "groups/all", 'cv_create_group');
-    //elgg_register_plugin_hook("view","groups/edit","cv_create_group"); 
-    //elgg_register_plugin_hook_handler("create","group","cv_create_group");
+   
     //set up our paths and various actions 
-    //gives a relative path to the directory where this file exists
     elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
     elgg_register_action("cv_content_tree", $base_path . '/actions/courseview/cv_content_tree.php');
     elgg_register_action("cv_edit_a_course", $base_path . '/actions/courseview/cv_edit_a_course.php');
@@ -221,6 +220,60 @@ function cv_register_hooks_events_actions($base_path)
     elgg_register_action('cv_admin_toggle', $base_path . '/actions/courseview/cv_admin_toggle.php');
 }
 
+/**
+ * Runs whenever a user joins a group.  If that group is actually a cvcohort then we need to add the users guid to the 
+ * acl of the cvcourse which is the container of that particluar cvcohort
+ *
+ * @param array $event  - not used
+ * @param array  $type - not used
+ * @param array $params - the params array contains the group entity that the user is being added to and the user entity
+ *                                            that is being added to the group. 
+ *
+ * @return void
+ */
+function cv_join_group($event, $type, $params)
+{
+    system_message ("Joining group, I hope");
+    //exit;
+    $cv_group = $params['group'];
+    //if the group isn't a cvcohort, then just return without doing anything
+    if (!$cv_group->cvcohort)
+    {
+        return;
+    }
+    $ignore_acess = elgg_set_ignore_access(true); // grants temporary permission overrides
+    $cv_course = $cv_group->getContainerEntity();
+    $cv_user = $params['user'];
+    //here we add the user to the course acl
+    $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
+    elgg_set_ignore_access($ignore_acess); // restore permissions
+    system_message ("$cv_user->name just joined $cv_group->name");
+    exit;
+}
+
+/**
+ * Runs whenever a user leaves a group.  If that group is actually a cvcohort then we need to remove the users guid from the 
+ * acl of the cvcourse which is the container of that particluar cvcohort
+ *
+ * @param array $event  - not used
+ * @param array  $type - not used
+ * @param array $params - the params array contains the group entity that the user is being removed from and the user entity
+ *                                            that is being removed from the group. 
+ *
+ * @return void
+ */
+function cv_leave_group($event, $type, $params)
+{
+     system_message ("Leaving the group, I hope");
+    $cv_group = $params['group'];
+    if (!$cv_group->cvcohort)
+    {
+        return;
+    }
+    $cv_course = $cv_group->getContainerEntity();
+    $cv_user = $params['user'];
+    remove_user_from_access_collection($cv_user->guid, $cv_course->cv_acl);
+}
 function cv_get_valid_plugins($user)
 {
     if (cv_isprof($user))
@@ -429,8 +482,6 @@ function cv_is_valid_plugin($arg1)
     return (array_key_exists($arg1, $validplugins));
 }
 
-
-
 /**
  * Gets all content created in a group that does not have a relationship with a cvmenu object of CourseView
  *
@@ -577,7 +628,6 @@ function cv_is_list_page()
     }
 }
 
-
 function courseview_listplugins()
 {
     // echo 'Got here!!!';
@@ -667,7 +717,6 @@ function cv_group_buttons($hook, $type, $return, $params)
     {
         return $return;
     }
-
     $is_cv_owner = cv_is_cohort_owner(elgg_get_logged_in_user_entity(), $params['entity']);
     $is_cv_admin = cv_is_admin(elgg_get_logged_in_user_entity());
     if ($is_cv_admin || $is_cv_owner)
@@ -694,38 +743,38 @@ function cv_group_buttons($hook, $type, $return, $params)
     return $return;
 }
 
-function temp_cv_group_buttons($hook, $type, $return, $params)
-{
-    if (!elgg_instanceof($params['entity'], 'group'))
-    {
-        return $return;
-    }
-
-    $cv_owner = cv_is_cohort_owner(elgg_get_logged_in_user_entity(), $params['entity']);
-    if (cv_is_cvcohort($params['entity']) || $cv_owner)
-    {
-
-        if (cv_is_admin(elgg_get_logged_in_user_entity()) && cv_is_cvcohort($params['entity']))
-        {
-            $link = new ElggMenuItem('cv_group_button', 'remove link to CourseView', "ajax/view/courseview/remove_group_from_cohort?guid={$params['entity']->guid}");
-            $link->addLinkClass("cv_remove_group_from_cohort");
-            $link->addLinkClass('elgg-lightbox');
-            $return[] = $link;
-        } else
-        {
-            $link = new ElggMenuItem('cv_button', 'CV Enabled!', "");
-            $link->addLinkClass("cv_enabled");
-            $return[] = $link;
-        }
-    } else if (elgg_get_logged_in_user_entity())
-    {
-        $link = new ElggMenuItem('cv_group_button', 'link to CourseView', "ajax/view/courseview/cv_make_group_a_cohort?guid={$params['entity']->guid}");
-        $link->addLinkClass("cv_add_to_cohort");
-        $link->addLinkClass('elgg-lightbox');
-        $return[] = $link;
-    }
-    return $return;
-}
+//function temp_cv_group_buttons($hook, $type, $return, $params)
+//{
+//    if (!elgg_instanceof($params['entity'], 'group'))
+//    {
+//        return $return;
+//    }
+//
+//    $cv_owner = cv_is_cohort_owner(elgg_get_logged_in_user_entity(), $params['entity']);
+//    if (cv_is_cvcohort($params['entity']) || $cv_owner)
+//    {
+//
+//        if (cv_is_admin(elgg_get_logged_in_user_entity()) && cv_is_cvcohort($params['entity']))
+//        {
+//            $link = new ElggMenuItem('cv_group_button', 'remove link to CourseView', "ajax/view/courseview/remove_group_from_cohort?guid={$params['entity']->guid}");
+//            $link->addLinkClass("cv_remove_group_from_cohort");
+//            $link->addLinkClass('elgg-lightbox');
+//            $return[] = $link;
+//        } else
+//        {
+//            $link = new ElggMenuItem('cv_button', 'CV Enabled!', "");
+//            $link->addLinkClass("cv_enabled");
+//            $return[] = $link;
+//        }
+//    } else if (elgg_get_logged_in_user_entity())
+//    {
+//        $link = new ElggMenuItem('cv_group_button', 'link to CourseView', "ajax/view/courseview/cv_make_group_a_cohort?guid={$params['entity']->guid}");
+//        $link->addLinkClass("cv_add_to_cohort");
+//        $link->addLinkClass('elgg-lightbox');
+//        $return[] = $link;
+//    }
+//    return $return;
+//}
 
 /**
  * When the sidebar plugin hook fires, cv_sidebar_intercept takes over and adds dropdowns and 
@@ -756,56 +805,6 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
         $returnvalue = elgg_view('courseview/cv_hijack_sidebar') . $returnvalue;
     }
     return $returnvalue;
-}
-
-/**
- * Runs whenever a user joins a group.  If that group is actually a cvcohort then we need to add the users guid to the 
- * acl of the cvcourse which is the container of that particluar cvcohort
- *
- * @param array $event  - not used
- * @param array  $type - not used
- * @param array $params - the params array contains the group entity that the user is being added to and the user entity
- *                                            that is being added to the group. 
- *
- * @return void
- */
-function cv_join_group($event, $type, $params)
-{
-    $cv_group = $params['group'];
-    //if the group isn't a cvcohort, then just return without doing anything
-    if (!$cv_group->cvcohort)
-    {
-        return;
-    }
-    //$ignore_acess = elgg_set_ignore_access(true); // grants temporary permission overrides
-    $cv_course = $cv_group->getContainerEntity();
-    $cv_user = $params['user'];
-    //here we add the user to the course acl
-    $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-    //elgg_set_ignore_access($ignore_acess); // restore permissions
-}
-
-/**
- * Runs whenever a user leaves a group.  If that group is actually a cvcohort then we need to remove the users guid from the 
- * acl of the cvcourse which is the container of that particluar cvcohort
- *
- * @param array $event  - not used
- * @param array  $type - not used
- * @param array $params - the params array contains the group entity that the user is being removed from and the user entity
- *                                            that is being removed from the group. 
- *
- * @return void
- */
-function cv_leave_group($event, $type, $params)
-{
-    $cv_group = $params['group'];
-    if (!$cv_group->cvcohort)
-    {
-        return;
-    }
-    $cv_course = $cv_group->getContainerEntity();
-    $cv_user = $params['user'];
-    remove_user_from_access_collection($cv_user->guid, $cv_course->cv_acl);
 }
 
 /**
@@ -927,7 +926,7 @@ function cv_intercept_ACL_write($hook, $type, $return, $params)
         if ($course->cv_acl)
         {
             $return [$course->cv_acl] = 'Course: ' . $course->title;
-            $return [$cv_cohort->group_acl] = 'Cohort: ' . $cv_cohort->title;
+            $return [$cv_cohort->group_acl] = 'Cohort: ' . $cv_cohort->name;
         }
     }
 
@@ -1011,15 +1010,8 @@ function cv_intercept_newuser($event, $type, $params)
  */
 function cv_menu_url_handler($menu_entity)
 {
-
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
-    //echo $menu_entity->name;
-    // echo $menu_entity->guid;
-
     $cvmenuguid = $menu_entity->guid;
-    //echo $cvmenuguid;
-    //exit;
-
     return (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuguid");
 }
 
@@ -1039,7 +1031,6 @@ function cv_menu_url_handler($menu_entity)
  */
 function cv_can_write_to_container($hook, $type, $return, $params)
 {
-
     if (elgg_instanceof($params['container'], 'object', 'cvcourse'))
     {
         if (cv_isprof($params['user']))

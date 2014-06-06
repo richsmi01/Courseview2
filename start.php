@@ -2,7 +2,7 @@
 /**
  * Write something profound here...
  */
-elgg_register_event_handler('init', 'system', 'courseviewInit'); //call courseviewinit when the plugin initializes
+elgg_register_event_handler('init', 'system', 'courseviewInit',99999); //call courseviewinit when the plugin initializes
 
 function courseviewInit()
 {
@@ -65,13 +65,24 @@ function courseviewInit()
 
     //$regentitytypes = get_registered_entity_types();
     // $plugins = $regentitytypes['object'];
-
+     elgg_register_event_handler('join', 'group', 'cvtest',0);
+  
     cv_register_hooks_events_actions(dirname(__FILE__));  //register all hooks and stuff, passing the current directory of this file
     // push the  cohort guid and menu guid into the session
+      // global $CONFIG;
+             //   echo print_r($CONFIG->events['join']['group'],true);
+                //exit;
+    
     $cvcohortguid = ElggSession::offsetGet('cvcohortguid');
     $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 }
 
+
+function cvtest()
+{
+    var_dump ("Worked");
+    exit;
+}
 //this method gets called when one of the courseview urls is called.  
 function courseviewPageHandler($page, $identifier)
 {

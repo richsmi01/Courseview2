@@ -38,7 +38,7 @@ if (cv_isprof($cvuser))
     foreach ($cvcourses as $cvcourse)
     {
         $menuitems = cv_get_menu_items_for_course($cvcourse->guid);
-        echo '<div class ="css-treeview">';
+        echo '<div class ="cv-treeview">';
         foreach ($menuitems as $menuitem)
         {
             $name = $menuitem->name;
@@ -81,7 +81,7 @@ foreach ($cv_users_cohorts as $cohort)
 
     // building the html of the treeview control and adding the correct css classes so that the css
     //can turn it into a tree that can be manipulated by the user 
-    echo '<div class ="css-treeview sub">';
+    echo '<div class ="cv-treeview sub">';
     //we start our tree with indentlevel at 0.  The only menu items that will be at indent level 0 will be the course container folder
     $indentlevel = 0;
     //now, loop through each menu item (by menusort order)

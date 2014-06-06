@@ -43,23 +43,23 @@ min-width: 850px;
 }
 */
 
-.css-treeview ul, .css-treeview li
+.cv-treeview ul, .cv-treeview li
 {
     padding: 0;
     margin: 0;
     list-style: none;
 }
 
-.css-treeview input
+.cv-treeview input
 {
 position: absolute;
 opacity: 0;  
 }
 
-.css-treeview input.cvinsert{
+.cv-treeview input.cvinsert{
 opacity: 1;
 }
-.css-treeview
+.cv-treeview
 {
 font: normal 11px "Segoe UI", Arial, Sans-serif;
 -moz-user-select: none;
@@ -69,7 +69,7 @@ overflow-y:hidden;
 overflow-x:hidden;
 }
 
-.css-treeview a
+.cv-treeview a
 {
 color: #00f;
 text-decoration: none;
@@ -80,53 +80,53 @@ text-decoration: none;
 //overflow-x:scroll;
 }
 /*I added this to make branch nodes push in a little bit--Rich.*/
-.css-treeview  .indent {
+.cv-treeview  .indent {
 margin-left: 25px;
 }
 
-.css-treeview a:hover
+.cv-treeview a:hover
 {
 text-decoration: underline;
 }
 
-.css-treeview input + label + ul
+.cv-treeview input + label + ul
 {
 margin: 0 0 0 22px;
 }
 
-.css-treeview input ~ ul
+.cv-treeview input ~ ul
 {
 display: none;
 }
 
-.css-treeview label,
-.css-treeview label::before
+.cv-treeview label,
+.cv-treeview label::before
 {
 cursor: pointer;
 }
 
-.css-treeview input:disabled + label
+.cv-treeview input:disabled + label
 {
 cursor: default;
 opacity: .6;
 
 }
 
-.css-treeview input:checked:not(:disabled) ~ ul
+.cv-treeview input:checked:not(:disabled) ~ ul
 {
 display: block;
 }
 
-.css-treeview label,
-.css-treeview label:before
+.cv-treeview label,
+.cv-treeview label:before
 {
 
 background: url(<?php echo elgg_get_site_url(); ?>mod/courseview/icons.png) no-repeat;
 }
 
-.css-treeview label,
-.css-treeview a,
-.css-treeview label::before
+.cv-treeview label,
+.cv-treeview a,
+.cv-treeview label::before
 {
 display: inline-block;
 height: 16px;
@@ -134,13 +134,13 @@ line-height: 16px;
 vertical-align: middle;
 }
 
-.css-treeview label 
+.cv-treeview label 
 {
 background-position: 18px 0;
 }
 
-/*.css-treeview label::before*/
-.css-treeview label:before
+/*.cv-treeview label::before*/
+.cv-treeview label:before
 {
 
 content: "";
@@ -150,7 +150,7 @@ vertical-align: middle;
 background-position: 0 -32px;
 }
 
-.css-treeview input:checked + label::before
+.cv-treeview input:checked + label::before
 {
 background-position: 0 -16px;
 }
@@ -158,7 +158,7 @@ background-position: 0 -16px;
 /* webkit adjacent element selector bugfix */
 @media screen and (-webkit-min-device-pixel-ratio:0)
 {
-.css-treeview 
+.cv-treeview 
 {
 -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
 }

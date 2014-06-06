@@ -8,16 +8,15 @@
  *
  */
 ?>
-
+/*used to hide course list until set to visible through js when a user clicks to open dropdown*/
 #cv_hidden_course_list 
 {
     display:none;
 }
 
+
 #make_a_cohort {
-
 display:none;
-
 }
 
 #make_a_cohort + label
@@ -73,8 +72,6 @@ margin 10px;
     margin:auto;
 }
 
-
-
 cv_settings
 {
     color:blue;
@@ -83,16 +80,16 @@ cv_settings
 #courseview_sidebar, #courseview_sidebar_filter, #courseview_sidebar_create, #courseview_sidebar_menu
 {
     border:grey 2px ridge;
-    padding: 5px;
+    padding: 1px;
 }
 #courseview_sidebar
 {
-    margin:7px;
+    margin:1px;
 }
 #courseview_sidebar_filter, #courseview_sidebar_create
 {
-    padding-top: 5px;
-    margin: 4px 0px;   
+    padding: 3px;
+    margin: 1px 0px;   
 }
 
 .smalltext{
@@ -139,14 +136,14 @@ body {
     display:block;
 }
 
-.css-treeview ul, .css-treeview li
+.cv-treeview ul, .cv-treeview li
 {
     padding: 0;
     margin: 0;
     list-style: none;
 }
 
-.css-treeview input
+.cv-treeview input
 {
     position: absolute;
     opacity: 0;  
@@ -155,12 +152,15 @@ body {
 
 #courseview_sidebar_menu li{
 overflow:hidden;
+white-space: nowrap
 }
 
-.css-treeview input.cvinsert{
+
+
+.cv-treeview input.cvinsert{
     opacity: 1;
 }
-.css-treeview
+.cv-treeview
 {
     font: normal 11px "Segoe UI", Arial, Sans-serif;
     -moz-user-select: none;
@@ -169,62 +169,65 @@ overflow:hidden;
     overflow-y:clip;
     overflow-x:clip;
     text-overflow: "...";
+    padding:3px;
 }
 
-.css-treeview a
+.cv-treeview a
 {
     color: #00f;
     text-decoration: none;
+    overflow:hidden;
+    white-space: nowrap;
 
 }
 
 /*I added this to make branch nodes push in a little bit--Rich.*/
-.css-treeview  .indent {
+.cv-treeview  .indent {
     margin-left: 15px;
 }
 
-.css-treeview a:hover
+.cv-treeview a:hover
 {
     text-decoration: underline;
 }
 
-.css-treeview input + label + ul
+.cv-treeview input + label + ul
 {
     margin: 0 0 0 22px;
 }
 
-.css-treeview input ~ ul
+.cv-treeview input ~ ul
 {
     display: none;
 }
 
-.css-treeview label,
-.css-treeview label::before
+.cv-treeview label,
+.cv-treeview label::before
 {
     cursor: pointer;
 }
 
-.css-treeview input:disabled + label
+.cv-treeview input:disabled + label
 {
     cursor: default;
     opacity: .6;
 
 }
 
-.css-treeview input:checked:not(:disabled) ~ ul
+.cv-treeview input:checked:not(:disabled) ~ ul
 {
     display: block;
 }
 
-.css-treeview label,
-.css-treeview label:before
+.cv-treeview label,
+.cv-treeview label:before
 {
     background: url('<?php echo elgg_get_site_url(); ?>mod/courseview/imgs/icons.png') no-repeat;
 }
 
-.css-treeview label,
-.css-treeview a,
-.css-treeview label::before
+.cv-treeview label,
+.cv-treeview a,
+.cv-treeview label::before
 {
     display: inline-block;
     height: 16px;
@@ -232,12 +235,12 @@ overflow:hidden;
     vertical-align: middle;
 }
 
-.css-treeview label 
+.cv-treeview label 
 {
     background-position: 18px 0;
 }
 
-.css-treeview label:before
+.cv-treeview label:before
 {
     content: "";
     width: 16px;
@@ -246,7 +249,7 @@ overflow:hidden;
     background-position: 0 -32px;
 }
 
-.css-treeview input:checked + label::before
+.cv-treeview input:checked + label::before
 {
     background-position: 0 -16px;
 }
@@ -254,7 +257,7 @@ overflow:hidden;
 /* webkit adjacent element selector bugfix */
 @media screen and (-webkit-min-device-pixel-ratio:0)
 {
-    .css-treeview 
+    .cv-treeview 
     {
         -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
     }
@@ -367,7 +370,7 @@ overflow:hidden;
 }
 
 #cvwelcome {
-    font-size:300%;
+    font-size:220%;
     text-align: center;
     font-weight: bold;
     -webkit-animation: blurFadeIn 2s ease-in-out;

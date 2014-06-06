@@ -27,6 +27,9 @@ add_user_to_access_collection(elgg_get_logged_in_user_guid(), $id);
 $cvmenu = new ElggObject();
 $cvmenu->subtype = 'cvmenu';
 $cvmenu->name = $cvcoursename;
+
+$cvmenu->title = $cvcoursename;
+
 $cvmenu->owner_guid = $user->guid;
 $cvmenu->container_guid = $cvcourse->guid;
 $cvmenu->access_id = ACCESS_PUBLIC;

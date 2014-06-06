@@ -1,4 +1,4 @@
-<!--<script>  //quick and dirty script to persist the tree menu between page refreshes...should probably think about a better way to do this...maybe through ajax
+<script>  // script to persist the tree menu between page refreshes...
     window.onload=function(){
         var treemenu = document.getElementsByClassName("cvmenuitem");
         var current=document.getElementsByClassName("cvcurrent")[0];
@@ -20,7 +20,7 @@
         }
         current.checked=true;
     }
-</script>-->
+</script>
 
 
 <?php
@@ -48,11 +48,8 @@ if ($cv_mode=='current' )
     else
     {
         $cohorts=null;
-    }
-    
+    }   
 }
-
-//echo "<h3><a href = '$cv_home_url'>CourseView</a></h3>";
 
 echo elgg_view_form('cv_menu_toggle');
 
@@ -76,26 +73,24 @@ if (cv_is_list_page())
     echo elgg_view ('courseview/cv_filter_content');
 }
 
-
 $count = 0;
 echo "<div id = courseview_sidebar_menu>";
 //loop through each cohort and build the tree menu
 foreach ($cohorts as $cohort)
 {
     $cv_current_examined_cohort_guid = $cohort->guid;
-    
     $menuitems = cv_get_menu_items_for_cohort($cv_current_examined_cohort_guid);
 
     //Here we are building the html of the treeview control and adding the correct css classes so that my css
     //can turn it into a tree that can be manipulated by the user 
-    echo elgg_echo('<div class ="css-treeview">');
+    echo elgg_echo('<div class ="cv-treeview">');
     $indentlevel = 0;
 
     //now, loop through each menu item (by menusort order)
     foreach ($menuitems as $menuitem)
     {
         //echo '@@@'.$menuitem->name;
-    //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
+        //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
         if ($menuitem->indent > $indentlevel)
         {
             echo elgg_echo('<ul>');
@@ -112,7 +107,7 @@ foreach ($cohorts as $cohort)
         $name = $menuitem->name;
         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
         {
-            $name = $cohort->title ;
+            $name = $cohort->name ;
         }
         $id1 = $count; //$menuitem->menuorder;
         $count++;
@@ -142,13 +137,12 @@ foreach ($cohorts as $cohort)
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         else
         {
-    
             echo elgg_echo("<li><a title='$name' abc ='m' name='$indent' class = 'cvmenuitem $class2 $class3 indent' id ='$id1' "
-                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_current_examined_cohort_guid . "/" . $menuitem->guid . "' >" . $name . "</a></li>");
+                . "href ='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_current_examined_cohort_guid . "/" . $menuitem->guid . "' >"
+                . $name . "</a></li>");
         }
     }
     echo '</div>';
 }
 echo'</div>';
-//echo '<br>';
-echo "</div>";
+echo "</div>";  //courseview_sidebar

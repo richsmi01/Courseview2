@@ -53,7 +53,7 @@ $dropdownlist = array();
 foreach ($availablecohorts as $availablecohort)
 {
     $cohort = "Parent course: " . get_entity($availablecohort->guid)->container_guid;
-    $dropdownlist [$availablecohort->guid] = $availablecohort->title;
+    $dropdownlist [$availablecohort->guid] = $availablecohort->name;   //::TODO:Rich - fix this
 }
 
 $cfilter = get_input('cohortfilter', $cv_cohort_guid);
