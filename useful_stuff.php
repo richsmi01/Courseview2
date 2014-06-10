@@ -12,3 +12,5 @@
  //elgg_register_plugin_hook_handler('view', "groups/all", 'cv_create_group');
     //elgg_register_plugin_hook("view","groups/edit","cv_create_group"); 
     //elgg_register_plugin_hook_handler("create","group","cv_create_group");
+
+ //if (is_numeric($guid))

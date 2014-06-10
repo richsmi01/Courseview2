@@ -7,7 +7,6 @@ echo "<div class='cvminiview'>";
 echo "<em>MAKE A COURSEVIEW COHORT :</em><br/><br/>";
 if (!isset($vars['group_guid']))
 {
-
     echo elgg_view('input/radio', array(
         'name' => 'params[cohort_permissions]',
         'id' => 'cohort_permissions',
@@ -21,5 +20,5 @@ echo "Please choose course that this cohort will be based on: ";
 
 echo elgg_view("courseview/cv_list_courses", array('all' => true));  
 echo elgg_view('input/submit');
-echo "</div>";
+echo "</div>";  //cvminiview
 

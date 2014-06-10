@@ -233,22 +233,18 @@ function cv_register_hooks_events_actions($base_path)
  */
 function cv_join_group($event, $type, $params)
 {
-    system_message ("Joining group, I hope");
-    //exit;
     $cv_group = $params['group'];
-    //if the group isn't a cvcohort, then just return without doing anything
+    //system_message ("Joining group:  $cv_group->name");
     if (!$cv_group->cvcohort)
     {
         return;
     }
-    $ignore_acess = elgg_set_ignore_access(true); // grants temporary permission overrides
     $cv_course = $cv_group->getContainerEntity();
     $cv_user = $params['user'];
     //here we add the user to the course acl
     $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-    elgg_set_ignore_access($ignore_acess); // restore permissions
-    system_message ("$cv_user->name just joined $cv_group->name");
-    exit;
+    //system_message ("$result");
+    system_message ("$cv_user->name has just joined the cohort: $cv_group->name");
 }
 
 /**
@@ -264,7 +260,6 @@ function cv_join_group($event, $type, $params)
  */
 function cv_leave_group($event, $type, $params)
 {
-     system_message ("Leaving the group, I hope");
     $cv_group = $params['group'];
     if (!$cv_group->cvcohort)
     {
@@ -273,6 +268,7 @@ function cv_leave_group($event, $type, $params)
     $cv_course = $cv_group->getContainerEntity();
     $cv_user = $params['user'];
     remove_user_from_access_collection($cv_user->guid, $cv_course->cv_acl);
+    system_message ($cv_user->name." is no longer in the cohort: ".$cv_group->name);
 }
 function cv_get_valid_plugins($user)
 {

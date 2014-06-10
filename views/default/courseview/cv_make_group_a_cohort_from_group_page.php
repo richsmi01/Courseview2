@@ -23,6 +23,8 @@ $options=array(
 );
 
 echo "<div id = 'testID'>";
+
+//echo "To make this group a Course View Cohort, go to the Group List page and click on 'Link to CourseView'.<br><br>";
 echo elgg_view('input/checkbox', $options);
 
 echo "<label for = 'make_a_cohort'>Add or remove this group from CourseView</label>";

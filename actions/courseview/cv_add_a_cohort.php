@@ -12,26 +12,34 @@ if (get_input('group_guid') > 0)
 } else
 {
     $cvcohort = new ElggGroup ();
-
-    $cvcohort->name = $cvcohortname;
-    //::TODO:Matt - How do we set open vs closed?  instead of public vs private
-    if (get_input('cohort_permissions') == 'open')
-    {
-        //   $cvcohort->access_id = ACCESS_PUBLIC;
-    } else
-    {
-        // $cvcohort->access_id = ACCESS_PRIVATE;
-    }
-    $cvcohort->owner_guid = elgg_get_logged_in_user_guid();
+    $cvcohort->title = $cvcohortname;
 }
-$cvcohort->container_guid = $cvcourseguid;
-$cvcohort->title = $cvcohort->name;
-$cvcohort->save();
-$cvcohort->cvcohort = true;
-$cvcohort->title = $cvcohort->name;
-add_user_to_access_collection($user, $cvcohort->group_acl);
 
+$cvcohort->access_id = ACCESS_PUBLIC;
+//    if (get_input('cohort_permissions') == 'open')
+//    {
+//        $cvcohort->membership = ACCESS_PUBLIC;
+//    } else
+//    {
+//        $cvcohort->membership = ACCESS_PRIVATE;
+//    }
+
+$cvcohort->owner_guid = elgg_get_logged_in_user_guid();
+$cvcohort->container_guid = $cvcourseguid;
+//$cvcohort->title = $cvcohort->name;
+
+
+$cvcohort->save();
+$cvcohort->membership = ACCESS_PUBLIC;
+//$cvcohort->container_guid = $cvcourseguid;
+$cvcohort->cvcohort = true;
+//$cvcohort->title = $cvcohort->name;
+add_user_to_access_collection($user, $cvcohort->group_acl);
+$temp = get_entity ($cvcohort->container_guid)->name;
+//system_message("The cohort container object is now ".$temp);
 //make the professor a member of the group (cohort)
 $cvcohort->join($user);
 
 system_message("The cohort: $cvcohort->name has been bound to the course: $cvcourse->title");
+//var_dump ($cvcohort);
+//exit;
