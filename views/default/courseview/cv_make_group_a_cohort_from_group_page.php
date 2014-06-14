@@ -13,7 +13,6 @@
 
 <?php
 $cv_group_guid =$vars['entity']->guid;
-
 $options=array(
     'name' => 'make_a_cohort',
     'id' => 'make_a_cohort',
@@ -23,7 +22,6 @@ $options=array(
 );
 
 echo "<div id = 'testID'>";
-
 //echo "To make this group a Course View Cohort, go to the Group List page and click on 'Link to CourseView'.<br><br>";
 echo elgg_view('input/checkbox', $options);
 

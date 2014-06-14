@@ -52,8 +52,9 @@ $availablecohorts = cv_get_cohorts_by_courseguid($courseguid);
 $dropdownlist = array();
 foreach ($availablecohorts as $availablecohort)
 {
+   // echo $availablecohort->title.'--'.$availablecohort->name.'<br>';
     $cohort = "Parent course: " . get_entity($availablecohort->guid)->container_guid;
-    $dropdownlist [$availablecohort->guid] = $availablecohort->name;   //::TODO:Rich - fix this
+    $dropdownlist [$availablecohort->guid] = $availablecohort->name;   
 }
 
 $cfilter = get_input('cohortfilter', $cv_cohort_guid);

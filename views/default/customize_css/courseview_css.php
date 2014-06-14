@@ -77,6 +77,13 @@ cv_settings
     color:blue;
 }
 
+/*********************************   sidebar formatting************************************/
+
+/*set all select widgets to have a width of 193px*/
+#courseview_sidebar select {
+width: 193px;
+}
+
 #courseview_sidebar, #courseview_sidebar_filter, #courseview_sidebar_create, #courseview_sidebar_menu
 {
     border:grey 2px ridge;
@@ -90,6 +97,11 @@ cv_settings
 {
     padding: 3px;
     margin: 1px 0px;   
+}
+
+#courseview_sidebar_menu li{
+overflow:hidden;
+white-space: nowrap
 }
 
 .smalltext{
@@ -149,11 +161,6 @@ body {
     opacity: 0;  
 }
 
-
-#courseview_sidebar_menu li{
-overflow:hidden;
-white-space: nowrap
-}
 
 
 

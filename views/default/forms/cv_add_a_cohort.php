@@ -8,7 +8,7 @@ echo "<em>MAKE A COURSEVIEW COHORT :</em><br/><br/>";
 if (!isset($vars['group_guid']))
 {
     echo elgg_view('input/radio', array(
-        'name' => 'params[cohort_permissions]',
+        'name' => 'cohort_permissions',
         'id' => 'cohort_permissions',
         'options' => array('Make Cohort open' => 'open', 'Make Cohort closed' => 'closed'),
         'value' => 'open',

@@ -26,7 +26,7 @@
 <?php
 
 //Builds the CourseView sidebar
-elgg_load_js ('cv_sidebar_js');
+//elgg_load_js ('cv_sidebar_js');
 elgg_load_library('elgg:courseview');
 
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
