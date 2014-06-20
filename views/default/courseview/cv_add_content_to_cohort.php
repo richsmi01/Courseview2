@@ -1,11 +1,18 @@
 <?php
 
-/* Next, we should check to see if the user has any cohorts...if they don't, return without doing anything else.
- * Also, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
+/* This view determines whether or not to display the cv_content_tree at the bottom of a page.  We want the cv_content_tree
+ * to appear when we are creating a new content artifact that is one of the approved plugins for CourseView.  However, there 
+ * are many cases where we don't want the cv_content_tree to show up.  
+ * 
+ * We can easily filter out plugins that aren't approved.
+ * However, certain pages are beyond our ability to automatically filter out.  For instance, we do want the cv_content_tree to
  * pop up when desiging a poll.  However, we don't want it to pop up when taking the poll.  The only way to do this is to look for
- * a particular word in the $action string that is created by the plugin.  Again, for the poll plugin, this $action String looks something
+ * a particular word in the $action string that is created by the plugin.  For the poll plugin, this $action String looks something
  * like this: http://localhost/elgg/action/polls/vote  -- In this case we are able to pull out the word vote as being unique to this page and check 
- * for it.  If we find it, we don't want to add cv_content_tree to the page.  This vote word gets entered in the settings page
+ * for it.  If we find it, we don't want to add cv_content_tree to the page.  This vote word gets entered in the settings page by the admin and we 
+ * check the action against this list
+ * 
+ * Also, if the posting is a reply, we don't want to show cv_content_tree
  */
 elgg_load_library('elgg:courseview');
 $action = $vars['action'];
@@ -28,7 +35,6 @@ if (strpos($action, 'reply'))
 
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
  * valid plugins for courseview is set in the settings view under the administration section of Elgg. */
-
 
 $user = elgg_get_logged_in_user_entity();
 $validplugins = cv_get_valid_plugins($user);

@@ -1,7 +1,7 @@
 <?php
 /* *
  * Allows content placed inside of 'professor' type menu items (ie relationship
- * between content and cvmenu item set to professor) to be move up or down
+ * between content and cvmenu item set to professor) to be moved up or down by the owner prof
  */
 $guid_to_move = get_input('guidtomove');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
@@ -17,10 +17,9 @@ $previous_content_item = $content_items[0];
 $movedown = false;
 foreach ($content_items as $content_item)
 {
-     
     if ($updown == 'up' && $guid_to_move == $content_item->guid)
     {
-        $temp = $content_item->sort_order;
+        $temp = $content_item->sort_order; //swap sort_order with previous cvmenu
         $content_item->sort_order = $previous_content_item->sort_order;
         $previous_content_item->sort_order = $temp;
         $previous_content_item->save();
@@ -29,7 +28,7 @@ foreach ($content_items as $content_item)
 
     if ($movedown)
     {
-        $temp = $content_item->sort_order;
+        $temp = $content_item->sort_order;//swap sort_order with next cvmenu 
         $content_item->sort_order = $previous_content_item->sort_order;
         $previous_content_item->sort_order = $temp;
         $previous_content_item->save();

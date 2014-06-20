@@ -46,7 +46,7 @@ $options = array
               echo "------------------menuorder: $menuitem->menuorder <br>";
               echo "------------------indentlevel:  $menuitem->indent<br>";
               echo "------------------Parent course:$menuitem->container_guid<br> ";
-            $content = cv_get_content_by_menu_item('all', $menuitem->guid, 'content'.$cohort->guid);
+            $content = cv_get_content_by_menu_item1('all', $menuitem->guid, 'content'.$cohort->guid);
             echo "-------------------Retrieved ".sizeof($content)." content relationships<br>";
             foreach($test as $t)
             {

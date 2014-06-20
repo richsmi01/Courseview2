@@ -10,4 +10,3 @@ $cvcourse = get_entity($cvcourseguid);
 delete_access_collection ($cvcourse->cv_acl);
 $cvcourse->delete();
 
-?>

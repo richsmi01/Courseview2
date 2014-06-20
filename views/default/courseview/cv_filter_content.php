@@ -52,7 +52,6 @@ $availablecohorts = cv_get_cohorts_by_courseguid($courseguid);
 $dropdownlist = array();
 foreach ($availablecohorts as $availablecohort)
 {
-   // echo $availablecohort->title.'--'.$availablecohort->name.'<br>';
     $cohort = "Parent course: " . get_entity($availablecohort->guid)->container_guid;
     $dropdownlist [$availablecohort->guid] = $availablecohort->name;   
 }
@@ -106,7 +105,7 @@ if (get_entity($menuguid)->menutype == 'student')
     echo "</div>";
 }
 
-if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) || get_entity($menuguid)->menutype == 'student')
+if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) && get_entity($menuguid)->menutype == 'professor'|| get_entity($menuguid)->menutype == 'student')
 {
     echo "<div id = courseview_sidebar_create>";
     echo 'Create a posting:<br> ';

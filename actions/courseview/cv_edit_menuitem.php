@@ -79,5 +79,4 @@ switch (get_input('buttonchoice'))
         $cvmenuitem = get_entity($nextselectedmenuitem->guid);      
 }
 
-//forward (elgg_get_site_url() . "courseview/cv_contentpane/$cvcohortguid/$cvmenuitem->guid");
 forward($cvmenuitem->getURL());

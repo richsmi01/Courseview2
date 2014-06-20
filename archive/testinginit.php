@@ -35,7 +35,8 @@ $options = array
           foreach ($menuitems as $menuitem)
           {
             echo "--------------Menu Item:  $menuitem->title --  $menuitem->guid --$menuitem->menutype -- indentlevel = $menuitem->indent<br>";
-            $content = cv_get_content_by_menu_item('all', $menuitem->guid, 'content'.$cohort->guid);
+            
+            $content = cv_get_content_by_menu_item1('all', $menuitem->guid, 'content'.$cohort->guid);
             foreach ($content as $contentitem)
             {
                 echo '------------------Content:'. $contentitem->getSubtype().' --'.$contentitem->title.'--'.$contentitem->guid.'<br>';

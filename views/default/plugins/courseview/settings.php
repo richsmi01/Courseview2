@@ -81,10 +81,7 @@ $options=array(
     'options' => array('Show CourseView activation menu item on main site menu' => 1),
      'value' => 1,
 );
- if ($vars['entity']->show_courseview_site_activation == 1)
-    {
-        $options['checked'] = true;
-    }
+ $options['checked'] = ($vars['entity']->show_courseview_site_activation==1);
 echo elgg_view('input/checkbox', $options);
 echo "Show CourseView activation menu item on main site menu.";
 elgg_set_plugin_setting('show_courseview_site_activation', $vars['entity']->show_courseview_site_activation, 'courseview'); 
@@ -95,13 +92,26 @@ $options=array(
     'options' => array('Show CourseView activation menu item on sidebar. ' => 1),
      'value' => 1,
 );
- if ($vars['entity']->show_courseview_sidebar_activation == 1)
-    {
-        $options['checked'] = true;
-    }
+
+ $options['checked'] = ($vars['entity']->show_courseview_sidebar_activation==1);
 echo elgg_view('input/checkbox', $options);
-echo "Show CourseView activation menu item on sidebar. ";
+echo "Show CourseView activation menu item on sidebar.<br> ";
 elgg_set_plugin_setting('show_courseview_sidebar_activation', $vars['entity']->show_courseview_sidebar_activation, 'courseview'); 
+
+
+$options=array(
+    'name' => 'params[hp_mode]',
+    'id' => 'hp_mode',
+    'options' => array('hp_mode ' => 1),
+     'value' => 1,
+);
+$options['checked'] = ($vars['entity']->hp_mode==1);
+echo elgg_view('input/checkbox', $options);
+echo "Have CourseView completely take over - for testing only";
+elgg_set_plugin_setting('hp_mode', $vars['entity']->hp_mode, 'courseview'); 
+
+
+
 
 echo "<br><br><h3>Sidebar Options:</h3>";
 echo "Displaying Cohorts within CourseView";
@@ -128,10 +138,7 @@ $options=array(
     'options' => array('Show Elgg stuff in sidebar' => 1),
      'value' => 1,
 );
- if ($vars['entity']->show_elgg_stuff == 1)
-    {
-        $options['checked'] = true;
-    }
+ $options['checked'] = ($vars['entity']->show_elgg_stuff==1);
 echo elgg_view('input/checkbox', $options);
 echo "Show Elgg content in sidebar underneath CourseView menu while CourseView is active";
 elgg_set_plugin_setting('show_elgg_stuff', $vars['entity']->show_elgg_stuff, 'courseview'); 
@@ -156,10 +163,7 @@ $options=array(
     'options' => array('Animate header?' => 1),
      'value' => 1,
 );
- if ($vars['entity']->cv_animated_header == 1)
-    {
-        $options['checked'] = true;
-    }
+ $options['checked'] = ($vars['entity']->cv_animated_header==1);
 echo elgg_view('input/checkbox', $options);
 
 elgg_set_plugin_setting('cv_animated_header', $vars['entity']->cv_animated_header, 'courseview'); 
@@ -171,14 +175,32 @@ $options=array(
     'options' => array('Animate header?' => 1),
      'value' => 1,
 );
- if ($vars['entity']->cv_animated_menuitem == 1)
-    {
-        $options['checked'] = true;
-    }
+//::TODO:Rich - Couldn't this whole if be replaced with $options['checked'] = $vars['entity']->cv_animated_menuitem; ?
+// if ($vars['entity']->cv_animated_menuitem == 1)
+//    {
+//        $options['checked'] = true;
+//    }
+$options['checked']= ($vars['entity']->cv_animated_menuitem==1);
 echo elgg_view('input/checkbox', $options);
 
 elgg_set_plugin_setting('cv_animated_menuitem', $vars['entity']->cv_animated_menuitem, 'courseview'); 
 echo "Animated listview?<br>";
+
+
+$options=array(
+    'name' => 'params[cv_flashing_status]',
+    'id' => 'cv_flashing_status',
+    'options' => array('Flashing Updating status message?' => 1),
+     'value' => 1,
+);
+//::TODO:Rich - Like this?  
+$options['checked'] = ($vars['entity']->cv_flashing_status==1);
+echo elgg_view('input/checkbox', $options);
+
+elgg_set_plugin_setting('cv_flashing_status', $vars['entity']->cv_flashing_status, 'courseview'); 
+echo "Flashing Updating status message? <br>";
+
+
 
 
 

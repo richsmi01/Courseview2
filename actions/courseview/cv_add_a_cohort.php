@@ -9,12 +9,9 @@
  * - Next we have to add the prof to the access collection
  * - And finally, add the prof to the group in case this hasn't already been done
  */
-
-
 $user = elgg_get_logged_in_user_entity();
 $cvcohortname = get_input('cvcohortname');
 $cvcourseguid = get_input('cvcourse');
-
 $cvcourse = get_entity($cvcourseguid);
 
 if (get_input('group_guid') > 0)
@@ -22,12 +19,11 @@ if (get_input('group_guid') > 0)
     $cvcohort = get_entity(get_input('group_guid'));
     $cv_course = $cvcohort->getContainerEntity();
     $cv_user = elgg_get_logged_in_user_entity ();
-    //here we add the user to the course acl
+    //here we add the prof to the course acl
     $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
     system_message ("$cv_user->name has just joined the cohort: $cvcohort->name");
-} else  //If there is not yet a group, we need to make one  --this occurs if the user has elected to build a courseview cohort
-            //from the CourseView Administrative menu.
-{
+} else  //If there is not yet a group, we need to make one  --this occurs if the user has elected to build a courseview cohort           
+{           //from the CourseView Administrative menu.
     $cvcohort = new ElggGroup ();
     $cvcohort->name = $cvcohortname;
     $cvcohort->join($user);
@@ -41,30 +37,9 @@ $cvcohort->access_id = ACCESS_PUBLIC;
     {
         $cvcohort->membership = ACCESS_PRIVATE;
     }
-
 $cvcohort->owner_guid = elgg_get_logged_in_user_guid();
 $cvcohort->container_guid = $cvcourseguid;
-
-
-//$cvcohort->title = $cvcohort->name;  //oops
-
 $cvcohort->save();
-
-
-//$cvcohort->container_guid = $cvcourseguid;  //oops
-
-
 $cvcohort->cvcohort = true;
 
-
-//$cvcohort->title = $cvcohort->name;  //oops
-
-//add_user_to_access_collection($user, $cvcohort->group_acl); //::TODO:Matt - what's this doing again?  wouldn't this happen in the join user below?
-
-//make the professor a member of the group (cohort)
-//$cvcohort->leave($user);
-//$cvcohort->join($user);
-
 system_message("The cohort: $cvcohort->name has been bound to the course: $cvcourse->title");
-//var_dump ($cvcohort);
-//exit;

@@ -1,5 +1,4 @@
-
-<!--move our link to just above the save button-->
+<!--moves our link to just above the save button-->
 <script>
     $(document).ready(function() {
         $(".elgg-form input[type='submit']input[value='Save']").before($("#add_entity_to_cohort_menus"));
@@ -8,26 +7,35 @@
     });
 </script>
 
-
 <?php
+/*
+ * Builds a menu tree of currently available cohort/menu pairs to this particular student.  The cv_content_tree is 
+ * presented at the bottom of certain content creation pages to allow the student to select which cohort/menu items that 
+ * they would like this content to be part of.  A student may elect to place the content artifact in multiple cohort/menu 
+ * combinations.  
+ * 
+ * However, typically the student won't touch this and the cv_content_tree defaults to placing the content artifact in 
+ * the currently selected cohort/menu section.
+ */
 elgg_load_library('elgg:cv_content_tree_helper_functions');
 elgg_load_library('elgg:courseview');
 
 $cv_cohortguid = ElggSession::offsetGet('cvcohortguid');
 $cv_cohort = get_entity(ElggSession::offsetGet('cvcohortguid'));
-$cv_entity = ($vars['entity']);
-$current_content_entity = $cv_entity;
+
+$current_content_entity = ($vars['entity']);
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $cvmenuitem = get_entity($cvmenuguid);
 $userguid = elgg_get_logged_in_user_guid();
 $cvuser = get_entity($userguid);
 
-
 $prof_menu_item_already_used = array();
 $cv_users_cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged in user belongs to
 
 echo "<div id='add_entity_to_cohort_menus'>";
-if (cv_isprof($cvuser))
+//If the user is a prof, we need to add the ability for them to add this content to a professor only cohort/menu 
+//pair
+if (cv_isprof($cvuser))  
 {
     echo "<input  id ='cv_check1' type ='checkbox' class='cv_collapsible' />";
     echo "<label  for ='cv_check1' >Add this content to the professor content areas of Courseview Courses </label>";
@@ -72,7 +80,7 @@ if (cv_isprof($cvuser))
 
 echo "<label class = 'sub3'>This content will be posted to the $cvmenuitem->name menu item<br></label>";
 echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' class ='cv_collapsible' type ='checkbox'  />";
-echo "<label  for ='cv_check2'  > in the $cv_cohort->title  cohort.  Click here to change destination</label>";
+echo "<label  for ='cv_check2'  > in the $cv_cohort->name  cohort.  Click here to change destination</label>";
 echo "<div>";
 echo"<label class ='bluesub'> Check any of the CourseView menu items below that you wish this content to be posted to:</label>";
 foreach ($cv_users_cohorts as $cohort)
@@ -122,7 +130,7 @@ foreach ($cv_users_cohorts as $cohort)
         $name = $menuitem->name;
          if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
             {
-                $name = get_entity($cv_cohort_guid)->title;
+                $name = get_entity($cv_cohort_guid)->name; //***********
             }
         $indent = $menuitem->indent;
         $value = $menuitem->guid . "|" . $cv_cohort_guid;

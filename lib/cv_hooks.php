@@ -65,7 +65,6 @@ function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 }
 
 /**
- * ::TODO:Matt - Why do we need to intercept the redirect again?
  * When adding content through courseview context, elgg wants to redirect somewhere else but 
  * we want to force it to go back and display the courseview cohort/menuitem
  * @param type 

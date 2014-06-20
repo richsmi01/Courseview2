@@ -1,26 +1,23 @@
 <?php
 
 /**
- * Write something profound here...
+ * Rich Smith's Master's Project:  CourseView - A Distance Learning Engine
  */
 elgg_register_event_handler('init', 'system', 'courseviewInit'); //call courseviewinit when the plugin initializes
-//  require_once 'lib/functions.php'; events and hooks should be require_once
-//all occaisionally used stuff gets elgg_register_library.
 
 function courseviewInit()
 {
-    ElggSession::offsetSet('cv_hp', false); //::TODO:Rich - move this to settings
-    // Ensure that there is a logged in user before allowing access to page
-// <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
+    //ElggSession::offsetSet('cv_hp', true); //::TODO:Rich - move this to settings
+    
+    // <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
-// </editor-fold> 
-// <editor-fold defaultstate="collapsed" desc="************  Load Libraries  ****************">
+    // </editor-fold> 
+    // <editor-fold defaultstate="collapsed" desc="*************  Load Libraries  ****************">
     require_once 'lib/cv_hooks.php';
     require_once 'lib/cv_events.php';
-// </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="********* Lightbox ajax and js stuff **********">
-    /* load Elgg functionality for lightboxes. */
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="********* Lightbox ajax and js code **********">
     elgg_load_js('lightbox');
     elgg_load_css('lightbox');
     elgg_register_simplecache_view('js/courseview/js');
@@ -30,9 +27,11 @@ function courseviewInit()
     elgg_register_ajax_view('courseview/cv_make_group_a_cohort');
     elgg_register_ajax_view('courseview/remove_group_from_cohort');
     // </editor-fold>
-//::TODO:Rich - should eventually get rid of this...make all of this stuff require_once --can replace cv calls in 41 with standard elgg calls
+   
+    //::TODO:Rich - Need to look at not loading courseview here 
     elgg_load_library('elgg:courseview');
-
+    
+    // Ensure that there is a logged in user before allowing access to page
     if (!elgg_get_logged_in_user_entity())
     {
         return;
@@ -47,10 +46,10 @@ function courseviewInit()
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
 
 // <editor-fold defaultstate="collapsed" desc="********** Extending Views *************">
-    /*  Allows us to add ability to tag content into a particular module */
-    /* The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
-     * without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
-     * an approved object such as a blog, bookmark etc as chosen in the settings page. */
+    /*  Allows us to add ability to tag content into a particular module 
+     *  The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
+     *  without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
+     *  an approved object such as a blog, bookmark etc as chosen in the settings page. */
     elgg_extend_view('input/form', 'courseview/cv_add_content_to_cohort', 600);
 
     /* The cv_make_group_a_cohort_from_group_page adds the ability to make a group a cohort when in the group edit/new group page */
@@ -69,9 +68,9 @@ function courseviewInit()
     }
     //elgg_extend_view('groups/add', 'courseview/test', 600);
     // </editor-fold>
-//::TODO:Rich - Fix this up and move important parts to settings page    
-//just a little sneaky thing that I'll remove later on -- allows me to test hp functionality
-    if (cv_hp())
+ 
+    //if hp_mode is set to true in settings, have courseview completey take over
+    if (elgg_get_plugin_setting('hp_mode', 'courseview'))
     {
         elgg_extend_view('css/elgg', 'customize_css/hp_css', 1001);
         //get rid of the menu items
@@ -80,7 +79,7 @@ function courseviewInit()
         ElggSession::offsetSet('courseview', true);
     }
 
-// <editor-fold defaultstate="collapsed" desc="********  Set Up Menu Items ********">
+    // <editor-fold defaultstate="collapsed" desc="********  Set Up Menu Items ********">
 
     /* register menu item to switch to CourseView */
     cv_register_courseview_menu();
@@ -116,7 +115,7 @@ function courseviewInit()
 
     /*  this is left for future expansion - will call cv_shutdown_event at the end of the page rendering after everything
       else has completed */
-    elgg_register_event_handler('shutdown', 'system', 'cv_shutdown_event');  
+    elgg_register_event_handler('shutdown', 'system', 'cv_shutdown_event');
 
     /* creating, updating or deleting content results in us calling the cv_intercept_content_update to make or remove any
       relationships between the content and any menuitems deemed neccesary. */
@@ -135,7 +134,7 @@ function courseviewInit()
     elgg_register_event_handler('create', 'group', 'cv_update_group', 9999);
     elgg_register_event_handler('update', 'group', 'cv_update_group', 9999);
     // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="***** Register Actions ********">
+    // <editor-fold defaultstate="collapsed" desc="***** Register Actions ********">
     $base_path = dirname(__FILE__);
     //set up our paths and various actions 
     elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
@@ -153,9 +152,10 @@ function courseviewInit()
     //elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_menu_toggle.php');
     elgg_register_action('cv_remove_cohort', $base_path . '/actions/courseview/cv_remove_cohort.php');
     elgg_register_action('cv_admin_toggle', $base_path . '/actions/courseview/cv_admin_toggle.php');
-// </editor-fold>
+    
     //intercepts call to entity_url_handler
     elgg_register_entity_url_handler('object', 'cvmenu', 'cv_menu_url_handler');
+// </editor-fold>   
 }
 
 /*
@@ -170,9 +170,6 @@ function courseviewPageHandler($page, $identifier)
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
     gatekeeper();  //gatekeeper ensures that user is authorized to view page
     $base_path = dirname(__FILE__);
-
-
-
     /* Since it is possible to require the current cohort and menuitem while on a non-courseview page, we push
      * this information into the session */
     ElggSession::offsetSet('cvcohortguid', $page[1]);
@@ -188,7 +185,7 @@ function courseviewPageHandler($page, $identifier)
     {
         $cv_course = $cv_group->getContainerEntity();
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-        system_message("Yay!!!  ".$result);
+        system_message("Yay!!!  " . $result);
     }
 
 

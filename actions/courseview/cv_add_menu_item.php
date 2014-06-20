@@ -7,26 +7,27 @@
  * menuorder of any cvmenu items that follow it.
  */
 
-$currentcvmenuguid = ElggSession::offsetGet('cvmenuguid');
-$currentcvmenu = get_entity($currentcvmenuguid);
-$indent = 0;
+$current_cvmenu_guid = ElggSession::offsetGet('cvmenuguid');
+$current_cvmenu = get_entity($current_cvmenu_guid);
+//$indent = 0;  //we start at indent level 0 since that is where the first menu item will start
+//switch on what button the prof clicked on
 switch (get_input('buttonchoice'))
 {
     case 'Indent':
-        $indent = $currentcvmenu->indent + 1;
+        $indent = $current_cvmenu->indent + 1;
         break;
     case "Outdent":
-        if ($currentcvmenu->indent > 1)
+        if ($current_cvmenu->indent > 1)
         {
-            $indent = $currentcvmenu->indent - 1;
+            $indent = $current_cvmenu->indent - 1;
         }
         else
         {
-            $indent = $currentcvmenu->indent;
+            $indent = $current_cvmenu->indent;
         }
         break;
     case "Same Level":
-        $indent = $currentcvmenu->indent;
+        $indent = $current_cvmenu->indent;
         break;
 }
 
@@ -35,12 +36,15 @@ $modulename = get_input('newmodulename');
 $moduletype = get_input('newmoduletype');
 $moduleindent = get_input('newmoduleindent');
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
-$cvcourseguid = get_entity($cv_cohort_guid)->container_guid;
-$cvcourse = get_entity($cvcourseguid);
-$moduleorder = $currentcvmenu->menuorder + 1;
+$cv_course_guid = get_entity($cv_cohort_guid)->container_guid;
+$cv_course = get_entity($cv_course_guid);
 
+/*need to set the menu order of the cvmenu item to one more than
+ * the currently cvmenu item */
+$moduleorder = $current_cvmenu->menuorder + 1;  
+//Get all cvmenu items for this course
 $menu = elgg_get_entities_from_relationship(array
-    ('relationship_guid' => $cvcourseguid,
+    ('relationship_guid' => $cv_course_guid,
     'relationship' => 'menu',
     'type' => 'object',
     'subtype' => 'cvmenu',
@@ -48,7 +52,10 @@ $menu = elgg_get_entities_from_relationship(array
     'limit' => 1000,
         )
 );
-
+/*loop through the menu items from the newly inserted cvmenu item to the end of cvmenu items,
+ * incrementing the menuorder of each one...This will make the newly created cvmenu item
+ * fit nicely into the menuorder of cvmenu items.
+ */
 for ($a = $moduleorder; $a < sizeof($menu); $a++)
 {
     $currentsort = $menu[$a]->menuorder;
@@ -56,19 +63,19 @@ for ($a = $moduleorder; $a < sizeof($menu); $a++)
     $menu[$a]->menuorder = $newsort;
     $menu[$a]->save();
 }
+//Construct the cvmenu item, making the course the container 
 $cvmenu = new ElggObject();
 $cvmenu->subtype = 'cvmenu';
 $cvmenu->name = $modulename;
 $cvmenu->owner_guid = $user->guid;
-$cvmenu->container_guid = $cvcourseguid;
+$cvmenu->container_guid = $cv_course_guid;
 $cvmenu->access_id = ACCESS_PUBLIC;
 $cvmenu->save();
 $cvmenu->menutype = $moduletype;
-//$cvmenu->meta1 = "closed";
 $cvmenu->menuorder = $moduleorder;
 $cvmenu->indent = $indent;
-
-add_entity_relationship($cvcourseguid, 'menu', $cvmenu->guid);
-
-system_message("Added the menu item: $cvmenu->name to $cvcourse->title");
+//add a relationship between the course and the cvmenu with the relationship of menu.
+//this is how we are able to query all cvmenu items that belong to a particular course.
+add_entity_relationship($cv_course_guid, 'menu', $cvmenu->guid);
+system_message("Added the menu item: $cvmenu->name to $cv_course->title");
 forward($cvmenu->getURL());
