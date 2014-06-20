@@ -9,7 +9,7 @@
 
 $current_cvmenu_guid = ElggSession::offsetGet('cvmenuguid');
 $current_cvmenu = get_entity($current_cvmenu_guid);
-//$indent = 0;  //we start at indent level 0 since that is where the first menu item will start
+
 //switch on what button the prof clicked on
 switch (get_input('buttonchoice'))
 {

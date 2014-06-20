@@ -175,17 +175,12 @@ $options=array(
     'options' => array('Animate header?' => 1),
      'value' => 1,
 );
-//::TODO:Rich - Couldn't this whole if be replaced with $options['checked'] = $vars['entity']->cv_animated_menuitem; ?
-// if ($vars['entity']->cv_animated_menuitem == 1)
-//    {
-//        $options['checked'] = true;
-//    }
+
 $options['checked']= ($vars['entity']->cv_animated_menuitem==1);
 echo elgg_view('input/checkbox', $options);
 
 elgg_set_plugin_setting('cv_animated_menuitem', $vars['entity']->cv_animated_menuitem, 'courseview'); 
 echo "Animated listview?<br>";
-
 
 $options=array(
     'name' => 'params[cv_flashing_status]',
@@ -193,16 +188,12 @@ $options=array(
     'options' => array('Flashing Updating status message?' => 1),
      'value' => 1,
 );
-//::TODO:Rich - Like this?  
+
 $options['checked'] = ($vars['entity']->cv_flashing_status==1);
 echo elgg_view('input/checkbox', $options);
 
 elgg_set_plugin_setting('cv_flashing_status', $vars['entity']->cv_flashing_status, 'courseview'); 
 echo "Flashing Updating status message? <br>";
-
-
-
-
 
 echo "<br><h3>Content</h3><br>";
 $options=array(
