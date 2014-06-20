@@ -7,8 +7,7 @@ elgg_register_event_handler('init', 'system', 'courseviewInit'); //call coursevi
 
 function courseviewInit()
 {
-    //ElggSession::offsetSet('cv_hp', true); //::TODO:Rich - move this to settings
-    
+ 
     // <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
@@ -30,7 +29,6 @@ function courseviewInit()
    
     //::TODO:Rich - Need to look at not loading courseview here 
     elgg_load_library('elgg:courseview');
-    
     // Ensure that there is a logged in user before allowing access to page
     if (!elgg_get_logged_in_user_entity())
     {
@@ -41,7 +39,6 @@ function courseviewInit()
     {
         return;
     }
-
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
 
@@ -67,7 +64,6 @@ function courseviewInit()
         elgg_extend_view('css/elgg', 'customize_css/cv_menuitems_animation', 1001);
     }
     //elgg_extend_view('groups/add', 'courseview/test', 600);
-    // </editor-fold>
  
     //if hp_mode is set to true in settings, have courseview completey take over
     if (elgg_get_plugin_setting('hp_mode', 'courseview'))
@@ -78,6 +74,7 @@ function courseviewInit()
         //turn on courseview
         ElggSession::offsetSet('courseview', true);
     }
+        // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="********  Set Up Menu Items ********">
 
@@ -164,7 +161,6 @@ function courseviewInit()
  * @param $page - array of restful url segments
  * @param $identifier - set to 'courseview'
  */
-
 function courseviewPageHandler($page, $identifier)
 {
     elgg_set_page_owner_guid($page[1]);   //set the page owner to the cohort and then call gatekeeper
@@ -178,7 +174,7 @@ function courseviewPageHandler($page, $identifier)
     set_input('params', $page);  //place the $page array into params
     set_input('cv_menu_guid', $page[2]);
 
-    //little hack to make sure course acls are set correctly for student
+    //little hack to make sure course acls are set correctly for student in a cohort so that they can see other cohorts
     $cv_group = get_entity($page[1]);
     $cv_user = elgg_get_logged_in_user_entity();
     if (elgg_instanceof($cv_group, "group") && $cv_group->cvcohort && $cv_group->isMember($cv_user))
@@ -187,7 +183,6 @@ function courseviewPageHandler($page, $identifier)
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
         system_message("Yay!!!  " . $result);
     }
-
 
     switch ($page[0])  //switching on the first parameter passed through the RESTful url
     {
