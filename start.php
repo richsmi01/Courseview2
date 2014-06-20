@@ -4,18 +4,17 @@
  * Rich Smith's Master's Project:  CourseView - A Distance Learning Engine
  */
 elgg_register_event_handler('init', 'system', 'courseviewInit'); //call courseviewinit when the plugin initializes
-
-function courseviewInit()
-{
- 
-    // <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
-    elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
-    elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
-    // </editor-fold> 
     // <editor-fold defaultstate="collapsed" desc="*************  Load Libraries  ****************">
     require_once 'lib/cv_hooks.php';
     require_once 'lib/cv_events.php';
     // </editor-fold>
+function courseviewInit()
+{
+    // <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
+    elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
+    elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
+    // </editor-fold> 
+
     // <editor-fold defaultstate="collapsed" desc="********* Lightbox ajax and js code **********">
     elgg_load_js('lightbox');
     elgg_load_css('lightbox');
@@ -30,6 +29,7 @@ function courseviewInit()
     //::TODO:Rich - Need to look at not loading courseview here 
     elgg_load_library('elgg:courseview');
     // Ensure that there is a logged in user before allowing access to page
+    
     if (!elgg_get_logged_in_user_entity())
     {
         return;
@@ -42,7 +42,7 @@ function courseviewInit()
     //register page event handler
     elgg_register_page_handler('courseview', 'courseviewPageHandler');
 
-// <editor-fold defaultstate="collapsed" desc="********** Extending Views *************">
+    // <editor-fold defaultstate="collapsed" desc="********** Extending Views *************">
     /*  Allows us to add ability to tag content into a particular module 
      *  The cv_add_content_to_cohort view gets added to the bottom of each page.  This view has code in it to simply return
      *  without doing anything unless the user belongs to at least one cohort and the current view is creating or updating
@@ -75,13 +75,12 @@ function courseviewInit()
         ElggSession::offsetSet('courseview', true);
     }
         // </editor-fold>
-
     // <editor-fold defaultstate="collapsed" desc="********  Set Up Menu Items ********">
 
     /* register menu item to switch to CourseView */
     cv_register_courseview_menu();
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="*****  Set Up Plugin Hooks ******">
+    // <editor-fold defaultstate="collapsed" desc="********  Set Up Plugin Hooks *********">
     /* loop through availbable plugins and register a plugin hook for each to check if content is new since last login */
     $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
     foreach ($availableplugins as $plugin)
@@ -131,7 +130,7 @@ function courseviewInit()
     elgg_register_event_handler('create', 'group', 'cv_update_group', 9999);
     elgg_register_event_handler('update', 'group', 'cv_update_group', 9999);
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="***** Register Actions ********">
+    // <editor-fold defaultstate="collapsed" desc="************ Register Actions**** ********">
     $base_path = dirname(__FILE__);
     //set up our paths and various actions 
     elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');
@@ -142,11 +141,10 @@ function courseviewInit()
     elgg_register_action("cv_add_a_cohort", $base_path . '/actions/courseview/cv_add_a_cohort.php');
     elgg_register_action("cv_delete_course", $base_path . '/actions/courseview/cv_delete_course.php');
     elgg_register_action('toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
-    elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
+    //elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
     elgg_register_action('cv_add_menu_item', $base_path . '/actions/courseview/cv_add_menu_item.php');
     elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
     elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');
-    //elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_menu_toggle.php');
     elgg_register_action('cv_remove_cohort', $base_path . '/actions/courseview/cv_remove_cohort.php');
     elgg_register_action('cv_admin_toggle', $base_path . '/actions/courseview/cv_admin_toggle.php');
     
@@ -181,7 +179,6 @@ function courseviewPageHandler($page, $identifier)
     {
         $cv_course = $cv_group->getContainerEntity();
         $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-        system_message("Yay!!!  " . $result);
     }
 
     switch ($page[0])  //switching on the first parameter passed through the RESTful url

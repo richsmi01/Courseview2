@@ -31,7 +31,6 @@ elgg_load_library('elgg:courseview');
 
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
-//$userguid = elgg_get_logged_in_user_guid();
 $cv_home_url = elgg_get_site_url ().'courseview/courseview';
 
 //get  a list of the cohorts that the logged in user belongs to
@@ -53,14 +52,15 @@ if ($cv_mode=='current' )
 
 echo elgg_view_form('cv_menu_toggle');
 
+
 $status = ElggSession::offsetGet('courseview');
 if ($status==false)
 {
     return;
 }
-echo "<div id = courseview_sidebar>";
-//Begin building view
 
+//Begin building view
+echo "<div id = courseview_sidebar>";
 if ($cohorts==null)
 {
     echo "<p id = 'cv_center'>No cohort selected</p>";
@@ -68,6 +68,7 @@ if ($cohorts==null)
     return;
 }
 
+//if the page is a cv_contentpane then we want to add filters
 if (cv_is_list_page())
 { 
     echo elgg_view ('courseview/cv_filter_content');

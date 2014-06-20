@@ -4,7 +4,7 @@ $userguid = elgg_get_logged_in_user_guid();
 
 echo elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $vars['group_guid']));
 echo "<div class='cvminiview'>";
-echo "<em>MAKE A COURSEVIEW COHORT :</em><br/><br/>";
+echo "<em>".elgg_echo ('cv:forms:add_a_cohort:make_cohort_title')." :</em><br/><br/>";
 if (!isset($vars['group_guid']))
 {
     echo elgg_view('input/radio', array(

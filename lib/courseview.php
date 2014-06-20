@@ -9,6 +9,7 @@ define("CV_COUNT", true);
  * @param ElggUser $user The user object being inspected
  * @return boolean returns true if the user is an admin and false if not
  * */
+//::TODO:Rich - get rid of this
 function cv_is_admin($user)
 {
     return $user->isAdmin();

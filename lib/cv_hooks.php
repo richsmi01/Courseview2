@@ -46,7 +46,11 @@ function cv_group_buttons($hook, $type, $return, $params)
  */
 function cv_sidebar_intercept($hook, $entity_type, $returnvalue, $params)
 {
-    echo elgg_view_form('cv_admin_toggle');
+    //echo elgg_view_form('cv_admin_toggle');
+     if (cv_isprof($user))
+{
+            echo elgg_view('output/url', array('text'=>'CourseView Admin', 'href' => 'courseview/cv_contentpane/0/0',   'id'=>'menutogglebutton', 'class'=>'elgg-button elgg-button-submit'));
+}
     $show_elgg_stuff = elgg_get_plugin_setting('show_elgg_stuff', 'courseview');
 
     if ($show_elgg_stuff == 0 && cv_is_cvcohort(page_owner_entity()))  //if don't show elgg stuff is selected in settings
