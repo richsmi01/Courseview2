@@ -12,6 +12,7 @@ function courseviewInit()
 {
     // <editor-fold defaultstate="collapsed" desc="*************  Register libraries *************">
     elgg_register_library('elgg:courseview', elgg_get_plugins_path() . 'courseview/lib/courseview.php');
+    elgg_register_library('elgg:cv_rarely_used_functions', elgg_get_plugins_path() . 'courseview/lib/cv_rarely_used_functions.php');
     elgg_register_library('elgg:cv_content_tree_helper_functions', elgg_get_plugins_path() . 'courseview/lib/cv_content_tree_helper_functions.php');
     // </editor-fold> 
 
@@ -141,7 +142,7 @@ function courseviewInit()
     elgg_register_action("cv_add_a_cohort", $base_path . '/actions/courseview/cv_add_a_cohort.php');
     elgg_register_action("cv_delete_course", $base_path . '/actions/courseview/cv_delete_course.php');
     elgg_register_action('toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
-    //elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
+    elgg_register_action('cv_menu_toggle', $base_path . '/actions/courseview/cv_toggle_courseview.php');
     elgg_register_action('cv_add_menu_item', $base_path . '/actions/courseview/cv_add_menu_item.php');
     elgg_register_action('cv_edit_a_cohort', $base_path . '/actions/courseview/cv_edit_a_cohort.php');
     elgg_register_action('cv_move_prof_content', $base_path . '/actions/courseview/cv_move_prof_content.php');

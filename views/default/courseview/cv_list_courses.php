@@ -9,6 +9,7 @@ $cv_userguid = elgg_get_logged_in_user_guid();
 $cv_user = get_entity($cv_userguid);
 if ($vars['all']==true)
 {
+    elgg_load_library('elgg:cv_rarely_used_functions');
     $cvcourses = cv_get_all_courses();
 }
 else

@@ -41,7 +41,7 @@ display:none;
 {
     margin: 5px auto;
     display:block;
-    width:150px;
+    width:160px;
     text-align:center;
 }
 .cv-menu-toggle

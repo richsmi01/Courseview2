@@ -5,6 +5,7 @@
  * If $vars['all'] has been set to true, it will list all cohorts.  If not, it lists only the cohorts ownedby the 
  * currently logged in user (professor)
  */
+ elgg_load_library('elgg:cv_rarely_used_functions');
 $cv_userguid = elgg_get_logged_in_user_guid();
 $cv_user = get_entity($cv_userguid);
 
@@ -18,7 +19,7 @@ if ($vars['all'] == true)
 
 foreach ($cvcohorts as $cvcohort)
 {
-    $radioname = $cvcohort->title . ' - owner: ' . $cvcohort->getOwnerEntity()->name. $cvcohort->description;
+    $radioname = $cvcohort->name . ' - owner: ' . $cvcohort->getOwnerEntity()->name. $cvcohort->description;
     echo "<div id='contentitem'>";
     echo elgg_view('input/radio', array('internalid' => $cvcohort->guid, 'name' => 'cvcohort', 'options' => array($radioname => $cvcohort->guid)));
     echo"</div>";

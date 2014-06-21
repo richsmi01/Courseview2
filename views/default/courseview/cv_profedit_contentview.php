@@ -60,7 +60,7 @@ echo"       <label for='cv_check5' >Add a Course</label>";
             echo elgg_view_form('cv_edit_a_course');
             echo "</div>";
         }
-
+        elgg_load_library('elgg:cv_rarely_used_functions');
         if (cv_prof_num_courses_owned($user) > 0 || (cv_is_admin(elgg_get_logged_in_user_entity()) && cv_get_all_courses($CV_COUNT) > 0))
         {
             echo "<input type='checkbox' id='cv_check7' class = 'cv_collapsible' />";
