@@ -1,8 +1,19 @@
 <?php
 /*This is called if the delete cohort menu is selected in CourseView*/
-$cvcohort->cvcohort = false; //this object is now just a simple group
+
+//$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $cv_cohort_guid = get_input('cvcohort');
-$cvcohort = get_entity($cv_cohort_guid);
-system_message("$cvcohort->title cohort deleted");
-$cvcohort->delete();  //now we delete the group
+$cv_cohort = get_entity($cv_cohort_guid);
+
+if (!$cv_cohort->canEdit() || !elgg_instanceof($cv_cohort,'group'))
+{
+    register_error ("Sorry, you do not have permissions for this operation");
+    forward (REFERER);
+}
+
+$cv_cohort->cvcohort = false; //this object is now just a simple group
+
+
+system_message("$cv_cohort->name  cohort deleted");
+$cv_cohort->delete();  //now we delete the group
 

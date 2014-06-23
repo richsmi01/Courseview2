@@ -9,6 +9,13 @@
  * - Next we have to add the prof to the access collection
  * - And finally, add the prof to the group in case this hasn't already been done
  */
+
+if (!cv_isprof(elgg_get_logged_in_user_entity))
+{
+    register_error ("Sorry, you do not have permissions for this operation");
+    forward (REFERER);
+}
+
 $user = elgg_get_logged_in_user_entity();
 $cvcohortname = get_input('cvcohortname');
 $cvcourseguid = get_input('cvcourse');

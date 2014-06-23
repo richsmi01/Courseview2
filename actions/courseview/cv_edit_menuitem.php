@@ -14,6 +14,7 @@ switch (get_input('buttonchoice'))
         $cvmenuitem->indent = $cvmenuitem->indent + 1;
         $cvmenuitem->save();
         break;
+    
     case 'Outdent':
         if ($cvmenuitem->indent > 1)
         {
@@ -36,6 +37,7 @@ switch (get_input('buttonchoice'))
         $cvmenuitem->save();
         $trailer->save();
         break;
+        
     case 'Move Down':
         $done = false;
         $leader;
@@ -66,7 +68,6 @@ switch (get_input('buttonchoice'))
         break;
 
     case 'Delete Menu Item':
-
         $prevmenuorder = $cvmenuitem->menuorder - 1;
         $nextselectedmenuitem = $menuitems[$prevmenuorder];
         for ($a = $cvmenuitem->menuorder; $a < sizeof($menuitems); $a++)

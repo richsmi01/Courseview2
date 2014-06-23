@@ -7,6 +7,12 @@
  * menuorder of any cvmenu items that follow it.
  */
 
+if (!cv_isprof(elgg_get_logged_in_user_entity))
+{
+    register_error ("Sorry, you do not have permissions for this operation");
+    forward (REFERER);
+}
+
 $current_cvmenu_guid = ElggSession::offsetGet('cvmenuguid');
 $current_cvmenu = get_entity($current_cvmenu_guid);
 

@@ -6,6 +6,15 @@
  *
  * @author Rich Smith
  */
+$cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
+$cv_cohort = get_entity($cv_cohort_guid);
+
+if (!$cv_cohort->canEdit() || !elgg_instanceof($cv_cohort,'group'))
+{
+    register_error ("Sorry, you do not have permissions for this operation");
+    forward (REFERER);
+}
+
 
 if (get_input ('remove_cohort')==='remove')
 {

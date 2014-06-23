@@ -4,9 +4,15 @@
  * In addition, the root menu item (Elgg object with cvmenu subtype) will be created and a relationship
  * created between it and the course
  */
+if (!cv_isprof(elgg_get_logged_in_user_entity))
+{
+    register_error ("Sorry, you do not have permissions for this operation");
+    forward (REFERER);
+}
 
 $cvcoursename = get_input('cvcoursename');
 $cvcoursedescription = get_input('cvcoursedescription');
+
 //build cvcourse object
 $cvcourse = new ElggObject();
 $cvcourse->title = $cvcoursename;

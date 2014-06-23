@@ -33,8 +33,8 @@ $prof_menu_item_already_used = array();
 $cv_users_cohorts = cv_get_users_cohorts();  //get  a list of the cohorts that the logged in user belongs to
 
 echo "<div id='add_entity_to_cohort_menus'>";
-//If the user is a prof, we need to add the ability for them to add this content to a professor only cohort/menu 
-//pair
+
+//If the user is a prof, we need to add the ability for them to add this content to a professor only cohort/menu pair
 if (cv_isprof($cvuser))  
 {
     echo "<input  id ='cv_check1' type ='checkbox' class='cv_collapsible' />";
@@ -58,11 +58,11 @@ if (cv_isprof($cvuser))
             $value = $menuitem->guid . "|" . $cv_cohort_guid;
             if ($menuitem->menutype == "folder")
             {
-                echo "<li>";
-                echo "<input type ='checkbox'  name='$indent' class ='cvmenuitem'   />";
-                echo "<label>";
-                echo $name;
-                echo "</label>";
+                echo "<li>
+                            <input type ='checkbox'  name='$indent' class ='cvmenuitem'   />
+                            <label>
+                                $name
+                            </label>";
             } elseif ($menuitem->menutype == 'student')     // && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
             {
                 echo "<p class ='indent'>$name.</p>";
@@ -138,11 +138,11 @@ foreach ($cv_users_cohorts as $cohort)
         if ($menuitem->menutype == "folder")
         {
 
-            echo "<li>";
-            echo "<input type ='checkbox' id ='$value'  name='$indent' class ='cvmenuitem'   />";
-            echo "<label for ='$value' class ='cvfolder'>";
-            echo $name;
-            echo "</label>";
+            echo "<li>
+                        <input type ='checkbox' id ='$value'  name='$indent' class ='cvmenuitem'   />
+                        <label for ='$value' class ='cvfolder'>
+                            $name;
+                        </label>";
         }
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         elseif ($menuitem->menutype == 'professor')// && !cv_isprof(get_entity($userguid))) || in_array($menuitem->guid, $prof_menu_item_already_used))
@@ -153,7 +153,6 @@ foreach ($cv_users_cohorts as $cohort)
             /* Note that the value that we are passing to the checkboxes is a String -- each String  contains three pieces 
              * of information in the format Xmenuitemguid|cohortguid where X is a + if a new relationship should be created.
              */
-
 
             echo "<li>";
             echo elgg_view('input/checkbox', array('name' => 'menuitems[]', 'id' => $value, 'value' => '+' . $value, 'class' => 'cvinsert', 'checked' => $checkoptions, 'default' => '-' . $value));
