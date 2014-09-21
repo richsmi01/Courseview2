@@ -38,7 +38,7 @@ echo "<div id='add_entity_to_cohort_menus'>";
 if (cv_isprof($cvuser))  
 {
     echo "<input  id ='cv_check1' type ='checkbox' class='cv_collapsible' />";
-    echo "<label  for ='cv_check1' >Add this content to the professor content areas of Courseview Courses </label>";
+    echo "<label  for ='cv_check1' >".elgg_echo ('cv:views:cv_content_tree:add_this')." </label>";
     echo "<div>";
 
     $cvcourses = cv_get_prof_owned_courses($cvuser);
@@ -78,11 +78,11 @@ if (cv_isprof($cvuser))
     echo "</div>";
 }
 
-echo "<label class = 'sub3'>This content will be posted to the $cvmenuitem->name menu item<br></label>";
+echo "<label class = 'sub3'>".elgg_echo ('cv:views:cv_content_tree:content_will_be_posted', array( $cvmenuitem->name))."<br></label>";
 echo "<input onclick = 'showCVAdd(" . '"cvaddtocohort"' . ")' id='cv_check2' class ='cv_collapsible' type ='checkbox'  />";
-echo "<label  for ='cv_check2'  > in the $cv_cohort->name  cohort.  Click here to change destination</label>";
+echo "<label  for ='cv_check2'  >".elgg_echo ('cv:views:cv_content_tree:click_to', array( $cv_cohort->name))."</label>";
 echo "<div>";
-echo"<label class ='bluesub'> Check any of the CourseView menu items below that you wish this content to be posted to:</label>";
+echo"<label class ='bluesub'>".elgg_echo ('cv:views:cv_content_tree:check_any')."</label>";
 foreach ($cv_users_cohorts as $cohort)
 {
     $cv_cohort_guid = $cohort->guid;
@@ -130,7 +130,7 @@ foreach ($cv_users_cohorts as $cohort)
         $name = $menuitem->name;
          if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
             {
-                $name = get_entity($cv_cohort_guid)->name; //***********
+                $name = get_entity($cv_cohort_guid)->name;
             }
         $indent = $menuitem->indent;
         $value = $menuitem->guid . "|" . $cv_cohort_guid;

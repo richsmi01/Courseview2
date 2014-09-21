@@ -6,7 +6,7 @@
  */
 if (!cv_isprof(elgg_get_logged_in_user_entity))
 {
-    register_error ("Sorry, you do not have permissions for this operation");
+    register_error (elgg_echo ('cv:actions:cv_create_course'));
     forward (REFERER);
 }
 
@@ -54,5 +54,5 @@ $cvmenu->save();
  */
 
 add_entity_relationship($cvcourse->guid, "menu", $cvmenu->guid);
-system_message("$cvcourse->title course added");
+system_message("$cvcourse->title ".elgg_echo('cv:actions:cv_create_course:created'));
 ?>

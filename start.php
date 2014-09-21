@@ -27,7 +27,6 @@ function courseviewInit()
     elgg_register_ajax_view('courseview/remove_group_from_cohort');
     // </editor-fold>
    
-    //::TODO:Rich - Need to look at not loading courseview here 
     elgg_load_library('elgg:courseview');
     // Ensure that there is a logged in user before allowing access to page
     
@@ -76,12 +75,12 @@ function courseviewInit()
         ElggSession::offsetSet('courseview', true);
     }
         // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="********  Set Up Menu Items ********">
+    // <editor-fold defaultstate="collapsed" desc="********** Set Up Menu Items ********">
 
     /* register menu item to switch to CourseView */
     cv_register_courseview_menu();
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="********  Set Up Plugin Hooks *********">
+    // <editor-fold defaultstate="collapsed" desc="********** Set Up Plugin Hooks *********">
     /* loop through availbable plugins and register a plugin hook for each to check if content is new since last login */
     $availableplugins = unserialize(elgg_get_plugin_setting('approved_subtype', 'courseview'));
     foreach ($availableplugins as $plugin)
@@ -108,7 +107,7 @@ function courseviewInit()
     elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'cv_can_write_to_container');
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="*******  Register event handlers  *******">
+    // <editor-fold defaultstate="collapsed" desc="********** Register event handlers  *******">
 
     /*  this is left for future expansion - will call cv_shutdown_event at the end of the page rendering after everything
       else has completed */
@@ -131,7 +130,7 @@ function courseviewInit()
     elgg_register_event_handler('create', 'group', 'cv_update_group', 9999);
     elgg_register_event_handler('update', 'group', 'cv_update_group', 9999);
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="************ Register Actions**** ********">
+    // <editor-fold defaultstate="collapsed" desc="********** Register Actions**** ********">
     $base_path = dirname(__FILE__);
     //set up our paths and various actions 
     elgg_register_action("cv_create_course", $base_path . '/actions/courseview/cv_create_course.php');

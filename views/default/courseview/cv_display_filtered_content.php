@@ -34,9 +34,6 @@ $content_items = cv_get_content_by_menu_item1($options);
 echo $content_items;
 
 
-
-
-
 //code to sort by likes---
 // $options = array(
 //		'container_guid' => $entity->guid,

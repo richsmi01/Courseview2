@@ -9,7 +9,7 @@
 
 if (!cv_isprof(elgg_get_logged_in_user_entity))
 {
-    register_error ("Sorry, you do not have permissions for this operation");
+    register_error (elgg_echo ('cv:actions:cv_add_menu_item:sorry'));
     forward (REFERER);
 }
 
@@ -83,5 +83,5 @@ $cvmenu->indent = $indent;
 //add a relationship between the course and the cvmenu with the relationship of menu.
 //this is how we are able to query all cvmenu items that belong to a particular course.
 add_entity_relationship($cv_course_guid, 'menu', $cvmenu->guid);
-system_message("Added the menu item: $cvmenu->name to $cv_course->title");
+system_message (elgg_echo ('cv:actions:cv_add_menu_item:added', array ( $cvmenu->name, $cv_course->title)));
 forward($cvmenu->getURL());

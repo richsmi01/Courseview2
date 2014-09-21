@@ -7,7 +7,7 @@ function cv_group_buttons($hook, $type, $return, $params)
         return $return;
     }
     $is_cv_owner = cv_is_cohort_owner(elgg_get_logged_in_user_entity(), $params['entity']);
-    $is_cv_admin = cv_is_admin(elgg_get_logged_in_user_entity());
+    $is_cv_admin = elgg_get_logged_in_user_entity()->isAdmin();
     if ($is_cv_admin || $is_cv_owner)
     {
         if (cv_is_cvcohort($params['entity']))
@@ -140,6 +140,7 @@ function cv_new_content_intercept($hook, $type, $return, $params)
     $attributes = $vars->get_attributes;
     $entity = $vars['entity'];
     $show_new_content = elgg_get_plugin_setting('flag_new_content', 'courseview');  //check to see if the NEW content feature is turned on in settings
+   //echo $entity->last_action.'---'.$user->prev_last_login.'   ';
     if ($entity->last_action > $user->prev_last_login && $vars['full_view'] == false && $show_new_content)
     {
         $return = "<div class='newContent'>New!</div>" . $return;  //insert a small green div with the word New! in it and apply .newContent css  ruleset to it.

@@ -12,7 +12,7 @@ $cv_cohort = get_entity($cv_cohort_guid);
 
 if (!$cv_cohort->canEdit() || !elgg_instanceof($cv_cohort,'group'))
 {
-    register_error ("Sorry, you do not have permissions for this operation");
+    register_error (elgg_echo('cv:actions:cv_edit_a_cohort:sorry'));
     forward (REFERER);
 }
 $cv_cohort->title = get_input('cvcohortname');

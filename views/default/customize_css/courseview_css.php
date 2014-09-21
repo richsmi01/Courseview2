@@ -14,6 +14,9 @@
     display:none;
 }
 
+.blue {
+color:blue;
+}
 
 #make_a_cohort {
 display:none;

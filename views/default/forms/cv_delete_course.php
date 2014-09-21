@@ -5,10 +5,10 @@
  **/
 $userguid = elgg_get_logged_in_user_guid();
 echo "<div class='cvminiview'>";
-echo '<em>DELETE A COURSE:</em><br/><br/>';
-echo ('Please choose course name to delete: ');
+echo '<p><em>'. elgg_echo ('cv:forms:cv_delete_course:title').'</em></p>';
+echo elgg_echo ('cv:forms:cv_delete_course:please_choose');
 
-if (cv_is_admin(elgg_get_logged_in_user_entity())) //if the user is admin, show all courses
+if (elgg_get_logged_in_user_entity()->isAdmin()) //if the user is admin, show all courses
 {
     echo elgg_view ("courseview/cv_list_courses", array ('all'=>true));
 }

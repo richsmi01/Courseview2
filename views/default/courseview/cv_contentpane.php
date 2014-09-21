@@ -13,12 +13,12 @@
     }
 </script>
 <?php
-
 /**
  * The main view used in CourseView
  * 
  * @author Rich Smith
  */
+ 
 
 if (cv_isprof($user))
 {
@@ -38,18 +38,20 @@ if (!$status )
 
 elgg_load_library('elgg:courseview');
 $user = elgg_get_logged_in_user_entity();
-//::TODO:Rich - Change ElggSession::offsetGet's to get_input('cv_menu_guid') throughout code
-$cv_menu_guid = get_input('cv_menu_guid'); //ElggSession::offsetGet('cvmenuguid');  
-$cv_cohort = elgg_get_page_owner_entity();  //get_entity (ElggSession::offsetGet('cvcohortguid'));
+$cv_menu_guid = get_input('cv_menu_guid'); 
+$cv_cohort = elgg_get_page_owner_entity();  
 $menu_item = get_entity($cv_menu_guid);
 $menu_type = $menu_item->menutype;  //there are three types of menu items:  folder, professor, and student
+
+
 //if the user is a prof and owns the course, include the ability to edit the course
-echo "<div id='hiddenmessage' style ='visibility:hidden; text-align:center; height:0px;' >Updating!</div>";
 
+//Add the message asking the user to wait for processing.
+echo "<div id='hiddenmessage' style ='visibility:hidden; text-align:center; height:0px;' >".elgg_echo ( 'cv:views:cv_contentpane:wait_message')."</div>";
 echo "<div id='cv_head'>";
-
 echo '<h1 id="menuitem">' . $menu_item->name . '</h1><br>';
-switch ($menu_type)
+
+switch ($menu_type)  //what kind of cvmenu item is it?  folder, professor, or student
 {
     case "folder":
         if ($menu_item->indent == 0)  //if this is the first menu_item in a course, display welcome
@@ -57,13 +59,13 @@ switch ($menu_type)
             $cvcourse = get_entity($cv_cohort->getContainerGUID());
             $cv_course_owner = get_entity($cv_cohort->container_guid)->getOwnerEntity();
             $cv_cohort_owner = $cv_cohort->getOwnerEntity();
-            echo "<br><p id = 'cvwelcome'>Welcome to " . $cv_cohort->name . "<p>";
-            echo "<br><div id='contentitem'> Course Name:  $cvcourse->title</div>";
-            echo "<br><div id='contentitem'> Course Description: $cvcourse->description</div>";
-            echo "<br><div id='contentitem'> Cohort Name:  $cv_cohort->name</div>";
-            echo "<br><div id='contentitem'> Course Owner:  $cv_course_owner->name</div>";
-            echo "<br><div id='contentitem'> Cohort Professor:  $cv_cohort_owner->name</div>";
-            echo '<br><label>The following are postings created in this group <br>but not assigned to CourseView:</label><br>';
+            echo "<br><p id = 'cvwelcome'>".elgg_echo('cv:views:cv_contentpane:welcome_to', array ($cv_cohort->name)) . "<p>";
+            echo "<br><div id='contentitem'>".elgg_echo ('cv:views:cv_contentpane:course_name',array($cvcourse->title))."</div>";
+            echo "<br><div id='contentitem'> ".elgg_echo('cv:views:cv_contentpane:course_description',array($cvcourse->description))."</div>";  
+            echo "<br><div id='contentitem'> ".elgg_echo('cv:views:cv_contentpane:cohort_name',array($cv_cohort->name))."</div>";
+            echo "<br><div id='contentitem'> ".elgg_echo('cv:views:cv_contentpane:course_owner',array($cv_course_owner->name))."</div>";
+            echo "<br><div id='contentitem'> ".elgg_echo('cv:views:cv_contentpane:cohort_owner',array($cv_cohort_owner->name))."</div>";
+            echo '<br><label>'.elgg_echo('cv:views:cv_contentpane:posting_message').'</label><br>';
             $unassigned_content = cv_get_content_not_assigned();
             echo $unassigned_content;
         } else
@@ -82,8 +84,8 @@ switch ($menu_type)
 
     //if menu_type isn't folder, student or professor then we must have just logged in
     default:
-        echo elgg_echo("<BR><BR><BR><div id ='cvwelcome' >WELCOME TO COURSEVIEW!</div>");
-        system_message("Welcome");
+        echo elgg_echo("<BR><BR><BR><div id ='cvwelcome' >".elgg_echo ('cv:views:cv_contentpane:big_welcome')."</div>");
+        //system_message("Welcome");
         break;
 }
 

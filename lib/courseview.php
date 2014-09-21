@@ -10,10 +10,10 @@ define("CV_COUNT", true);
  * @return boolean returns true if the user is an admin and false if not
  * */
 //::TODO:Rich - get rid of this
-function cv_is_admin($user)
-{
-    return $user->isAdmin();
-}
+//function cv_is_admin($user)
+//{
+//    return $user->isAdmin();
+//}
 
 /**
  * Is the user a member of the cohort?             .

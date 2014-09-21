@@ -18,7 +18,7 @@ else
 }
 foreach ($cvcourses as $cvcourse)
 {
-    $radioname = "Course: $cvcourse->title  <p>Owner: ".$cvcourse->getOwnerEntity()->name." <p>Description: $cvcourse->description</p>";
+    $radioname = elgg_echo('cv:views:cv_list_courses:owner', array ($cvcourse->title.'<br>' , $cvcourse->getOwnerEntity()->name.'<br>   ',$cvcourse->description.'<br>'));
     echo "<div id='contentitem'>";
     echo elgg_view('input/radio', array('internalid' => $cvcourse->guid, 'name' => 'cvcourse', 'options' => array($radioname => $cvcourse->guid)));
     echo"</div>";

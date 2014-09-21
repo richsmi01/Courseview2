@@ -12,7 +12,7 @@
 
 if (!cv_isprof(elgg_get_logged_in_user_entity))
 {
-    register_error ("Sorry, you do not have permissions for this operation");
+    register_error (elgg_echo ('cv:actions:cv_add_a_cohort:sorry'));
     forward (REFERER);
 }
 
@@ -28,7 +28,7 @@ if (get_input('group_guid') > 0)
     $cv_user = elgg_get_logged_in_user_entity ();
     //here we add the prof to the course acl
     $result = add_user_to_access_collection($cv_user->guid, $cv_course->cv_acl);
-    system_message ("$cv_user->name has just joined the cohort: $cvcohort->name");
+    system_message ("$cv_user->name".elgg_echo ('cv:actions:cv_add_a_cohort:has_just'). "$cvcohort->name");
 } else  //If there is not yet a group, we need to make one  --this occurs if the user has elected to build a courseview cohort           
 {           //from the CourseView Administrative menu.
     $cvcohort = new ElggGroup ();
@@ -49,4 +49,4 @@ $cvcohort->container_guid = $cvcourseguid;
 $cvcohort->save();
 $cvcohort->cvcohort = true;
 
-system_message("The cohort: $cvcohort->name has been bound to the course: $cvcourse->title");
+system_message("The cohort: $cvcohort->name ".elgg_echo ('cv:actions:cv_add_a_cohort:has_been'). " $cvcourse->title");

@@ -6,14 +6,15 @@
  *
  * @author ITSC
  */
-$group= get_entity($vars['group_guid']);
 
-echo "<h3>Are you sure that you want to remove $group->title from CourseView?<br></h3><br>";
+
+$group= get_entity($vars['group_guid']);
+echo "<h3>".elgg_echo ('cv:forms:cv_remove_cohort:confirm', array( $group->name) )."<br></h3><br>";
 
 echo elgg_view('input/radio', array(
     'name' => 'remove_cohort',
     'id' => 'remove_cohort',
-    'options' => array('Yes, remove this group from CourseView (Note, all CourseView indexing will be permanently deleted' => 'remove', 'No, Leave this group as is' => 'no'),
+    'options' => array(elgg_echo ('cv:forms:cv_remove_cohort:yes') => 'remove', elgg_echo ('cv:forms:cv_remove_cohort:no') => 'no'),
      'value' => 'no',
 ));
 echo '<br>';
@@ -24,7 +25,7 @@ $options=array(
      'value' =>1,
 );
 echo elgg_view('input/checkbox', $options);
-echo "Check this box to delete the underlying group...THIS ACTION CANNOT BE UNDONE!";
+echo elgg_echo ('cv:forms:cv_remove_cohort:warning');
 echo'<br><br>';
  
 echo elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $vars['group_guid']));

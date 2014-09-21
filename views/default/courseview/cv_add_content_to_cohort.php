@@ -56,7 +56,7 @@ if ($donotdisplay)
     return true;
 }
 
-//finally, if this is a page that needs the cv_content_tree, then load it.
+//finally, if this is a page that needs the cv_content_tree, then go ahead and load it.
 echo elgg_view('courseview/cv_content_tree', $vars);
 
 

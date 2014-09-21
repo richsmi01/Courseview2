@@ -26,9 +26,8 @@
 <?php
 
 //Builds the CourseView sidebar
-//elgg_load_js ('cv_sidebar_js');
-elgg_load_library('elgg:courseview');
 
+elgg_load_library('elgg:courseview');
 $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $cvmenuguid = ElggSession::offsetGet('cvmenuguid');
 $cv_home_url = elgg_get_site_url ().'courseview/courseview';
@@ -63,7 +62,7 @@ if ($status==false)
 echo "<div id = courseview_sidebar>";
 if ($cohorts==null)
 {
-    echo "<p id = 'cv_center'>No cohort selected</p>";
+    echo "<p id = 'cv_center'>".elgg_echo ('cv:views:cv_highjack_sidebar:no_cohort')."</p>";
     echo "</div>";
     return;
 }
@@ -90,27 +89,30 @@ foreach ($cohorts as $cohort)
     //now, loop through each menu item (by menusort order)
     foreach ($menuitems as $menuitem)
     {
-        //echo '@@@'.$menuitem->name;
-        //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
+    //If this menu item should be indented from the previous one, add a <ul> tag to start a new unordered list
         if ($menuitem->indent > $indentlevel)
         {
             echo elgg_echo('<ul>');
         }
+        
         //if this menu item should be outdented, close off our list item and unorderedlist item
         else if ($menuitem->indent < $indentlevel)
         {
             echo elgg_echo('</li> </ul>');
         }
+        
         //now we set indent level to the current menu item indent level so that we can check against it on the next iteration
         $indentlevel = $menuitem->indent;
 
         //setting up attributes to insert into the html tags
         $name = $menuitem->name;
+        
         if ($indentlevel == 0)  //if this is a topline course menuitem, use the cohort name instead
         {
             $name = $cohort->name ;
         }
-        $id1 = $count; //$menuitem->menuorder;
+        
+        $id1 = $count; 
         $count++;
         $class2 = "";
         $indent = $menuitem->indent;
@@ -135,6 +137,7 @@ foreach ($cohorts as $cohort)
             echo "<a title = '$name' href='" . elgg_get_site_url() . "courseview/cv_contentpane/" . $cv_current_examined_cohort_guid . "/" . $menuitem->guid . "'> " . $name . "</a>";
             echo "</label>";
         }
+        
         //otherwise, let's just create a link to the cv_contentpane and pass the guid of the menu object...the css class indent is also added here
         else
         {
@@ -143,7 +146,7 @@ foreach ($cohorts as $cohort)
                 . $name . "</a></li>");
         }
     }
-    echo '</div>';
+    echo '</div>';  //cv-treeview
 }
 echo'</div>';
 echo "</div>";  //courseview_sidebar

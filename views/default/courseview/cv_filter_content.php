@@ -3,6 +3,8 @@ $cv_cohort_guid = ElggSession::offsetGet('cvcohortguid');
 $courseguid = get_entity($cv_cohort_guid)->container_guid;
 $menuguid = ElggSession::offsetGet('cvmenuguid');
 $filter = get_input('filter', 'all'); //the currently selected dropdown list  item  
+
+//build create string
 $createString = unserialize(elgg_get_plugin_setting('plugincreatestring', 'courseview'));
 $createString = str_replace('{url}', elgg_get_site_url(), $createString);
 $createString = str_replace('{user_guid}', elgg_get_logged_in_user_guid(), $createString);
@@ -20,6 +22,7 @@ $json_create_string = json_encode($createString);
         $('#notHidden').fadeOut(500);
         $('#notHidden').fadeIn(500);
     }
+    //handle any changes to dropdown listboxes
     function onChange(id, value)
     {
         if (id == 'filterDropDown' || id == 'cohortDropDown' || id == 'numItemsDropdown' || id == 'sortDropDown')
@@ -44,9 +47,9 @@ while (array_search("", $availableplugins))
     unset($availableplugins[array_search("", $availableplugins)]);
 }
 $createplugins = $availableplugins;
-$createplugins ['choose'] = 'Choose a posting type';  //Add the choose menu item to the array...we will default to that
-$availableplugins['all'] = 'All Content Types';  //add the ability for the student to select all content
-$availableplugins['myPostings'] = 'Only My Postings';  //add the ablility for the students to select only their own postings
+$createplugins ['choose'] = elgg_echo('cv:views:cv_filter_content:choose');  //Add the choose menu item to the array...we will default to that
+$availableplugins['all'] = elgg_echo('cv:views:cv_filter_content:all');  //add the ability for the student to select all content
+$availableplugins['myPostings'] = elgg_echo('cv:views:cv_filter_content:only');  //add the ablility for the students to select only their own postings
 $availablecohorts = cv_get_cohorts_by_courseguid($courseguid);
 
 $dropdownlist = array();
@@ -68,7 +71,7 @@ if (get_entity($menuguid)->menutype == 'student')
     $numItemsDrop ['4'] = '4';
     $numItemsDrop ['10'] = '10';
     $numItemsDrop ['25'] = '25';
-    echo 'Items per page:<br>';
+    echo elgg_echo ('cv:views:cv_filter_content:items').'<br>';
     echo elgg_view('input/dropdown', array(
         'name' => 'numItems',
         'value' => $numItems,
@@ -76,7 +79,7 @@ if (get_entity($menuguid)->menutype == 'student')
         'onchange' => 'onChange(id, value)',
         'options_values' => $numItemsDrop));
 
-    echo'<br>Filter by cohort:<br> ';
+    echo'<br>'.elgg_echo('cv:views:cv_filter_content:filter_cohort').'<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'cohortfilter',
         'value' => $cfilter,
@@ -84,7 +87,7 @@ if (get_entity($menuguid)->menutype == 'student')
         'onchange' => 'onChange(id, value)',
         'options_values' => $dropdownlist));
 
-    echo "<br>Filter by type:<br>";
+    echo "<br>".elgg_echo('cv:views:cv_filter_content:filter_type')."<br>";
     echo elgg_view('input/dropdown', array(
         'name' => 'filter',
         'id' => 'filterDropDown',
@@ -93,9 +96,9 @@ if (get_entity($menuguid)->menutype == 'student')
         'options_values' => $availableplugins));
 
     $sort_dropdown = array();
-    $sort_dropdown ['likes'] = 'likes';
-    $sort_dropdown ['chrono'] = 'date';
-    echo'<br>Sort by:<br> ';
+    $sort_dropdown ['likes'] = elgg_echo ('cv:views:cv_filter_content:likes');
+    $sort_dropdown ['chrono'] = elgg_echo ('cv:views:cv_filter_content:date');
+    echo'<br>'.elgg_echo ('cv:views:cv_filter_content:sort').'<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'sortby',
         'value' => $sort_by,
@@ -108,7 +111,7 @@ if (get_entity($menuguid)->menutype == 'student')
 if (cv_isprof($user) && cv_is_course_owner($user, $cvcohort) && get_entity($menuguid)->menutype == 'professor'|| get_entity($menuguid)->menutype == 'student')
 {
     echo "<div id = courseview_sidebar_create>";
-    echo 'Create a posting:<br> ';
+    echo elgg_echo ('cv:views:cv_filter_content:create').'<br> ';
     echo elgg_view('input/dropdown', array(
         'name' => 'create',
         'id' => 'createDropDown',

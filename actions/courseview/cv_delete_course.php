@@ -10,11 +10,11 @@ $cvcourseguid = get_input('cvcourse');
 $cvcourse = get_entity($cvcourseguid);
 if (!$cvcourse->canEdit() ||$cvcourse->cvcourse !=true )
 {
-    register_error ("Sorry, you do not have permissions for this operation");
+    register_error (elgg_echo('cv:actions:cv_delete_course:sorry'));
     forward (REFERER);
 }
 
-system_message("$cvcourse->title cohort deleted");
+system_message("$cvcourse->title ".elgg_echo('cv:actions:cv_delete_course:sorry'));
 delete_access_collection ($cvcourse->cv_acl);
 $cvcourse->delete();
 

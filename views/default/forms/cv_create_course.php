@@ -1,15 +1,10 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 echo "<div class='cvminiview'>";
-echo  '<em>ADD A COURSE:</em><br/><br/>';
-echo elgg_echo ('Course name: ');
+echo  '<p><em>'.elgg_echo ( 'cv:forms:cv_create_course:add_course').'</em></p>';
+echo elgg_echo ('cv:forms:cv_create_course:course_name');
 echo elgg_view('input/text', array('name' => 'cvcoursename'));
-echo elgg_echo ('Course description: ');
+echo elgg_echo ('cv:forms:cv_create_course:course_description');
 echo elgg_view('input/text', array('name' => 'cvcoursedescription'));
 echo elgg_view('input/submit');
 echo'</div>'
