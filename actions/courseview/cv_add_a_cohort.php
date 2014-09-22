@@ -48,5 +48,4 @@ $cvcohort->owner_guid = elgg_get_logged_in_user_guid();
 $cvcohort->container_guid = $cvcourseguid;
 $cvcohort->save();
 $cvcohort->cvcohort = true;
-
 system_message("The cohort: $cvcohort->name ".elgg_echo ('cv:actions:cv_add_a_cohort:has_been'). " $cvcourse->title");
