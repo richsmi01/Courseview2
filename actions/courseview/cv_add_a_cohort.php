@@ -35,7 +35,7 @@ if (get_input('group_guid') > 0)
     $cvcohort->name = $cvcohortname;
     $cvcohort->join($user);
 }
-
+//set appropriate access
 $cvcohort->access_id = ACCESS_PUBLIC;
     if (get_input('cohort_permissions') == 'open')
     {
