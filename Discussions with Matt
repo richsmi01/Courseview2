@@ -1,14 +1,10 @@
+R - Fix up language separation
+
 - Problem with cohort visibility
 - problem with acl's
 
-
-
-
-
 - When exiting CourseView, it should go to the group/page that it was in first and activity if it can't do that
 - Finish code to allow a group to become a CourseView course in course create/edit page
--
-
 
         R - Correctly wrap text in menutree...or cut and use tooltip
 R - Hide default cohort group in settings page
@@ -17,8 +13,6 @@ M - How can I Add "Make group into CourseView cohort" from create group page?
 M - What is the better way to get cohort in the cv_get_content_not_assigned method?
         M - I'm still stuck on getting content that hasn't been CourseViewafied
 M - How does the whole language stuff work?
-
-
 
 M - Bug where edit, public etc is cut off on full view of content...for example blogs when using tooltip
 
@@ -232,7 +226,6 @@ How can I connect the cveditcourse action to the checkbox that shows the course 
 Where should I use extend view vs require?
 
 Setting up a quasi-production courseview site in the next couple weeks
-
 
 
 Oct 24 Agenda -
