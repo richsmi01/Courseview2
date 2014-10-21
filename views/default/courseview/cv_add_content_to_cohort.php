@@ -35,7 +35,6 @@ if (strpos($action, 'reply'))
 
 /* Determine if the current view is editing a plugin object that is valid in courseview.  The list of the 
  * valid plugins for courseview is set in the settings view under the administration section of Elgg. */
-
 $user = elgg_get_logged_in_user_entity();
 $validplugins = cv_get_valid_plugins($user);
 $validkeys = array_keys($validplugins);

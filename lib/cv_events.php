@@ -101,7 +101,7 @@ function cv_intercept_content_update($event, $type, $object)
  */
 function cv_join_group($event, $type, $params)
 {
-    system_message("Joining...");
+    //system_message("Joining...");
     $cv_group = $params['group'];
     if (!$cv_group->cvcohort)
     {
